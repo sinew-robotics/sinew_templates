@@ -98,6 +98,51 @@ $code-block-font-size: 0.58em !default;
 
 .reveal .section-slide h1 { margin-top: 2.3em; }
 
+/* User-supplied affiliation marks keep their original color and alpha data.
+   Light profiles stay transparent; dark profiles opt into a palette-derived
+   light plate through the logo custom properties. */
+.reveal .institution-lockup {
+  position: absolute;
+  z-index: 3;
+  right: 0;
+  bottom: 0.2em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.52em;
+  padding: var(--sinew-logo-plate-padding, 0);
+  border: var(--sinew-logo-plate-border, 0);
+  border-radius: var(--sinew-logo-plate-radius, 0);
+  background: var(--sinew-logo-plate, transparent);
+  box-shadow: var(--sinew-logo-plate-shadow, none);
+  pointer-events: none;
+}
+
+.reveal .institution-lockup img {
+  display: block;
+  width: auto;
+  height: 0.88em;
+  max-height: none;
+  margin: 0;
+  object-fit: contain;
+}
+
+.reveal .institution-lockup > p {
+  display: contents;
+  margin: 0;
+}
+
+.reveal .institution-lockup .institution-logo-iris { height: 0.96em; }
+
+.reveal .slide.level2 > .institution-lockup {
+  right: 0.12em;
+  bottom: 0.12em;
+  gap: 0.36em;
+}
+
+.reveal .slide.level2 > .institution-lockup img { height: 0.56em; }
+
+.reveal .slide.level2 > .institution-lockup .institution-logo-iris { height: 0.61em; }
+
 /* Reveal letterboxes a 16:9 canvas on wider displays. Put divider decoration
    on the viewport, then keep the scaled slide and its generated background
    transparent so the treatment remains full bleed. */
@@ -152,6 +197,20 @@ html:has(.reveal .section-slide.present) .reveal .slide-background-content {
 
 .reveal .algorithm-caption {
   margin-top: 0.55em;
+  font-family: var(--sinew-algorithm-font, var(--r-code-font));
+}
+
+/* Algorithms need a real monospace face even when a profile uses display type
+   for small labels. Profiles may specialize this stack without changing the
+   semantic algorithm component. */
+.reveal pre,
+.reveal pre code,
+.reveal pre code span,
+.reveal .algorithm-caption,
+.reveal .sinew-reference-preview-algorithm,
+.reveal .sinew-fullscreen-algorithm {
+  font-family: var(--sinew-algorithm-font, var(--r-code-font));
+  font-variant-ligatures: none;
 }
 
 .reveal .algorithm-caption + .profile-checklist {
@@ -215,6 +274,41 @@ html:has(.reveal .section-slide.present) .reveal .slide-background-content {
   background: var(--sinew-accent);
 }
 
+/* Native Quarto figure/table links and Sinew statement/algorithm links share
+   one quiet inline treatment. Q/H remain bare labels without pills or boxes. */
+.reveal a.quarto-xref,
+.reveal a.sinew-reference {
+  color: var(--sinew-accent);
+  font-family: var(--r-code-font);
+  font-weight: 800;
+  text-decoration: underline;
+  text-decoration-thickness: 0.09em;
+  text-underline-offset: 0.13em;
+}
+
+.reveal a.sinew-reference-hypothesis { color: var(--sinew-success); }
+
+.reveal a.quarto-xref:hover,
+.reveal a.quarto-xref:focus-visible,
+.reveal a.sinew-reference:hover,
+.reveal a.sinew-reference:focus-visible {
+  background: transparent;
+  outline: 0;
+  text-decoration-thickness: 0.18em;
+  text-underline-offset: 0.17em;
+  text-shadow: 0 0 0.02em currentColor;
+}
+
+.reveal a.sinew-reference.is-unresolved {
+  color: var(--sinew-danger);
+  text-decoration-style: wavy;
+}
+
+.reveal .cross-reference-example {
+  margin-top: 0.62em;
+  font-size: 0.64em;
+}
+
 .reveal .citation-help {
   margin-top: 0.65em;
   padding: 0.55em 0.7em;
@@ -241,6 +335,16 @@ html:has(.reveal .section-slide.present) .reveal .slide-background-content {
   line-height: 1.35;
 }
 
+.reveal .tippy-box[data-theme~="sinew-figure"],
+.reveal .tippy-box[data-theme~="sinew-algorithm"] {
+  max-width: min(44em, 900px) !important;
+}
+
+.reveal .tippy-box[data-theme~="sinew-table"] {
+  max-width: min(58em, 1100px) !important;
+  font-size: 0.58em;
+}
+
 .reveal .tippy-box[data-theme~="light-border"] .tippy-content {
   padding: 0.72em 0.82em;
 }
@@ -258,6 +362,66 @@ html:has(.reveal .section-slide.present) .reveal .slide-background-content {
   overflow-wrap: anywhere;
   text-decoration-thickness: 0.1em;
   text-underline-offset: 0.12em;
+}
+
+.reveal .sinew-reference-preview-label {
+  margin: 0 0 0.38em;
+  color: var(--sinew-accent);
+  font-family: var(--r-code-font);
+  font-size: 0.86em;
+  font-weight: 800;
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+}
+
+.reveal .sinew-reference-preview-hypothesis .sinew-reference-preview-label {
+  color: var(--sinew-success);
+}
+
+.reveal .sinew-reference-preview-statement { margin: 0; }
+
+.reveal .sinew-reference-preview-algorithm {
+  display: grid;
+  gap: 0.5em;
+}
+
+.reveal .sinew-reference-preview-algorithm pre {
+  max-height: 16em;
+  margin: 0;
+  overflow: hidden;
+  white-space: pre-wrap;
+}
+
+.reveal .sinew-reference-preview-algorithm .algorithm-caption {
+  margin: 0;
+  font-size: 0.84em;
+}
+
+.reveal .sinew-reference-preview-evidence,
+.reveal .sinew-reference-preview-evidence figure {
+  display: grid;
+  gap: 0.5em;
+  margin: 0;
+}
+
+.reveal .sinew-reference-preview-figure img {
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  max-height: 19em;
+  margin: 0 auto;
+  object-fit: contain;
+}
+
+.reveal .sinew-reference-preview-evidence :is(.caption, figcaption) {
+  margin: 0;
+  font-size: 0.84em;
+}
+
+.reveal .sinew-reference-preview-table table {
+  width: 100%;
+  margin: 0;
+  font-size: 0.96em;
 }
 
 /* Citeproc fills #refs. The runtime clones selected entries into each
@@ -412,6 +576,113 @@ html:has(.reveal .section-slide.present) .reveal .slide-background-content {
 .reveal .hot { color: var(--sinew-danger); font-weight: 700; }
 .reveal .ok { color: var(--sinew-success); font-weight: 700; }
 
+/* Research framing is a visual identity component, not a generic numbered
+   list. CSS counters produce Q1-Q9 and H1-H9; authors provide semantic list
+   markup and never type the identifiers into the item text. */
+.reveal .research-framing {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75em;
+  align-items: stretch;
+}
+
+.reveal .research-block {
+  --sinew-statement-color: var(--sinew-accent);
+  min-width: 0;
+  padding: 0.68em 0.72em 0.72em;
+  border: 1px solid var(--sinew-line);
+  border-top: 0.16em solid var(--sinew-statement-color);
+  border-radius: var(--sinew-radius);
+  background: var(--sinew-panel);
+}
+
+.reveal .research-block-hypotheses {
+  --sinew-statement-color: var(--sinew-success);
+}
+
+.reveal .research-block > p:first-child {
+  margin: 0 0 0.5em;
+  color: var(--sinew-statement-color);
+  font-family: var(--r-code-font);
+  font-size: 0.48em;
+  font-weight: 800;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+}
+
+.reveal ol.research-questions,
+.reveal ol.research-hypotheses {
+  display: grid;
+  gap: 0.42em;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.reveal ol.research-questions { counter-reset: sinew-research-question; }
+.reveal ol.research-hypotheses { counter-reset: sinew-research-hypothesis; }
+
+.reveal ol.research-questions li,
+.reveal ol.research-hypotheses li {
+  position: relative;
+  box-sizing: border-box;
+  min-height: 3.25em;
+  margin: 0;
+  padding: 0.58em 0.2em 0.58em 3.3em;
+  border: 0;
+  background: transparent;
+  font-size: 0.66em;
+  line-height: 1.28;
+}
+
+.reveal ol.research-questions li { counter-increment: sinew-research-question; }
+.reveal ol.research-hypotheses li { counter-increment: sinew-research-hypothesis; }
+
+.reveal ol.research-questions li::before,
+.reveal ol.research-hypotheses li::before {
+  position: absolute;
+  top: 50%;
+  left: 0.12em;
+  width: 2.7em;
+  padding: 0.25em 0;
+  transform: translateY(-50%);
+  border: 2px solid currentColor;
+  border-radius: calc(var(--sinew-radius) * 0.7);
+  color: var(--sinew-statement-color);
+  font-family: var(--r-code-font);
+  font-size: 0.68em;
+  font-weight: 800;
+  letter-spacing: 0.025em;
+  line-height: 1;
+  text-align: center;
+}
+
+.reveal ol.research-questions li::before {
+  content: "Q" counter(sinew-research-question);
+}
+
+.reveal ol.research-hypotheses li::before {
+  content: "H" counter(sinew-research-hypothesis);
+}
+
+/* Use on at most one primary item per list. The filled identifier and text
+   weight keep the emphasis visible without boxing the statement. */
+.reveal ol.research-questions li.is-highlighted,
+.reveal ol.research-hypotheses li.is-highlighted {
+  font-weight: 700;
+}
+
+.reveal ol.research-questions li.is-highlighted::before,
+.reveal ol.research-hypotheses li.is-highlighted::before {
+  border-width: 3px;
+  color: var(--sinew-bg);
+  background: var(--sinew-statement-color);
+}
+
+.reveal .research-framing + .source {
+  margin-top: 0.62em;
+}
+
 .reveal ol.takeaways {
   margin: 0.45em 0 0;
   padding: 0;
@@ -438,6 +709,175 @@ html:has(.reveal .section-slide.present) .reveal .slide-background-content {
   font-family: var(--r-code-font);
   font-size: 0.62em;
   content: counter(sinew-takeaway);
+}
+
+/* Figures, tables, and captioned algorithms expose one direct inspect action:
+   click to open, click the fullscreen evidence to close, and use focus plus
+   Enter/Space or Escape for the keyboard equivalents. */
+.reveal .sinew-expandable {
+  position: relative;
+  cursor: zoom-in;
+}
+
+.reveal .sinew-expandable:focus-visible {
+  outline: 3px solid var(--sinew-accent);
+  outline-offset: 0.16em;
+}
+
+.reveal .sinew-fullscreen-dialog {
+  box-sizing: border-box;
+  width: 100vw;
+  max-width: none;
+  height: 100vh;
+  max-height: none;
+  margin: 0;
+  padding: clamp(22px, 3vw, 58px);
+  border: 0;
+  color: var(--sinew-ink);
+  background: var(--sinew-bg);
+  overflow: hidden;
+}
+
+.reveal .sinew-fullscreen-dialog::backdrop {
+  background: color-mix(in srgb, #000000 72%, transparent);
+}
+
+.reveal .sinew-fullscreen-shell {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 0.8em;
+  width: 100%;
+  height: 100%;
+}
+
+.reveal .sinew-fullscreen-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1em;
+  padding-bottom: 0.5em;
+  border-bottom: 2px solid var(--sinew-line-strong);
+}
+
+.reveal .sinew-fullscreen-title {
+  margin: 0;
+  color: var(--sinew-muted);
+  font-family: var(--r-code-font);
+  font-size: clamp(16px, 1.35vw, 25px);
+  font-weight: 800;
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+}
+
+.reveal .sinew-fullscreen-content {
+  display: grid;
+  min-width: 0;
+  min-height: 0;
+  place-items: center;
+  overflow: hidden;
+  cursor: zoom-out;
+}
+
+.reveal .sinew-fullscreen-dialog[data-sinew-evidence-kind="figure"] .sinew-fullscreen-content > figure {
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  min-height: 0;
+  max-height: none;
+  grid-template-rows: minmax(0, 1fr) auto;
+  overflow: hidden;
+}
+
+.reveal .sinew-fullscreen-dialog[data-sinew-evidence-kind="figure"] .sinew-fullscreen-content figure > div {
+  display: grid;
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  min-height: 0;
+  align-self: stretch;
+  place-items: center;
+  overflow: hidden;
+}
+
+.reveal .sinew-fullscreen-dialog[data-sinew-evidence-kind="figure"] .sinew-fullscreen-content :is(img, svg) {
+  width: 100% !important;
+  max-width: 100%;
+  height: 100% !important;
+  max-height: 100% !important;
+  position: absolute;
+  inset: 0;
+  object-fit: contain;
+}
+
+.reveal .sinew-fullscreen-content > * {
+  box-sizing: border-box;
+  width: min(94vw, 1600px);
+  max-width: 100%;
+  max-height: 100%;
+  margin: 0;
+}
+
+.reveal .sinew-fullscreen-content figure,
+.reveal .sinew-fullscreen-content .quarto-figure {
+  display: grid;
+  gap: 0.5em;
+  place-items: center;
+}
+
+.reveal .sinew-fullscreen-content img,
+.reveal .sinew-fullscreen-content svg {
+  width: auto;
+  max-width: 94vw;
+  height: auto;
+  max-height: 76vh !important;
+  object-fit: contain;
+}
+
+.reveal .sinew-fullscreen-content table {
+  width: 100%;
+  font-size: clamp(18px, 1.45vw, 32px);
+}
+
+.reveal .sinew-fullscreen-dialog[data-sinew-evidence-kind="table"] .sinew-fullscreen-content > * {
+  width: min(92vw, 2800px);
+  max-width: none;
+  max-height: 100%;
+  overflow: hidden;
+}
+
+.reveal .sinew-fullscreen-dialog[data-sinew-evidence-kind="table"] .sinew-fullscreen-content :is(.quarto-float, figure) {
+  width: 100%;
+  max-width: none;
+  margin-right: 0;
+  margin-left: 0;
+}
+
+.reveal .sinew-fullscreen-dialog[data-sinew-evidence-kind="table"] .sinew-fullscreen-content figure > div {
+  width: 100%;
+  max-width: none;
+}
+
+.reveal .sinew-fullscreen-algorithm {
+  display: grid;
+  gap: 0.65em;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  min-height: 0;
+  align-content: center;
+}
+
+.reveal .sinew-fullscreen-algorithm pre {
+  width: 100%;
+  margin: 0;
+  font-size: clamp(18px, 1.35vw, 32px);
+}
+
+.reveal .sinew-fullscreen-content :is(figcaption, caption, .algorithm-caption) {
+  max-width: min(96vw, 2400px);
+  font-size: clamp(18px, 1.25vw, 32px);
+  line-height: 1.3;
 }
 
 /* Academic figures: preserve aspect ratio and reserve room for captions. */

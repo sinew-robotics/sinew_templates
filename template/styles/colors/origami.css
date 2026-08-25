@@ -26,6 +26,11 @@
   --sinew-data-3: #b895f5;
   --sinew-data-4: #75d66e;
   --sinew-data-5: #ff8b73;
+  --sinew-logo-plate: color-mix(in srgb, var(--sinew-ink) 88%, var(--sinew-accent));
+  --sinew-logo-plate-padding: 0.18em 0.28em;
+  --sinew-logo-plate-border: 1px solid color-mix(in srgb, var(--sinew-accent) 45%, transparent);
+  --sinew-logo-plate-radius: 0.12em;
+  --sinew-logo-plate-shadow: 0 0.14em 0.42em rgba(0, 0, 0, 0.2);
   color: var(--sinew-ink);
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 }

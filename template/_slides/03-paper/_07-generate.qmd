@@ -7,7 +7,7 @@ python3 scripts/generate_gallery_plots.py
 quarto render --profile color-paper
 ```
 
-::: {.algorithm-caption}
+::: {#algorithm-gallery-paper-render .algorithm-caption}
 **Algorithm.** Rebuild the illustrative figures, then render the Paper style gallery to `_site/index.html`.
 :::
 

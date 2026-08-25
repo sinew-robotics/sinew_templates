@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+## 1.1.0  -  2026-08-25
+
+- Added required Q1-Q9 research-question and H1-H9 research-hypothesis lists, with an optional non-color-only primary-item highlight and examples in every visual style.
+- Retained two large research group panels while removing per-statement row boxes; per-item identity now lives in the Q/H labels, with a filled-label and text-weight primary highlight.
+- Added bare Q/H reference shortcodes, stable algorithm references, and profile-aware hover/focus previews for figure, table, algorithm, question, and hypothesis links.
+- Added a keyboard-accessible fullscreen inspector for every rendered figure, table, and captioned algorithm.
+- Added owner-supplied KAIST and Interactive Robotic Systems Laboratory affiliation marks on every slide, preserving PNG transparency while giving dark profiles a light plate derived from their own palette.
+- Simplified figure, table, and algorithm inspection to click-to-open and click-to-close without visible controls; removed fixed-width fullscreen caps and made captions viewport-responsive.
+- Re-typeset math in cloned cross-reference previews and widened table hover cards for legible columns.
+- Replaced accidental proportional algorithm type in unmasked, the give, the meeting, and movement with four profile-matched monospace stacks.
+- Switched Reveal math rendering from the incompatible MathJax 2 loader to Quarto's KaTeX browser path so dollar-delimited table arrows render reliably.
+
 ## 1.0.0  -  2026-08-25
 
 - Released nine selectable visual styles and a browser-based 2D gallery with one style per horizontal column.

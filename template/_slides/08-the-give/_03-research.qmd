@@ -1,0 +1,27 @@
+## Questions isolate uncertainty; hypotheses state the expected evidence {data-style-preview="the-give"}
+
+<span class="kicker">Research framing | illustrative scenario</span>
+
+:::: {.research-framing}
+::: {.research-block .research-block-questions}
+**Research questions**
+
+<ol class="research-questions">
+<li class="is-highlighted">Can contact-aware supervision improve recovery under held-out disturbances?</li>
+<li>Which force-history features transfer from simulation to real insertion?</li>
+</ol>
+:::
+
+::: {.research-block .research-block-hypotheses}
+**Research hypotheses**
+
+<ol class="research-hypotheses">
+<li class="is-highlighted">Contact-aware supervision increases recovery success relative to behavior cloning.</li>
+<li>Force-history features reduce peak contact force without lowering task completion.</li>
+</ol>
+:::
+::::
+
+::: {.source}
+Illustrative placeholder, not a scientific claim. Replace each item with a paper-grounded question or falsifiable hypothesis and map it to evidence.
+:::

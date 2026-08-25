@@ -22,6 +22,12 @@ Figure styling builds on SciencePlots and interface checks use WCAG 2.2 [@scienc
 :::
 :::
 
+::: {.evidence-card .cross-reference-example}
+**Linked local evidence**
+
+The illustrative chain connects @fig-gallery-high-contrast, @tbl-gallery-high-contrast, {{< alg algorithm-gallery-high-contrast-method >}}, {{< q 1 >}}, and {{< h 1 >}}.
+:::
+
 ::: {.citation-help}
-Hover or focus a citation to preview its reference. Activate it to open the High Contrast references slide in this column.
+Hover or focus a citation or inline reference for a preview. Activate it to open its bibliography entry, evidence object, or original statement in this column.
 :::

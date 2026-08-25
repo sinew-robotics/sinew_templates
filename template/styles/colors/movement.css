@@ -21,6 +21,7 @@
   --sinew-data-4: #00798a;
   --sinew-data-5: #0b0f14;
   --sinew-radius: 0.45em;
+  --sinew-algorithm-font: "Latin Modern Mono Light Cond", "Liberation Mono", monospace;
   color: var(--sinew-ink);
   font-family: Lora, Georgia, "Times New Roman", serif;
 }
@@ -34,14 +35,14 @@
   font-weight: 700;
   letter-spacing: 0.004em;
 }
-.reveal code,
-.reveal pre,
 .reveal .kicker,
 .reveal .eyebrow,
 .reveal .figcap,
 .reveal figcaption,
 .reveal caption,
 .reveal .source { font-family: "Arial Narrow", Arial, sans-serif; }
+.reveal code,
+.reveal pre { font-family: var(--sinew-algorithm-font); }
 .reveal pre code { background: #ffffff; color: #0b0f14; }
 .reveal #title-slide,
 .reveal .section-slide {

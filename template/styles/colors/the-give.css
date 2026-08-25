@@ -21,6 +21,7 @@
   --sinew-data-4: #96543c;
   --sinew-data-5: #3b6f92;
   --sinew-radius: 0.52em;
+  --sinew-algorithm-font: "Noto Mono", "DejaVu Sans Mono", monospace;
   color: var(--sinew-ink);
   font-family: Faustina, Georgia, "Times New Roman", serif;
 }
@@ -33,14 +34,14 @@
   font-family: Signika, "Trebuchet MS", Arial, sans-serif;
   font-weight: 600;
 }
-.reveal code,
-.reveal pre,
 .reveal .kicker,
 .reveal .eyebrow,
 .reveal .figcap,
 .reveal figcaption,
 .reveal caption,
 .reveal .source { font-family: Signika, "Trebuchet MS", Arial, sans-serif; }
+.reveal code,
+.reveal pre { font-family: var(--sinew-algorithm-font); }
 .reveal pre code { background: #dbe3ef; color: #232b36; }
 .reveal #title-slide,
 .reveal .section-slide {

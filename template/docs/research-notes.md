@@ -20,6 +20,8 @@ Primary documentation reviewed:
 - [Project profiles](https://quarto.org/docs/projects/profiles.html): profile groups enforce mutually exclusive selections; profile-specific `metadata-files` are unsupported.
 - [Reveal themes](https://quarto.org/docs/presentations/revealjs/themes.html): custom SCSS themes and additional CSS are supported.
 - [Figures](https://quarto.org/docs/authoring/figures-and-layout.html): `fig-alt`, captions, sizing, and figure layout.
+- [Cross-references](https://quarto.org/docs/authoring/cross-references.html): stable `#fig-...` and `#tbl-...` targets render automatic labels and hyperlinks; Quarto also reserves `#alg-...` for theorem-style algorithm blocks.
+- [Shortcode extensions](https://quarto.org/docs/extensions/shortcodes.html): an extension contributes Lua shortcodes from `_extension.yml`, and each shortcode returns Pandoc AST nodes.
 
 Architecture decisions derived from those sources:
 
@@ -28,6 +30,7 @@ Architecture decisions derived from those sources:
 - Keep exactly one visual `color-*` profile active for a normal deck.
 - Keep event logistics out of render metadata and verify them separately for the exact delivery context.
 - Ship root agent rules and separately named copyable templates because Quarto excludes `AGENTS.md` and `CLAUDE.md` from starter copies.
+- Keep caption-below-code algorithms on Sinew's `#algorithm-...` targets and `alg` shortcode rather than Quarto's theorem-style `#alg-...` block; use shortcodes for Q/H statement references because CSS-generated list labels do not exist in the source AST.
 
 ## Event delivery evidence
 

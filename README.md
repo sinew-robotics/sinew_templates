@@ -10,7 +10,7 @@ quarto render template
 
 No profile selection or source edit is required for the demo. Sinew also provides one selectable visual-style profile for delivery builds, covering palette, type, surfaces, syntax highlighting, and plot tokens.
 
-The [live gallery](https://sinew-robotics.github.io/sinew_templates/) has one introduction column and one column for each of the nine visual styles. Move right between styles and down through the guidance -> problem -> algorithm -> plot -> table -> conclusion -> generation -> citations -> references sequence. Runtime gallery code previews the style represented by each column. A real talk selects exactly one `color-*` profile for the whole deck. Repository builds write `template/_site/index.html`.
+The [live gallery](https://sinew-robotics.github.io/sinew_templates/) has one introduction column and one column for each of the nine visual styles. Move right between styles and down through the guidance -> problem -> research framing -> algorithm -> plot -> table -> conclusion -> generation -> citations -> references sequence. Runtime gallery code previews the style represented by each column. A real talk selects exactly one `color-*` profile for the whole deck. Repository builds write `template/_site/index.html`.
 
 The self-contained Quarto project lives in `template/`. It contains all `_quarto-color-*.yml` profiles, `deck.qmd`, `references.bib`, slides, styles, assets, scripts, documentation, and the bundled extension. Repository-level governance and CI stay at the top level.
 
@@ -21,6 +21,10 @@ The self-contained Quarto project lives in `template/`. It contains all `_quarto
 - Folder-backed horizontal subtopics and vertical evidence stacks using Reveal's 2D grid.
 - Nine visual profiles: Origami, paper, high contrast, blueprint, scholar, unmasked, the give, the meeting, and movement.
 - Semantic figure, table, evidence, metric, source, and takeaway styles.
+- Required Q1-Q9 research-question and H1-H9 research-hypothesis lists with a primary-item highlight treatment.
+- Bare `{{< q N >}}` and `{{< h N >}}` hyperlinks that preview and return to the original statement, plus automatic figure, table, and algorithm cross-reference previews.
+- Click or keyboard activation to inspect figures, tables, and captioned algorithms in a profile-aware fullscreen dialog.
+- A reusable divider-slide lockup with owner-supplied KAIST and Interactive Robotic Systems Laboratory marks.
 - Profile-aware citation hover cards, a generated shared bibliography, and local two-column references in every style column.
 - A common projected-figure overlay, one matching Matplotlib overlay per visual style, and a plot generator.
 - Human documentation plus comprehensive `AGENTS.md` and `CLAUDE.md` operating rules.
@@ -173,4 +177,4 @@ Every push, pull request, and release tag runs structural and contrast validatio
 
 ## Status and scope
 
-This repository is an academic authoring system, not an official event template. Delivery rules change by event, edition, track, and presentation type; consult current official instructions instead of expecting a visual profile to encode them. The current stable release is v1.0.0.
+This repository is an academic authoring system, not an official event template. Delivery rules change by event, edition, track, and presentation type; consult current official instructions instead of expecting a visual profile to encode them. The current stable release is v1.1.0.

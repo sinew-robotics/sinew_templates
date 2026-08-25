@@ -62,9 +62,53 @@ Keep visible vertical space between adjacent panels, code blocks, evidence group
 
 For table slides, keep one header row, include units in headings, align numeric columns, and provide a caption with scope, sample size, and evidence status. Use a unique `#tbl-...` label. For structured result tables, wrap the table in `.structured-results` plus `.ours-last-N`, put metric direction in headings with `$\uparrow$`/`$\downarrow$`, put `Total` last, bold the best per metric, and keep labeled `Ours:` rows last. The gallery demonstrates this after the plot slide in every style column.
 
-Quarto-generated `Figure N` and `Table N` identifiers are bolded by the format; do not manually repeat them in caption prose. Put an `.algorithm-caption` directly beneath procedural code and inside the same column or container. Start it with `**Algorithm.**`; Sinew replaces that source label with a globally numbered, bold `Algorithm N` identifier. Then state inputs/outputs or scope and whether the procedure is illustrative, adapted, or traced to the research implementation. Treat a procedural shell block as an algorithm and caption it too.
+Quarto-generated `Figure N` and `Table N` identifiers are bolded by the format; do not manually repeat them in caption prose. Put an `.algorithm-caption` directly beneath procedural code and inside the same column or container. Start it with `**Algorithm.**`; Sinew replaces that source label with a globally numbered, bold `Algorithm N` identifier. Then state inputs/outputs or scope and whether the procedure is illustrative, adapted, or traced to the research implementation. Treat a procedural shell block as an algorithm and caption it too. Use the profile's genuine monospace `--sinew-algorithm-font` for both the body and caption, with programming ligatures disabled so literal ASCII remains visible.
 
 The source project's quiet visual hierarchy, assertion headlines, one-evidence discipline, figure captions, and numbered takeaways are retained. Branding and app-specific UI are not.
+
+## Research questions and hypotheses
+
+Research questions and research hypotheses use required semantic list classes. Do not type `Q1`, `Q2`, `H1`, or `H2` into item text: Sinew generates Q1-Q9 and H1-H9 with CSS counters so identifiers remain consistent across every visual profile.
+
+```markdown
+:::: {.research-framing}
+::: {.research-block .research-block-questions}
+**Research questions**
+
+<ol class="research-questions">
+<li class="is-highlighted">Which observation resolves the stated uncertainty?</li>
+<li>Under which condition does the effect fail?</li>
+</ol>
+:::
+
+::: {.research-block .research-block-hypotheses}
+**Research hypotheses**
+
+<ol class="research-hypotheses">
+<li class="is-highlighted">The proposed signal improves the primary outcome relative to the named baseline.</li>
+<li>The effect persists under the stated distribution shift.</li>
+</ol>
+:::
+::::
+```
+
+- Use one to nine items per list. Split a longer set across explicit slides instead of producing Q10/H10 or shrinking the slide.
+- A question states an uncertainty the study can answer; a hypothesis states a falsifiable expected relation, direction, population/task, and comparison when known.
+- Keep identifiers stable across the deck and map each question/hypothesis to visible evidence or a clearly marked unresolved result.
+- Keep exactly two large research panels: one encloses all questions and one encloses all hypotheses. Inside those panels, keep every statement row unboxed; the Q/H identifier is the only per-statement bounded shape.
+- Use `.is-highlighted` on at most one primary item per list. It fills and thickens the identifier label and adds text weight, so emphasis does not depend on color alone or place a box around the statement.
+- Questions use the selected profile's accent role; hypotheses use its success role. Do not override those colors per slide.
+- Keep illustrative examples labeled until paper-grounded wording and evidence replace them.
+
+Reference a generated identifier in prose with the bundled shortcodes:
+
+```markdown
+The primary evaluation answers {{< q 1 >}} and tests {{< h 1 >}}.
+```
+
+The rendered `Q1` and `H1` are bare, emphasized text links rather than badges or boxed chips. Pointer hover and keyboard focus open a profile-aware preview containing the original statement; activation follows a hyperlink to that statement. Never type a manual `Q1`/`H1` link or hand-build its HTML. Shortcodes accept only integers 1 through 9, so `{{< q 10 >}}` and `{{< h primary >}}` fail at render time.
+
+Keep one canonical question list and one canonical hypothesis list per logical deck whenever possible. Resolution prefers a matching statement in the reference's current horizontal stack, which lets the style gallery repeat Q1/H1 independently. If there is no local target, Sinew resolves only one unique deck-wide match. Multiple out-of-stack Q1 or H1 targets are ambiguous and remain visibly unresolved. Once colleagues or speaker notes refer to an identifier, append or deliberately migrate items instead of silently renumbering them.
 
 ## Grid navigation without losing the audience
 
@@ -112,6 +156,27 @@ Keep exactly one `::: {#refs}` target in `.global-references-slide`; it is the s
 Every global or local references view uses two columns without splitting an entry. Do not manually add `.smaller` or `.scrollable`; the theme overrides Quarto's automatic helpers so references remain fixed to the slide canvas. If a scoped view no longer fits legibly, reduce its key set, split the scope across additional explicit slides, or move the complete list to a handout instead of shrinking or scrolling it.
 
 Only cited items appear by default. Use the documented Pandoc `nocite` metadata deliberately when the deck must list an uncited resource. Put a visible short source on the same slide as reused figures, video, datasets, or borrowed claims; a hover preview does not replace projected attribution. Confirm license/permission because citation is not reuse permission.
+
+Internal cross-references are distinct from scholarly citations. Use stable object labels and automatic references:
+
+```markdown
+The evidence chain uses @fig-contact, @tbl-ablation,
+{{< alg algorithm-contact-training >}}, {{< q 1 >}}, and {{< h 1 >}}.
+```
+
+- Figures use `#fig-...` and tables use `#tbl-...`; cite them with native Quarto `@fig-...` and `@tbl-...` syntax.
+- Captioned algorithms put a stable `#algorithm-...` ID on `.algorithm-caption`, for example `::: {#algorithm-contact-training .algorithm-caption}`, then cite it with `{{< alg algorithm-contact-training >}}`. Do not use Quarto's theorem-style `#alg-...` block for this caption-below-code component.
+- Questions and hypotheses use `{{< q N >}}` and `{{< h N >}}`; do not manually write linked labels.
+- Hover or focus previews the original figure, table, algorithm, question, or hypothesis in the active profile. Preview clones rerun KaTeX so dollar-delimited math remains rendered; table previews use a wider card for legible columns. Activation navigates to the original target. From there, figures, tables, and algorithms can be opened in the control-free fullscreen inspector: click evidence to open it, click the fullscreen evidence again to close it, use Enter/Space to open from focus, or Escape to close.
+- Never hard-code rendered numbers such as `Figure 2`, `Table 3`, or `Algorithm 4`; numbering can change when slides move.
+
+Treat a source citation and an internal reference according to their different jobs: a bibliography citation identifies outside evidence and permissions provenance, while an internal reference points to a claim or object already in this deck. Many slides legitimately need both.
+
+## Affiliation marks
+
+The starter demonstrates KAIST and Interactive Robotic Systems Laboratory affiliation marks on every slide. The owner supplied the PNGs under `assets/branding/`; their provenance and reuse caveat are recorded in `assets/branding/README.md`. The authored divider lockup is the canonical accessible copy, and the Sinew runtime repeats a smaller decorative copy on every content slide. Repeated copies are hidden from assistive technology to avoid noisy duplicate announcements. The `.institution-lockup` component preserves the original artwork, including its transparent alpha channel. Light profiles leave the lockup unbacked. Dark profiles use a light plate mixed from their own ink and accent tokens, never generic white. Do not recolor the marks or flatten their transparency.
+
+Replace or remove these marks when the author affiliation changes. Confirm current institutional identity and trademark rules before public delivery, keep informative `alt` text, do not distort or recolor the files, and inspect the lockup on both ordinary widescreen and ultrawide displays.
 
 ## Computation
 

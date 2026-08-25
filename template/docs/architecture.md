@@ -56,6 +56,7 @@ Render one style with `quarto render --profile color-origami`. Render every supp
 - `.panel` / `.evidence-card`
 - `.metric-row` / `.metric`
 - `.tag`, `.hot`, `.ok`
+- `.research-framing`, `.sinew-reference`, `.institution-lockup`
 - `ol.takeaways`
 - `.section-slide`
 
@@ -65,7 +66,13 @@ New visual styles should target these roles and tokens, not sample-slide IDs.
 
 Pandoc citeproc generates one authoritative `#refs` list. Sinew keeps that list in `.global-references-slide` and uses `captions.html` to clone selected entries into each `.style-references` container after the document loads. The clones remove source IDs, preserve list roles, and remain derived from `references.bib`. Citation links inside a style stack are then routed to that stack's stable `#references-<style>` slide; Quarto hover previews continue to read the original `ref-<key>` entries.
 
-The Tippy `light-border` citation preview is restyled in `core.scss` using the same `--sinew-*` tokens as the active deck. In gallery mode, the hover surface therefore changes with the current column. In a standalone profile, it follows the single selected profile.
+The bundled `research-references.lua` shortcode extension emits semantic placeholders for `{{< q N >}}`, `{{< h N >}}`, and `{{< alg algorithm-id >}}`. The post-body runtime numbers algorithm captions, adds Q1-Q9/H1-H9 identifiers and accessible names, resolves those placeholders in the current horizontal stack or to one unique deck-wide statement, and supplies direct hyperlinks. It also registers native Quarto figure/table cross-references plus Sinew algorithm/Q/H references for profile-aware Tippy previews. Preview factories rerun KaTeX on unprocessed cloned math. Evidence-specific Tippy themes give tables a wider maximum than figures, algorithms, statements, or bibliography entries.
+
+The same runtime registers figures, tables, and captioned algorithms with the evidence inspector. The native dialog stays inside `.reveal` so it inherits the currently active gallery/profile tokens while entering the browser top layer. It clones evidence only when opened, strips duplicate IDs, reruns math typesetting, traps Reveal key handling inside the dialog, and restores focus when closed. All three evidence types use the same control-free direct-interaction mode: the source object is keyboard focusable, a second click inside fullscreen content closes the dialog, and evidence-specific CSS uses the viewport while preserving each object's structure. Captions use viewport-responsive type.
+
+`installInstitutionLockups()` treats the authored divider lockup as the canonical source and clones a compact decorative copy into every content slide at startup. Clones retain image alpha and aspect ratio, but use empty alternative text and `aria-hidden` because announcing identical affiliation marks on every slide would be redundant.
+
+The Tippy `light-border` citation and internal-reference previews are restyled in `core.scss` using the same `--sinew-*` tokens as the active deck. In gallery mode, the hover surface therefore changes with the current column. In a standalone profile, it follows the single selected profile.
 
 ## Plot-style pairing
 
@@ -78,5 +85,7 @@ Static figures do not inherit Reveal CSS. Each color profile therefore has a mat
 ## Resource policy
 
 `embed-resources: true` is the offline-safe default. If a talk adds MP4 video, test the target browser: some browser/media combinations do not decode video from data URIs. In that case set `embed-resources: false`, ship the generated dependency directory and assets, and present over a local HTTP server.
+
+The Reveal format uses Quarto's KaTeX browser path for dollar-delimited math. Quarto keeps the TeX source in the generated HTML and the KaTeX runtime replaces it when the deck loads. This avoids the incompatible MathJax 2 loader previously seen in the gallery. Test every added LaTeX command in a browser because KaTeX and MathJax do not support exactly the same command surface.
 
 Do not use remote font imports in delivery-critical decks. Bundle licensed fonts or specify robust system fallbacks and test on the presentation machine.

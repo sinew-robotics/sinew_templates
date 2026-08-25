@@ -5,3 +5,8 @@
 An exposed monochrome system with visible structure.
 
 <span class="visual-preview-label">color-unmasked</span>
+
+<div class="institution-lockup" role="group" aria-label="Institutional affiliations">
+<img class="institution-logo institution-logo-kaist" src="assets/branding/kaist_logo.png" alt="KAIST">
+<img class="institution-logo institution-logo-iris" src="assets/branding/iris_logo.png" alt="Interactive Robotic Systems Laboratory">
+</div>
