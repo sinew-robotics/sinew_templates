@@ -5,6 +5,14 @@
  * columns.html updates data-sinew-gallery-style when Reveal changes slides.
  */
 
+html[data-sinew-gallery-style] .reveal {
+  --sinew-logo-plate: transparent;
+  --sinew-logo-plate-padding: 0;
+  --sinew-logo-plate-border: 0;
+  --sinew-logo-plate-radius: 0;
+  --sinew-logo-plate-shadow: none;
+}
+
 html:is([data-sinew-gallery-style="intro"], [data-sinew-gallery-style="origami"]) {
   --gallery-bg: #131416;
 }
@@ -25,6 +33,11 @@ html:is([data-sinew-gallery-style="intro"], [data-sinew-gallery-style="origami"]
   --sinew-data-3: #b895f5;
   --sinew-data-4: #75d66e;
   --sinew-data-5: #ff8b73;
+  --sinew-logo-plate: color-mix(in srgb, var(--sinew-ink) 88%, var(--sinew-accent));
+  --sinew-logo-plate-padding: 0.18em 0.28em;
+  --sinew-logo-plate-border: 1px solid color-mix(in srgb, var(--sinew-accent) 45%, transparent);
+  --sinew-logo-plate-radius: 0.12em;
+  --sinew-logo-plate-shadow: 0 0.14em 0.42em rgba(0, 0, 0, 0.2);
   --gallery-body-font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --gallery-heading-font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --gallery-mono-font: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
@@ -94,6 +107,11 @@ html[data-sinew-gallery-style="blueprint"] .reveal {
   --sinew-data-3: #86e3ce;
   --sinew-data-4: #d7aefb;
   --sinew-data-5: #ff9a8f;
+  --sinew-logo-plate: color-mix(in srgb, var(--sinew-ink) 84%, var(--sinew-accent));
+  --sinew-logo-plate-padding: 0.18em 0.28em;
+  --sinew-logo-plate-border: 1px solid color-mix(in srgb, var(--sinew-accent) 48%, transparent);
+  --sinew-logo-plate-radius: 0.12em;
+  --sinew-logo-plate-shadow: 0 0.14em 0.42em rgba(0, 0, 0, 0.22);
   --gallery-body-font: Aptos, "Segoe UI", Arial, sans-serif;
   --gallery-heading-font: "Arial Narrow", "Aptos Display", Aptos, Arial, sans-serif;
   --gallery-mono-font: "Cascadia Mono", "SFMono-Regular", Consolas, monospace;
@@ -143,7 +161,8 @@ html[data-sinew-gallery-style="unmasked"] .reveal {
   --sinew-radius: 0;
   --gallery-body-font: "Source Serif 4", Georgia, "Times New Roman", serif;
   --gallery-heading-font: "Public Sans", Arial, sans-serif;
-  --gallery-mono-font: "Public Sans", Arial, sans-serif;
+  --gallery-mono-font: "Liberation Mono", "Courier New", Courier, monospace;
+  --sinew-algorithm-font: "Liberation Mono", "Courier New", Courier, monospace;
 }
 
 html[data-sinew-gallery-style="the-give"] { --gallery-bg: #e9eef5; }
@@ -167,7 +186,8 @@ html[data-sinew-gallery-style="the-give"] .reveal {
   --sinew-radius: 0.52em;
   --gallery-body-font: Faustina, Georgia, "Times New Roman", serif;
   --gallery-heading-font: Signika, "Trebuchet MS", Arial, sans-serif;
-  --gallery-mono-font: Signika, "Trebuchet MS", Arial, sans-serif;
+  --gallery-mono-font: "Noto Mono", "DejaVu Sans Mono", monospace;
+  --sinew-algorithm-font: "Noto Mono", "DejaVu Sans Mono", monospace;
 }
 
 html[data-sinew-gallery-style="the-meeting"] { --gallery-bg: #ecf3f2; }
@@ -191,7 +211,8 @@ html[data-sinew-gallery-style="the-meeting"] .reveal {
   --sinew-radius: 0.42em;
   --gallery-body-font: Lora, Georgia, "Times New Roman", serif;
   --gallery-heading-font: "Cormorant Garamond", Georgia, "Times New Roman", serif;
-  --gallery-mono-font: "Hanken Grotesk", Arial, sans-serif;
+  --gallery-mono-font: "Fira Code", "DejaVu Sans Mono", monospace;
+  --sinew-algorithm-font: "Fira Code", "DejaVu Sans Mono", monospace;
 }
 
 html[data-sinew-gallery-style="movement"] { --gallery-bg: #f6f8fb; }
@@ -215,7 +236,8 @@ html[data-sinew-gallery-style="movement"] .reveal {
   --sinew-radius: 0.45em;
   --gallery-body-font: Lora, Georgia, "Times New Roman", serif;
   --gallery-heading-font: "Big Shoulders Display", "Arial Narrow", Arial, sans-serif;
-  --gallery-mono-font: "Arial Narrow", Arial, sans-serif;
+  --gallery-mono-font: "Latin Modern Mono Light Cond", "Liberation Mono", monospace;
+  --sinew-algorithm-font: "Latin Modern Mono Light Cond", "Liberation Mono", monospace;
 }
 
 html[data-sinew-gallery-style] .reveal-viewport,
@@ -241,6 +263,7 @@ html[data-sinew-gallery-style] .reveal pre,
 html[data-sinew-gallery-style] .reveal .kicker,
 html[data-sinew-gallery-style] .reveal .eyebrow,
 html[data-sinew-gallery-style] .reveal .figcap,
+html[data-sinew-gallery-style] .reveal .algorithm-caption,
 html[data-sinew-gallery-style] .reveal figcaption,
 html[data-sinew-gallery-style] .reveal caption,
 html[data-sinew-gallery-style] .reveal .source {

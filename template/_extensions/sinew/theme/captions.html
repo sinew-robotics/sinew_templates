@@ -23,6 +23,27 @@
     });
   }
 
+  function installInstitutionLockups() {
+    var slides = document.querySelectorAll(".reveal .slides section.slide");
+    var source = document.querySelector(".reveal .slides section.slide .institution-lockup");
+    if (!source) return;
+
+    slides.forEach(function (slide) {
+      var hasDirectLockup = Array.from(slide.children).some(function (child) {
+        return child.classList && child.classList.contains("institution-lockup");
+      });
+      if (hasDirectLockup) return;
+
+      var lockup = source.cloneNode(true);
+      lockup.classList.add("institution-lockup-auto");
+      lockup.setAttribute("aria-hidden", "true");
+      lockup.querySelectorAll("img").forEach(function (image) {
+        image.setAttribute("alt", "");
+      });
+      slide.appendChild(lockup);
+    });
+  }
+
   function numberAlgorithmCaptions() {
     document.querySelectorAll(".algorithm-caption").forEach(function (caption, index) {
       var identifier = caption.querySelector("strong");
@@ -111,6 +132,19 @@
     return code;
   }
 
+  function typesetClonedMath(scope) {
+    if (!scope || !window.katex || typeof window.katex.render !== "function") return;
+    scope.querySelectorAll(".math").forEach(function (element) {
+      if (element.querySelector(".katex")) return;
+      var source = element.textContent.trim();
+      if (!source) return;
+      window.katex.render(source, element, {
+        displayMode: element.classList.contains("display"),
+        throwOnError: false
+      });
+    });
+  }
+
   function resolveSinewReference(reference) {
     var kind = reference.dataset.sinewReferenceKind;
     if (kind === "algorithm") {
@@ -137,6 +171,7 @@
       var code = findAlgorithmCode(target);
       if (code) preview.appendChild(stripInspectorMetadata(code.cloneNode(true)));
       preview.appendChild(stripInspectorMetadata(target.cloneNode(true)));
+      typesetClonedMath(preview);
       return preview;
     }
 
@@ -148,6 +183,7 @@
     statement.className = "sinew-reference-preview-statement";
     statement.textContent = target.textContent.trim();
     preview.append(heading, statement);
+    typesetClonedMath(preview);
     return preview;
   }
 
@@ -159,6 +195,7 @@
       preview.classList.add("sinew-reference-preview-figure");
       if (!target.matches("img")) {
         preview.appendChild(stripInspectorMetadata(target.cloneNode(true)));
+        typesetClonedMath(preview);
         return preview;
       }
       var figure = document.createElement("figure");
@@ -168,16 +205,19 @@
         figure.appendChild(stripInspectorMetadata(caption.cloneNode(true)));
       }
       preview.appendChild(figure);
+      typesetClonedMath(preview);
       return preview;
     }
 
     preview.classList.add("sinew-reference-preview-table");
     preview.appendChild(stripInspectorMetadata(target.cloneNode(true)));
+    typesetClonedMath(preview);
     return preview;
   }
 
-  function registerReferencePreview(reference, contentFactory) {
+  function registerReferencePreview(reference, contentFactory, previewKind) {
     if (typeof window.tippy !== "function") return;
+    var maxWidths = { table: 1100, figure: 900, algorithm: 900 };
     window.tippy(reference, {
       allowHTML: true,
       appendTo: function () {
@@ -188,10 +228,13 @@
       delay: 100,
       interactive: true,
       interactiveBorder: 10,
-      maxWidth: 700,
+      maxWidth: maxWidths[previewKind] || 700,
       offset: [0, 0],
+      onMount: function (instance) {
+        typesetClonedMath(instance.popper);
+      },
       placement: "bottom-start",
-      theme: "light-border"
+      theme: "light-border" + (previewKind ? " sinew-" + previewKind : "")
     });
   }
 
@@ -217,7 +260,7 @@
       );
       registerReferencePreview(reference, function () {
         return buildSinewReferencePreview(reference, target);
-      });
+      }, kind);
     });
 
     document.querySelectorAll("a.quarto-xref").forEach(function (reference) {
@@ -225,9 +268,12 @@
       var targetId = href.replace(/^#\/?/, "");
       var target = targetId ? document.getElementById(targetId) : null;
       if (!target) return;
+      var previewKind = target.matches("img") || target.querySelector("figure.quarto-float-fig")
+        ? "figure"
+        : "table";
       registerReferencePreview(reference, function () {
         return buildQuartoCrossReferencePreview(target);
-      });
+      }, previewKind);
     });
   }
 
@@ -236,6 +282,12 @@
 
     node.classList.remove("sinew-expandable");
     node.removeAttribute("data-sinew-expandable");
+    node.removeAttribute("data-sinew-click-expand");
+    node.removeAttribute("tabindex");
+    if (node.getAttribute("role") === "button") node.removeAttribute("role");
+    node.removeAttribute("aria-label");
+    node.removeAttribute("aria-haspopup");
+    node.removeAttribute("aria-controls");
     node.querySelectorAll(".sinew-expand-control, .code-copy-button").forEach(function (control) {
       control.remove();
     });
@@ -263,7 +315,6 @@
       '<div class="sinew-fullscreen-shell">',
       '  <div class="sinew-fullscreen-header">',
       '    <p class="sinew-fullscreen-title" id="sinew-fullscreen-title"></p>',
-      '    <button class="sinew-fullscreen-close" type="button">Close</button>',
       '  </div>',
       '  <div class="sinew-fullscreen-content"></div>',
       '</div>'
@@ -272,70 +323,59 @@
 
     var title = dialog.querySelector(".sinew-fullscreen-title");
     var content = dialog.querySelector(".sinew-fullscreen-content");
-    var closeButton = dialog.querySelector(".sinew-fullscreen-close");
     var returnFocus = null;
 
     function closeInspector() {
       if (dialog.open) dialog.close();
     }
 
-    function openInspector(label, clone, opener) {
+    function openInspector(label, clone, opener, kind) {
       title.textContent = label;
       content.replaceChildren(stripInspectorMetadata(clone));
+      typesetClonedMath(content);
       returnFocus = opener;
+      dialog.dataset.sinewEvidenceKind = kind;
       dialog.showModal();
-      closeButton.focus();
     }
 
-    closeButton.addEventListener("click", closeInspector);
     dialog.addEventListener("cancel", function (event) {
       event.preventDefault();
       closeInspector();
     });
     dialog.addEventListener("click", function (event) {
-      if (event.target === dialog) closeInspector();
+      var clickClosesEvidence = event.target.closest(".sinew-fullscreen-content");
+      if (event.target === dialog || clickClosesEvidence) closeInspector();
     });
     dialog.addEventListener("keydown", function (event) {
       event.stopPropagation();
     });
     dialog.addEventListener("close", function () {
       content.replaceChildren();
+      delete dialog.dataset.sinewEvidenceKind;
       if (returnFocus && typeof returnFocus.focus === "function") returnFocus.focus();
       returnFocus = null;
     });
 
-    function registerExpandable(target, kind, cloneFactory, explicitLabel, controlHost) {
+    function registerExpandable(target, kind, cloneFactory, explicitLabel) {
       if (!target || target.dataset.sinewExpandable === "true") return;
 
       var identifier = explicitLabel || evidenceIdentifier(target, kind);
       var accessibleLabel = "Open " + identifier + " fullscreen";
-      var control = document.createElement("button");
-      control.type = "button";
-      control.className = "sinew-expand-control";
-      control.textContent = "Expand";
-      control.setAttribute("aria-label", accessibleLabel);
-      control.setAttribute("aria-haspopup", "dialog");
-      control.setAttribute("aria-controls", dialog.id);
 
       target.dataset.sinewExpandable = "true";
+      target.dataset.sinewClickExpand = "true";
       target.classList.add("sinew-expandable");
-      if (controlHost && controlHost !== target) {
-        control.classList.add("sinew-expand-control-inline");
-        controlHost.appendChild(control);
-      } else {
-        target.appendChild(control);
-      }
+      target.setAttribute("tabindex", "0");
+      target.setAttribute("role", "button");
+      target.setAttribute("aria-label", accessibleLabel + "; press Escape or click the fullscreen evidence to close");
+      target.setAttribute("aria-haspopup", "dialog");
+      target.setAttribute("aria-controls", dialog.id);
 
       function activate() {
-        openInspector(identifier, cloneFactory(), control);
+        openInspector(identifier, cloneFactory(), target, kind);
       }
 
-      control.addEventListener("click", function (event) {
-        event.preventDefault();
-        event.stopPropagation();
-        activate();
-      });
-      control.addEventListener("keydown", function (event) {
+      target.addEventListener("keydown", function (event) {
         if (event.key !== "Enter" && event.key !== " ") return;
         event.preventDefault();
         event.stopPropagation();
@@ -351,15 +391,14 @@
       if (figure.querySelector("table")) return;
       registerExpandable(figure, "figure", function () {
         return figure.cloneNode(true);
-      }, null, figure.querySelector("figcaption"));
+      });
     });
 
     slides.querySelectorAll("section.slide table").forEach(function (table) {
       var target = table.closest(".structured-results") || table.closest(".quarto-float") || table.parentElement;
-      var tableCaption = target.querySelector("figcaption") || target.querySelector("caption");
       registerExpandable(target, "table", function () {
         return target.cloneNode(true);
-      }, null, tableCaption);
+      });
     });
 
     slides.querySelectorAll("section.slide .algorithm-caption").forEach(function (caption) {
@@ -373,11 +412,12 @@
         algorithm.appendChild(code.cloneNode(true));
         algorithm.appendChild(caption.cloneNode(true));
         return algorithm;
-      }, label, caption);
+      }, label);
     });
   }
 
   function enhanceDeck() {
+    installInstitutionLockups();
     boldFloatIdentifiers();
     numberAlgorithmCaptions();
     buildStyleBibliographies();

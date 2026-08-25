@@ -30,9 +30,9 @@ WAI's [complex-image tutorial](https://www.w3.org/WAI/tutorials/images/complex/)
 - Do not skip heading levels to make text smaller.
 - Use semantic Markdown tables with captions and headers.
 - Use real lists, figures, captions, and links rather than screenshots of text.
-- Use the semantic research-question and research-hypothesis lists so Q1-Q9/H1-H9 remain textual as well as colored; the primary highlight also uses weight and rules.
+- Use the semantic research-question and research-hypothesis lists so Q1-Q9/H1-H9 remain textual as well as colored; the unboxed primary highlight also uses text weight and a filled identifier label.
 - Use `{{< q N >}}` and `{{< h N >}}` for in-text statement references. The links retain visible Q/H text, underline, and weight without a permanent bounding box; hover and keyboard focus expose the original statement in a profile-aware preview.
-- Keep the native semantics of figures and tables. Use the separate `Expand` button for keyboard access to fullscreen inspection rather than turning the evidence object itself into a button role.
+- Keep native figure and table semantics in the authored source. The runtime makes figures, tables, and captioned algorithms focusable interactive objects because visible expand/close controls are intentionally suppressed: Enter or Space opens focused evidence and Escape closes it.
 
 ### Typography and language
 
@@ -85,7 +85,8 @@ Manual review still checks:
 - whether speaker narration covers visual-only information;
 - whether PDF/video exports retain tags, fonts, captions, and legibility;
 - whether animations/media can be paused where required.
-- whether every evidence inspector opens with pointer and keyboard, retains the active profile, traps Reveal navigation, closes with Escape/Close, and restores focus.
+- whether every evidence inspector opens with pointer and keyboard, retains the active profile, traps Reveal navigation, restores focus, and closes when the fullscreen evidence is clicked; no evidence type may show expand/close controls.
+- whether cloned preview math is typeset and wide table previews retain legible headings, values, and navigation at browser zoom.
 - whether figure, table, algorithm, Q, and H references expose previews on pointer hover and keyboard focus, then navigate to the correct original target when activated.
 
 An automated "pass" is not evidence of statistical honesty, accessible chart semantics, or a comprehensible talk.

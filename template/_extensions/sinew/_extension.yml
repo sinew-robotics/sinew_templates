@@ -1,6 +1,6 @@
 title: Sinew Academic Reveal.js
 author: Ivan Domrachev and contributors
-version: 1.1.0-dev
+version: 1.1.0
 quarto-required: ">=1.5.0"
 contributes:
   shortcodes:

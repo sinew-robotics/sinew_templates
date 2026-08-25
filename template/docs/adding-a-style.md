@@ -16,7 +16,7 @@ Do not place `.beads` or private network URLs in the template. A source record i
 
 - [ ] Copy `styles/colors/paper.css` to `styles/colors/<slug>.css`.
 - [ ] Set `--sinew-color-profile: "<slug>"` and every required `--sinew-*` token.
-- [ ] Define robust heading, body, and monospace stacks without a required CDN.
+- [ ] Define robust heading, body, and monospace stacks without a required CDN. Set `--sinew-algorithm-font` to a genuine monospace stack that fits the profile; never reuse a proportional display face for algorithm bodies or captions.
 - [ ] Check text, muted text, links, rules, statuses, and all five data colors with `scripts/check_contrast.py`.
 - [ ] Add `_quarto-color-<slug>.yml` with the new CSS and syntax-highlighting choice.
 - [ ] Append `color-<slug>` to the single profile group in `_quarto.yml`.
@@ -103,6 +103,7 @@ These are acceptance notes from regressions found while developing the existing 
 
 ### Algorithms and procedural code
 
+- [ ] Give algorithms a deliberate, profile-appropriate monospace stack through `--sinew-algorithm-font`; verify both code and caption use it in standalone and gallery renders.
 - [ ] Place the algorithm caption immediately below its code and inside the same code column/container, never beneath an adjacent right-hand block.
 - [ ] Start the caption with `**Algorithm.**`; the runtime must produce a bold, sequential `Algorithm N` label.
 - [ ] Number and caption the generation command block on `_07-generate.qmd` as an algorithm too.
@@ -112,16 +113,17 @@ These are acceptance notes from regressions found while developing the existing 
 
 - [ ] Preserve `<ol class="research-questions">` and `<ol class="research-hypotheses">`; CSS counters must render Q1-Q9 and H1-H9 without identifiers typed into item text.
 - [ ] Keep each list to one through nine items. Split longer sets across explicit slides rather than producing Q10/H10 or shrinking the slide.
-- [ ] Use `.is-highlighted` on at most one primary question and one primary hypothesis. Keep its thicker rule, weight, and inset line so emphasis is not color-only.
+- [ ] Keep exactly two large research panels, one around all questions and one around all hypotheses. Keep statement rows unboxed; the Q/H identifier is the only per-statement bounded shape.
+- [ ] Use `.is-highlighted` on at most one primary question and one primary hypothesis. Keep its filled/thicker identifier and text weight so emphasis is not color-only.
 - [ ] Let questions inherit the profile accent and hypotheses inherit the profile success color. Do not add slide-local color overrides.
 - [ ] Map every question/hypothesis to evidence or visibly mark it unresolved, and keep illustrative gallery wording labeled as a placeholder.
 - [ ] Reference questions and hypotheses only with `{{< q N >}}` and `{{< h N >}}`. Keep the rendered inline labels bare, with no permanent box or pill, and preserve keyboard-visible underline/weight.
 
 ### Fullscreen evidence inspection
 
-- [ ] Preserve the runtime `Expand` control on every figure, table, and captioned algorithm; do not hide or overlap it with content or Quarto's code-copy control.
-- [ ] Test object click and keyboard activation, then Escape, backdrop, and `Close` dismissal with focus return.
-- [ ] Confirm the dialog inherits the active profile, prevents Reveal navigation while open, removes duplicate IDs/copy controls from clones, and fits without scrollbars.
+- [ ] Preserve click-to-open and click-to-close interaction for figures, tables, and captioned algorithms without visible `Expand` or fullscreen `Close` controls.
+- [ ] Test click, second-click dismissal, Enter/Space activation, Escape, and focus return for every evidence type.
+- [ ] Confirm the dialog inherits the active profile, prevents Reveal navigation while open, removes duplicate IDs/copy controls from clones, and lets every evidence type and its caption upscale on ultrawide viewports without distortion or scrollbars.
 - [ ] Keep the original evidence legible on its slide; fullscreen inspection is not a workaround for overflow.
 
 ### Citations and references
@@ -130,15 +132,15 @@ These are acceptance notes from regressions found while developing the existing 
 - [ ] Preserve exactly one global `#refs` citeproc source and one generated `.style-references` view per style. Do not hand-copy bibliography prose or duplicate `ref-*` IDs.
 - [ ] Keep references in two columns, keep each entry unsplit, and remove every reference scrollbar. Reduce/split scope instead of shrinking illegibly.
 - [ ] Verify pointer hover and keyboard focus. The Tippy card must inherit the current profile's surface, ink, border, accent, radius, and font stack.
-- [ ] Hover/focus the figure, table, method algorithm, Q1, and H1 links; confirm each preview contains the correct original object or statement and inherits the active profile.
+- [ ] Hover/focus the figure, table, method algorithm, Q1, and H1 links; confirm each preview contains the correct original object or statement and inherits the active profile. Confirm cloned math renders and the table card is wide enough to read every column.
 - [ ] Activate bibliography citations and confirm they route to the local `#references-<slug>` slide. Activate internal references and confirm they route to the original figure, table, algorithm, question, or hypothesis in the same column.
 - [ ] Confirm DOI/project links are actionable and open in a new tab with `noopener`.
 
 ### Affiliation marks
 
-- [ ] Preserve the `.institution-lockup` on the divider example unless the presentation owner explicitly removes or replaces the affiliations.
-- [ ] Keep logo aspect ratios, informative alt text, neutral backing plate, and recorded authorization/provenance. Do not recolor protected marks to fit a profile.
-- [ ] Confirm both marks remain legible without clipping on light, dark, 16:9, and ultrawide divider backgrounds.
+- [ ] Preserve the canonical `.institution-lockup` on the divider example and the all-slide replication runtime unless the presentation owner explicitly removes or replaces the affiliations.
+- [ ] Keep logo aspect ratios, informative alt text, source transparency, and recorded authorization/provenance. Light profiles leave the lockup unbacked; dark profiles define a light plate from their own palette rather than generic white. Do not recolor protected marks.
+- [ ] Confirm both marks remain legible without clipping on every slide across light, dark, 16:9, and ultrawide backgrounds.
 
 ### Repository and demo integrity
 

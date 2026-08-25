@@ -21,13 +21,13 @@ Every color profile defines:
 --sinew-data-1 ... --sinew-data-5
 ```
 
-It also sets explicit sans-serif and monospace stacks for Reveal headings/body/code. Use local/system fonts or bundle licensed webfonts. Do not import delivery-critical fonts from a remote CDN.
+It also sets explicit sans-serif and monospace stacks for Reveal headings/body/code. Algorithm bodies and captions use `--sinew-algorithm-font`; this must be a genuine monospace stack chosen to fit the profile, never a proportional display face. Use local/system fonts or bundle licensed webfonts. Do not import delivery-critical fonts from a remote CDN.
 
 Core layout and components live in `_extensions/sinew/theme/core.scss`. Styles should not target sample-slide IDs or change the meaning/order of content.
 
 The research-framing identity is part of that stable component layer. `.research-questions` uses `--sinew-accent`; `.research-hypotheses` uses `--sinew-success`; the Q/H identifier, item border, title rule, and optional `.is-highlighted` treatment inherit automatically in every profile. A profile must keep both semantic colors readable on its panel surfaces and must not replace the Q/H labels with color-only meaning.
 
-The evidence inspector is also profile-neutral core UI. Its controls, fullscreen surface, rules, text, and focus state inherit the active profile tokens. Style-specific rules may refine geometry or depth, but must preserve the visible `Expand` control, keyboard focus, viewport fit, and dialog contrast.
+The evidence inspector is also profile-neutral core UI. Its fullscreen surface, rules, text, and focus state inherit the active profile tokens. Style-specific rules may refine geometry or depth, but must preserve control-free click/keyboard interaction, viewport fit for figures/tables/algorithms, responsive captions, and dialog contrast.
 
 Every adapted style record must state the inspected source route or URL, inspection date, owner/license when known, extracted visual roles, deliberate projection/accessibility changes, font fallback policy, and any mismatch between deck CSS and the Matplotlib overlay. A source reference is provenance, not permission to redistribute protected assets.
 
@@ -96,7 +96,7 @@ Profile: `color-unmasked`
 
 Reference inspected on 2026-08-25: design-source route `/systems/unmasked/system.html`. The repository was not given a canonical public URL, owner, or license for that reference. Resolve those fields before publishing the adaptation as an endorsed or redistributable theme.
 
-Extracted ideas: true monochrome, visible construction rules, square geometry, heavy sans-serif display type, and serif reading text. Sinew adapts these ideas with a near-white `#f7f9fb` ground, black focus, layered grays, explicit danger/success colors, and square evidence components. Remote font dependencies were replaced with Public Sans/Arial and Source Serif/Georgia fallbacks. Muted text and rules were strengthened for projection. The Matplotlib overlay uses DejaVu Sans for dependable labels, so it matches the monochrome palette and rule weight rather than the deck's mixed serif/sans typography.
+Extracted ideas: true monochrome, visible construction rules, square geometry, heavy sans-serif display type, and serif reading text. Sinew adapts these ideas with a near-white `#f7f9fb` ground, black focus, layered grays, explicit danger/success colors, and square evidence components. Remote font dependencies were replaced with Public Sans/Arial and Source Serif/Georgia fallbacks. Algorithms use a rigid Liberation Mono/Courier stack rather than inheriting the display face. Muted text and rules were strengthened for projection. The Matplotlib overlay uses DejaVu Sans for dependable labels, so it matches the monochrome palette and rule weight rather than the deck's mixed serif/sans typography.
 
 ## The give
 
@@ -104,7 +104,7 @@ Profile: `color-the-give`
 
 Reference inspected on 2026-08-25: design-source route `/systems/give/system.html`; the public style name is "the give." The repository was not given a canonical public URL, owner, or license for that reference.
 
-Extracted ideas: periwinkle and mint surfaces, soft corners, gentle depth, Signika-like headings, and Faustina-like body text. Sinew reduces decorative depth, uses a darker periwinkle focus color with white contrast text, keeps table banding restrained, and supplies offline Trebuchet/Arial and Georgia fallbacks. The data cycle adds separable purple, green, rust, and blue roles and still requires markers/dashes. The Matplotlib overlay uses DejaVu Serif as an available approximation rather than claiming the design-source fonts are embedded.
+Extracted ideas: periwinkle and mint surfaces, soft corners, gentle depth, Signika-like headings, and Faustina-like body text. Sinew reduces decorative depth, uses a darker periwinkle focus color with white contrast text, keeps table banding restrained, and supplies offline Trebuchet/Arial and Georgia fallbacks. Algorithms use the softer Noto Mono/DejaVu Sans Mono stack. The data cycle adds separable purple, green, rust, and blue roles and still requires markers/dashes. The Matplotlib overlay uses DejaVu Serif as an available approximation rather than claiming the design-source fonts are embedded.
 
 ## The meeting
 
@@ -112,7 +112,7 @@ Profile: `color-the-meeting`
 
 Reference inspected on 2026-08-25: design-source route `/systems/meeting/system.html`; the public style name is "the meeting." The repository was not given a canonical public URL, owner, or license for that reference.
 
-Extracted ideas: coral and teal voices meeting through violet, a cool porcelain ground, editorial serif headings, and restrained depth. Sinew darkens the signals used for small text/data, confines the brighter source colors to non-text decoration, uses violet as the focus seam, and replaces remote typography with Cormorant/Lora/Hanken-compatible system fallbacks. The Matplotlib overlay uses a DejaVu Serif fallback while preserving the coral/teal/violet data ordering.
+Extracted ideas: coral and teal voices meeting through violet, a cool porcelain ground, editorial serif headings, and restrained depth. Sinew darkens the signals used for small text/data, confines the brighter source colors to non-text decoration, uses violet as the focus seam, and replaces remote typography with Cormorant/Lora/Hanken-compatible system fallbacks. Algorithms use a contemporary Fira Code/DejaVu Sans Mono stack with programming ligatures disabled so ASCII source remains visually literal. The Matplotlib overlay uses a DejaVu Serif fallback while preserving the coral/teal/violet data ordering.
 
 ## Movement
 
@@ -120,7 +120,7 @@ Profile: `color-movement`
 
 Reference inspected on 2026-08-25: design-source route `/systems/motion/system.html`. The source slug is `motion`; the Sinew-facing style name and profile slug are deliberately `movement`. The repository was not given a canonical public URL, owner, or license for that reference.
 
-Extracted ideas: charged white, scarlet motion, a green wake, condensed display type, and directional diagonal energy. Sinew uses darker scarlet and green for contrast, keeps the diagonal treatment on title/divider surfaces, makes progress animation conditional on `prefers-reduced-motion`, and provides Big Shoulders/Arial Narrow/Arial plus Lora/Georgia fallbacks. The Matplotlib overlay uses a dependable sans stack, thicker series lines, and the same scarlet/green-led cycle; marker and dash differences remain mandatory.
+Extracted ideas: charged white, scarlet motion, a green wake, condensed display type, and directional diagonal energy. Sinew uses darker scarlet and green for contrast, keeps the diagonal treatment on title/divider surfaces, makes progress animation conditional on `prefers-reduced-motion`, and provides Big Shoulders/Arial Narrow/Arial plus Lora/Georgia fallbacks. Algorithms use Latin Modern Mono Light Cond with Liberation Mono fallback to retain the profile's narrow rhythm without sacrificing character alignment. The Matplotlib overlay uses a dependable sans stack, thicker series lines, and the same scarlet/green-led cycle; marker and dash differences remain mandatory.
 
 ## Runtime gallery switching
 
@@ -149,4 +149,4 @@ Do not add event colors or logos merely because a deck will be presented there. 
 
 ## Affiliation marks
 
-Affiliation marks are deck content, not color-profile tokens. The starter's `.institution-lockup` uses owner-supplied KAIST and Interactive Robotic Systems Laboratory PNGs on one neutral plate so their original colors survive every profile. Do not recolor protected marks to imitate a theme. Preserve aspect ratio and alt text, record authorization and reuse constraints, and replace or remove the assets when the presentation affiliation changes.
+Affiliation marks are deck content, but their backing treatment is a color-profile token. The starter's `.institution-lockup` uses owner-supplied KAIST and Interactive Robotic Systems Laboratory PNGs and preserves their transparent alpha channels. A canonical accessible lockup appears on each divider and the runtime adds a smaller decorative copy to every content slide. Light profiles leave the artwork unbacked. Dark profiles define a light plate mixed from their own ink and accent tokens rather than generic white. Do not recolor protected marks. Preserve aspect ratio and alt text, record authorization and reuse constraints, and replace or remove the assets when the presentation affiliation changes.

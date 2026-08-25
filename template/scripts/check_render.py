@@ -121,11 +121,14 @@ def main() -> int:
         "expected Quarto's KaTeX browser runtime",
     )
     require("numberAlgorithmCaptions" in html, "automatic algorithm numbering script is absent")
+    require("installInstitutionLockups" in html, "all-slide affiliation runtime is absent")
     require("labelResearchStatements" in html, "accessible Q/H identifier script is absent")
     require("wireSinewReferences" in html, "internal reference routing script is absent")
     require("buildQuartoCrossReferencePreview" in html, "figure/table reference preview script is absent")
     require("registerReferencePreview" in html, "profile-aware internal reference preview script is absent")
     require("buildEvidenceInspector" in html, "fullscreen evidence inspector script is absent")
+    require("clickClosesEvidence" in html, "click-to-close evidence inspector is absent")
+    require("typesetClonedMath" in html, "cloned preview math typesetting is absent")
     require('dialog.id = "sinew-evidence-inspector"' in html, "fullscreen evidence dialog is absent")
     citation_links = re.findall(r'<a\b[^>]*\brole="doc-biblioref"', html)
     require(
@@ -158,6 +161,10 @@ def main() -> int:
         require(
             ".sinew-reference-preview" in core and ".sinew-reference-hypothesis" in core,
             "profile-aware internal reference styling is absent",
+        )
+        require(
+            '[data-theme~="sinew-table"]' in core,
+            "large table-reference preview styling is absent",
         )
 
     requested_mode = sys.argv[2] if len(sys.argv) == 3 else None

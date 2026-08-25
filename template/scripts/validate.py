@@ -25,6 +25,8 @@ COLORS = (
     "the-meeting",
     "movement",
 )
+DARK_COLORS = {"origami", "blueprint"}
+SPECIALIZED_ALGORITHM_FONT_COLORS = {"unmasked", "the-give", "the-meeting", "movement"}
 STYLE_CITATION_KEYS = {
     "origami": "sinewOrigami2026",
     "paper": "sinewPaper2026",
@@ -163,11 +165,15 @@ class Validation:
             runtime_source = runtime.read_text(encoding="utf-8")
             for marker in (
                 "labelResearchStatements",
+                "installInstitutionLockups",
                 "wireSinewReferences",
                 "registerReferencePreview",
                 "buildQuartoCrossReferencePreview",
+                "typesetClonedMath",
                 "buildEvidenceInspector",
                 "sinew-evidence-inspector",
+                "sinewClickExpand",
+                "clickClosesEvidence",
                 "showModal",
             ):
                 self.require(marker in runtime_source, f"evidence inspector runtime is missing: {marker}")
@@ -234,6 +240,15 @@ class Validation:
         self.require('gallery-mode: "runtime-style-preview"' in gallery, "gallery runtime metadata is missing")
         self.require("styles/gallery/columns.css" in gallery, "gallery profile does not load column styles")
         self.require("styles/gallery/columns.html" in gallery, "gallery profile does not load column switching")
+        self.require(
+            columns_css.count("--sinew-logo-plate:") == len(DARK_COLORS) + 1
+            and "--sinew-logo-plate: transparent;" in columns_css,
+            "gallery CSS must reset logo plates and override them for dark profiles only",
+        )
+        self.require(
+            columns_css.count("--sinew-algorithm-font:") >= len(SPECIALIZED_ALGORITHM_FONT_COLORS),
+            "gallery CSS must mirror every specialized algorithm font",
+        )
 
         for name in COLORS:
             profile_name = f"color-{name}"
@@ -402,6 +417,23 @@ class Validation:
                 f'--sinew-color-profile: "{name}"' in source,
                 f"{path.name} missing profile marker",
             )
+            if name in SPECIALIZED_ALGORITHM_FONT_COLORS:
+                self.require(
+                    "--sinew-algorithm-font:" in source and "monospace" in source,
+                    f"{path.name} must define a genuine monospace algorithm font stack",
+                )
+            if name in DARK_COLORS:
+                self.require(
+                    "--sinew-logo-plate:" in source
+                    and "var(--sinew-ink)" in source
+                    and "var(--sinew-accent)" in source,
+                    f"{path.name} must derive a light logo plate from its own palette",
+                )
+            else:
+                self.require(
+                    "--sinew-logo-plate:" not in source,
+                    f"{path.name} is light and must leave transparent logos unbacked",
+                )
             self.require(
                 (ROOT / f"styles/matplotlib/sinew-{name}.mplstyle").is_file(),
                 f"missing Matplotlib style for {name}",
