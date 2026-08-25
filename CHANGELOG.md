@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 1.0.0  -  2026-08-25
+
 - Released nine selectable visual styles and a browser-based 2D gallery with one style per horizontal column.
 - Standardized repeated guidance, problem, algorithm, plot, structured table, conclusion, and generation examples in every style.
 - Added automatic bold numbering for figure, table, and algorithm captions, including procedural shell blocks.

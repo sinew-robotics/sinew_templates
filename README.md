@@ -173,4 +173,4 @@ Every push, pull request, and release tag runs structural and contrast validatio
 
 ## Status and scope
 
-This repository is an academic authoring system, not an official event template. Delivery rules change by event, edition, track, and presentation type; consult current official instructions instead of expecting a visual profile to encode them. The repository is currently a pre-release preview; v1.0.0 will be created only after review approval.
+This repository is an academic authoring system, not an official event template. Delivery rules change by event, edition, track, and presentation type; consult current official instructions instead of expecting a visual profile to encode them. The current stable release is v1.0.0.
