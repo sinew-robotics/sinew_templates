@@ -1,0 +1,64 @@
+/*
+ * movement - adapted from /systems/motion/system.html on 2026-08-25.
+ * Charged white, scarlet motion, green wake, condensed display type.
+ */
+.reveal {
+  --sinew-color-profile: "movement";
+  --sinew-bg: #f6f8fb;
+  --sinew-panel: #ffffff;
+  --sinew-panel-raised: #f0f4f8;
+  --sinew-ink: #0b0f14;
+  --sinew-muted: #5d6672;
+  --sinew-line: #e2e7ee;
+  --sinew-line-strong: #64707d;
+  --sinew-accent: #b8200c;
+  --sinew-accent-contrast: #ffffff;
+  --sinew-danger: #b8200c;
+  --sinew-success: #006e2a;
+  --sinew-data-1: #db1b00;
+  --sinew-data-2: #006e2a;
+  --sinew-data-3: #806000;
+  --sinew-data-4: #00798a;
+  --sinew-data-5: #0b0f14;
+  --sinew-radius: 0.45em;
+  color: var(--sinew-ink);
+  font-family: Lora, Georgia, "Times New Roman", serif;
+}
+.reveal-viewport,
+.reveal .slide-background-content { background: #f6f8fb; }
+.reveal h1,
+.reveal h2,
+.reveal h3 {
+  color: #0b0f14;
+  font-family: "Big Shoulders Display", "Arial Narrow", Arial, sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.004em;
+}
+.reveal code,
+.reveal pre,
+.reveal .kicker,
+.reveal .eyebrow,
+.reveal .figcap,
+.reveal figcaption,
+.reveal caption,
+.reveal .source { font-family: "Arial Narrow", Arial, sans-serif; }
+.reveal pre code { background: #ffffff; color: #0b0f14; }
+.reveal #title-slide,
+.reveal .section-slide {
+  background-color: #f6f8fb;
+  background-image:
+    linear-gradient(105deg, transparent 0 42%, rgba(255, 46, 18, 0.12) 42% 44%, transparent 44% 55%, rgba(0, 149, 59, 0.10) 55% 57%, transparent 57%);
+  background-size: auto;
+}
+.reveal .panel:nth-child(odd) { transform: translateY(0.08em); }
+.reveal .evidence-card { border-left-color: #db1b00; }
+.reveal table tbody tr:nth-child(even) { background: #f0f4f8; }
+@media (prefers-reduced-motion: no-preference) {
+  .reveal .progress { transition: transform 300ms cubic-bezier(.22, 1, .36, 1); }
+}
+html:has(.reveal .section-slide.present) .reveal-viewport {
+  background-color: #f6f8fb;
+  background-image:
+    linear-gradient(105deg, transparent 0 42%, rgba(255, 46, 18, 0.12) 42% 44%, transparent 44% 55%, rgba(0, 149, 59, 0.10) 55% 57%, transparent 57%);
+  background-size: auto;
+}

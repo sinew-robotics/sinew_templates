@@ -1,0 +1,7 @@
+visual-style: "high-contrast"
+format:
+  sinew-revealjs:
+    css:
+      - styles/colors/high-contrast.css
+    highlight-style: monochrome
+    transition: none

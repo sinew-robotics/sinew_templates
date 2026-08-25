@@ -1,0 +1,29 @@
+## Pose-only labels hide contact transitions that drive insertion failures {data-style-preview="the-give"}
+
+<span class="kicker">Problem | illustrative scenario</span>
+
+::: {.columns}
+::: {.column width="48%"}
+::: {.panel}
+**What the data records**
+
+- End-effector pose
+- Commanded action
+- Sparse task outcome
+:::
+:::
+
+::: {.column width="48%"}
+::: {.panel}
+**What the policy needs**
+
+- Contact onset
+- Force direction
+- Recovery state
+:::
+:::
+:::
+
+::: {.evidence-card}
+**Research question.** Can contact-aware supervision improve recovery under held-out disturbances?
+:::

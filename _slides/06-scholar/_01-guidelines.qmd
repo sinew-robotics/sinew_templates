@@ -1,0 +1,22 @@
+## A restrained editorial voice for academic arguments {data-style-preview="scholar"}
+
+<span class="kicker">Style guidance</span>
+
+::: {.metric-row}
+::: {.metric}
+**Surface**
+<span>Pale lilac paper</span>
+:::
+::: {.metric}
+**Typography**
+<span>Serif headings</span>
+:::
+::: {.metric}
+**Plot language**
+<span>Blue plus ochre</span>
+:::
+:::
+
+::: {.evidence-card}
+Reserve accent color for key findings. Keep body copy neutral and verify plot labels at presentation distance.
+:::

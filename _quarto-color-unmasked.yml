@@ -1,0 +1,7 @@
+visual-style: "unmasked"
+format:
+  sinew-revealjs:
+    css:
+      - styles/colors/unmasked.css
+    highlight-style: monochrome
+    transition: none

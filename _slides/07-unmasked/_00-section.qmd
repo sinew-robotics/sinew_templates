@@ -1,0 +1,7 @@
+# unmasked {.section-slide data-style-preview="unmasked"}
+
+<span class="kicker">Style 06</span>
+
+An exposed monochrome system with visible structure.
+
+<span class="visual-preview-label">color-unmasked</span>

@@ -1,0 +1,11 @@
+gallery-mode: "runtime-style-preview"
+format:
+  sinew-revealjs:
+    width: 1600
+    height: 900
+    css:
+      - styles/gallery/gallery.css
+      - styles/gallery/columns.css
+    include-after-body:
+      - styles/gallery/columns.html
+    footer: "Sinew style gallery - select one color-* profile for delivery"

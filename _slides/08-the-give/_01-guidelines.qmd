@@ -1,0 +1,22 @@
+## Soft, compliant surfaces for approachable technical content {data-style-preview="the-give"}
+
+<span class="kicker">Style guidance</span>
+
+::: {.metric-row}
+::: {.metric}
+**Surface**
+<span>Putty and compliant</span>
+:::
+::: {.metric}
+**Typography**
+<span>Signika plus serif</span>
+:::
+::: {.metric}
+**Plot language**
+<span>Slate plus teal</span>
+:::
+:::
+
+::: {.evidence-card}
+Reserve accent color for key findings. Keep body copy neutral and verify plot labels at presentation distance.
+:::

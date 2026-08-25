@@ -1,0 +1,16 @@
+figure.facecolor: 131416
+axes.facecolor: 1b1d21
+savefig.facecolor: 131416
+text.color: e6e6e6
+axes.labelcolor: e6e6e6
+axes.titlecolor: f2f3f4
+axes.edgecolor: 626873
+xtick.color: a9adb4
+ytick.color: a9adb4
+grid.color: 626873
+legend.facecolor: 202329
+legend.edgecolor: 626873
+legend.labelcolor: e6e6e6
+axes.prop_cycle: cycler('color', ['4cc2e8', 'e8b64c', 'b895f5', '75d66e', 'ff8b73'])
+font.family: sans-serif
+font.sans-serif: DejaVu Sans, Arial

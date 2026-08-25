@@ -1,0 +1,13 @@
+## Contact supervision is the testable intervention {data-style-preview="high-contrast"}
+
+<span class="kicker">Conclusion</span>
+
+<ol class="takeaways">
+<li><strong>Problem.</strong> Pose alone misses transitions that matter during contact.</li>
+<li><strong>Method.</strong> Add contact labels to the policy objective.</li>
+<li><strong>Evidence needed.</strong> Measure recovery on held-out disturbances and report failures.</li>
+</ol>
+
+::: {.evidence-card}
+**Boundary.** The numbers and curves shown here are illustrative. Replace them with traceable evidence before making a scientific claim.
+:::

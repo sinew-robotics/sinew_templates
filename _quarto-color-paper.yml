@@ -1,0 +1,6 @@
+visual-style: "paper"
+format:
+  sinew-revealjs:
+    css:
+      - styles/colors/paper.css
+    highlight-style: github

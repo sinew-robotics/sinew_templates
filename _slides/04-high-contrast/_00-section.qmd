@@ -1,0 +1,7 @@
+# High contrast {.section-slide data-style-preview="high-contrast"}
+
+<span class="kicker">Style 03</span>
+
+Maximum separation for uncertain rooms and projectors.
+
+<span class="visual-preview-label">color-high-contrast</span>

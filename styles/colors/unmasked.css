@@ -1,0 +1,64 @@
+/*
+ * unmasked - adapted from /systems/unmasked/system.html on 2026-08-25.
+ * True monochrome, exposed rules, square construction, sans display type,
+ * and serif body text. Remote fonts were replaced with offline fallbacks.
+ */
+.reveal {
+  --sinew-color-profile: "unmasked";
+  --sinew-bg: #f7f9fb;
+  --sinew-panel: #e9ecef;
+  --sinew-panel-raised: #ffffff;
+  --sinew-ink: #000000;
+  --sinew-muted: #5b6167;
+  --sinew-line: #d8dce0;
+  --sinew-line-strong: #545b62;
+  --sinew-accent: #000000;
+  --sinew-accent-contrast: #ffffff;
+  --sinew-danger: #821b22;
+  --sinew-success: #1d5f36;
+  --sinew-data-1: #000000;
+  --sinew-data-2: #34383c;
+  --sinew-data-3: #545b62;
+  --sinew-data-4: #6a7178;
+  --sinew-data-5: #2f3439;
+  --sinew-radius: 0;
+  color: var(--sinew-ink);
+  font-family: "Source Serif 4", Georgia, "Times New Roman", serif;
+}
+.reveal-viewport,
+.reveal .slide-background-content { background: #f7f9fb; }
+.reveal h1,
+.reveal h2,
+.reveal h3 {
+  color: #000000;
+  font-family: "Public Sans", Arial, sans-serif;
+  font-weight: 800;
+}
+.reveal code,
+.reveal pre,
+.reveal .kicker,
+.reveal .eyebrow,
+.reveal .figcap,
+.reveal figcaption,
+.reveal caption,
+.reveal .source { font-family: "Public Sans", Arial, sans-serif; }
+.reveal pre code { background: #e9ecef; color: #000000; }
+.reveal #title-slide,
+.reveal .section-slide {
+  background-color: #f7f9fb;
+  background-image:
+    linear-gradient(#d8dce0 1px, transparent 1px),
+    linear-gradient(90deg, #d8dce0 1px, transparent 1px);
+}
+.reveal .panel,
+.reveal .evidence-card,
+.reveal .metric,
+.reveal pre { border: 1.5px solid #000000; box-shadow: none; }
+.reveal table tbody tr:nth-child(even) { background: #e9ecef; }
+html:has(.reveal .section-slide.present) .reveal-viewport {
+  background-color: #f7f9fb;
+  background-image:
+    linear-gradient(#d8dce0 1px, transparent 1px),
+    linear-gradient(90deg, #d8dce0 1px, transparent 1px);
+  background-size: 82px 82px;
+}

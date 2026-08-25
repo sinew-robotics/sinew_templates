@@ -1,0 +1,7 @@
+# Sinew style gallery {.section-slide data-style-preview="intro"}
+
+<span class="kicker">Intro</span>
+
+Nine visual systems for academic presentations.
+
+<span class="profile-route">Move right between styles; move down through slides</span>

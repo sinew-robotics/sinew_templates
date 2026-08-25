@@ -1,0 +1,63 @@
+/* Conference-neutral deep-blue technical drawing style. */
+.reveal {
+  --sinew-color-profile: "blueprint";
+  --sinew-bg: #081c33;
+  --sinew-panel: #102a49;
+  --sinew-panel-raised: #153758;
+  --sinew-ink: #f4f8fc;
+  --sinew-muted: #b8c8da;
+  --sinew-line: #36536f;
+  --sinew-line-strong: #6c8dab;
+  --sinew-accent: #62c7ff;
+  --sinew-accent-contrast: #081c33;
+  --sinew-danger: #ff9a8f;
+  --sinew-success: #80d6a1;
+  --sinew-data-1: #62c7ff;
+  --sinew-data-2: #ffd166;
+  --sinew-data-3: #86e3ce;
+  --sinew-data-4: #d7aefb;
+  --sinew-data-5: #ff9a8f;
+  color: var(--sinew-ink);
+  font-family: Aptos, "Segoe UI", Arial, sans-serif;
+}
+
+.reveal-viewport,
+.reveal .slide-background-content { background: #081c33; }
+.reveal h1,
+.reveal h2,
+.reveal h3 {
+  color: #f4f8fc;
+  font-family: "Arial Narrow", "Aptos Display", Aptos, Arial, sans-serif;
+  font-weight: 700;
+}
+.reveal code,
+.reveal pre,
+.reveal .kicker,
+.reveal .eyebrow,
+.reveal .figcap,
+.reveal figcaption,
+.reveal caption,
+.reveal .source {
+  font-family: "Cascadia Mono", "SFMono-Regular", Consolas, monospace;
+}
+.reveal pre code { background: #04111f; color: #eaf6ff; }
+.reveal #title-slide,
+.reveal .section-slide {
+  background-color: #081c33;
+  background-image:
+    linear-gradient(rgba(98, 199, 255, 0.085) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(98, 199, 255, 0.085) 1px, transparent 1px);
+  background-size: 1.2em 1.2em;
+}
+.reveal .panel,
+.reveal .evidence-card,
+.reveal .metric { box-shadow: inset 0 0 0 1px rgba(98, 199, 255, 0.06); }
+.reveal table tbody tr:nth-child(even) { background: #0c2440; }
+.reveal .progress { background: #102a49; }
+html:has(.reveal .section-slide.present) .reveal-viewport {
+  background-color: #081c33;
+  background-image:
+    linear-gradient(rgba(98, 199, 255, 0.085) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(98, 199, 255, 0.085) 1px, transparent 1px);
+  background-size: 41px 41px;
+}

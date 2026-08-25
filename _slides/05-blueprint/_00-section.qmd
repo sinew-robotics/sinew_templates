@@ -1,0 +1,7 @@
+# Blueprint {.section-slide data-style-preview="blueprint"}
+
+<span class="kicker">Style 04</span>
+
+A technical drawing language for systems and mechanisms.
+
+<span class="visual-preview-label">color-blueprint</span>

@@ -1,0 +1,50 @@
+.reveal {
+  --sinew-color-profile: "high-contrast";
+  --sinew-bg: #ffffff;
+  --sinew-panel: #ffffff;
+  --sinew-panel-raised: #ffffff;
+  --sinew-ink: #000000;
+  --sinew-muted: #3d3d3d;
+  --sinew-line: #777777;
+  --sinew-line-strong: #000000;
+  --sinew-accent: #003f9e;
+  --sinew-accent-contrast: #ffffff;
+  --sinew-danger: #9c180f;
+  --sinew-success: #146b2f;
+  --sinew-data-1: #0072b2;
+  --sinew-data-2: #9a5700;
+  --sinew-data-3: #007a59;
+  --sinew-data-4: #91406f;
+  --sinew-data-5: #5e3c00;
+  color: #000000;
+  font-family: "Atkinson Hyperlegible", Verdana, Arial, sans-serif;
+}
+
+.reveal-viewport,
+.reveal .slide-background-content { background: #ffffff; }
+.reveal h1,
+.reveal h2,
+.reveal h3 {
+  color: #000000;
+  font-family: "Atkinson Hyperlegible", Verdana, Arial, sans-serif;
+  font-weight: 700;
+}
+.reveal code,
+.reveal pre,
+.reveal .kicker,
+.reveal .eyebrow,
+.reveal .figcap,
+.reveal figcaption,
+.reveal caption,
+.reveal .source {
+  font-family: "DejaVu Sans Mono", Consolas, monospace;
+}
+.reveal pre code { background: #f2f2f2; color: #000000; }
+.reveal #title-slide,
+.reveal .section-slide { background-image: none; }
+.reveal .panel,
+.reveal .evidence-card,
+.reveal .metric,
+.reveal pre { border-width: 2px; }
+.reveal table tbody tr:nth-child(even) { background: #eeeeee; }
+.reveal .controls { color: #000000; }

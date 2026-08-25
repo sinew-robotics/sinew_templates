@@ -1,0 +1,61 @@
+/*
+ * the give - adapted from /systems/give/system.html on 2026-08-25.
+ * Periwinkle and mint, compliant surfaces, soft corners, gentle depth.
+ */
+.reveal {
+  --sinew-color-profile: "the-give";
+  --sinew-bg: #e9eef5;
+  --sinew-panel: #f4f7fc;
+  --sinew-panel-raised: #ffffff;
+  --sinew-ink: #232b36;
+  --sinew-muted: #5a6675;
+  --sinew-line: #cbd6e6;
+  --sinew-line-strong: #65719b;
+  --sinew-accent: #3c477a;
+  --sinew-accent-contrast: #ffffff;
+  --sinew-danger: #9b2c36;
+  --sinew-success: #286f61;
+  --sinew-data-1: #3c477a;
+  --sinew-data-2: #216c60;
+  --sinew-data-3: #6b4f8b;
+  --sinew-data-4: #96543c;
+  --sinew-data-5: #3b6f92;
+  --sinew-radius: 0.52em;
+  color: var(--sinew-ink);
+  font-family: Faustina, Georgia, "Times New Roman", serif;
+}
+.reveal-viewport,
+.reveal .slide-background-content { background: #e9eef5; }
+.reveal h1,
+.reveal h2,
+.reveal h3 {
+  color: #232b36;
+  font-family: Signika, "Trebuchet MS", Arial, sans-serif;
+  font-weight: 600;
+}
+.reveal code,
+.reveal pre,
+.reveal .kicker,
+.reveal .eyebrow,
+.reveal .figcap,
+.reveal figcaption,
+.reveal caption,
+.reveal .source { font-family: Signika, "Trebuchet MS", Arial, sans-serif; }
+.reveal pre code { background: #dbe3ef; color: #232b36; }
+.reveal #title-slide,
+.reveal .section-slide {
+  background-color: #e9eef5;
+  background-image: radial-gradient(circle at 78% 30%, #d5eee7 0 6em, transparent 6.1em);
+  background-size: auto;
+}
+.reveal .panel,
+.reveal .evidence-card,
+.reveal .metric {
+  box-shadow: 0 0.35em 1em rgba(38, 50, 74, 0.12);
+}
+.reveal table tbody tr:nth-child(even) { background: #dfe4f3; }
+html:has(.reveal .section-slide.present) .reveal-viewport {
+  background-color: #e9eef5;
+  background-image: radial-gradient(circle at 78% 30%, #d5eee7 0 204px, transparent 208px);
+  background-size: auto;
+}

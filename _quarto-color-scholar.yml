@@ -1,0 +1,6 @@
+visual-style: "scholar"
+format:
+  sinew-revealjs:
+    css:
+      - styles/colors/scholar.css
+    highlight-style: github

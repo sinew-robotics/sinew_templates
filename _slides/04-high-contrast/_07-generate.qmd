@@ -1,0 +1,20 @@
+## Render a presentation with the High contrast profile {data-style-preview="high-contrast"}
+
+<span class="kicker">Reproduce</span>
+
+```bash
+python3 scripts/generate_gallery_plots.py
+quarto render --profile color-high-contrast
+```
+
+::: {.algorithm-caption}
+**Algorithm.** Rebuild the illustrative figures, then render the High Contrast style gallery to `_site/index.html`.
+:::
+
+::: {.profile-checklist}
+1. Render with the intended color profile.
+2. Regenerate figures after changing data.
+3. Inspect contrast, overflow, captions, and offline assets.
+:::
+
+<span class="source">Output: _site/index.html</span>

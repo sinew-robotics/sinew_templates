@@ -1,0 +1,22 @@
+## Maximum separation for uncertain rooms and projectors {data-style-preview="high-contrast"}
+
+<span class="kicker">Style guidance</span>
+
+::: {.metric-row}
+::: {.metric}
+**Surface**
+<span>Pure black and white</span>
+:::
+::: {.metric}
+**Typography**
+<span>Hyperlegible sans</span>
+:::
+::: {.metric}
+**Plot language**
+<span>Dark safe hues</span>
+:::
+:::
+
+::: {.evidence-card}
+Reserve accent color for key findings. Keep body copy neutral and verify plot labels at presentation distance.
+:::

@@ -1,0 +1,64 @@
+/*
+ * the meeting - adapted from /systems/meeting/system.html on 2026-08-25.
+ * Coral and teal meet in violet on a cool porcelain ground.
+ */
+.reveal {
+  --sinew-color-profile: "the-meeting";
+  --sinew-bg: #ecf3f2;
+  --sinew-panel: #ffffff;
+  --sinew-panel-raised: #f7fbfa;
+  --sinew-ink: #142523;
+  --sinew-muted: #5c6e6c;
+  --sinew-line: #cfe0dd;
+  --sinew-line-strong: #607975;
+  --sinew-accent: #5a22b8;
+  --sinew-accent-contrast: #ffffff;
+  --sinew-danger: #b31e45;
+  --sinew-success: #087a75;
+  --sinew-data-1: #d51f4c;
+  --sinew-data-2: #087a75;
+  --sinew-data-3: #7b3fe4;
+  --sinew-data-4: #b31e45;
+  --sinew-data-5: #5a22b8;
+  --sinew-radius: 0.42em;
+  color: var(--sinew-ink);
+  font-family: Lora, Georgia, "Times New Roman", serif;
+}
+.reveal-viewport,
+.reveal .slide-background-content { background: #ecf3f2; }
+.reveal h1,
+.reveal h2,
+.reveal h3 {
+  color: #142523;
+  font-family: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  font-weight: 600;
+  letter-spacing: -0.012em;
+}
+.reveal code,
+.reveal pre,
+.reveal .kicker,
+.reveal .eyebrow,
+.reveal .figcap,
+.reveal figcaption,
+.reveal caption,
+.reveal .source { font-family: "Hanken Grotesk", Arial, sans-serif; }
+.reveal pre code { background: #ffffff; color: #142523; }
+.reveal #title-slide,
+.reveal .section-slide {
+  background-color: #ecf3f2;
+  background-image:
+    radial-gradient(circle at 35% 50%, rgba(245, 48, 91, 0.13), transparent 14em),
+    radial-gradient(circle at 65% 50%, rgba(11, 166, 160, 0.13), transparent 14em);
+  background-size: auto;
+}
+.reveal .evidence-card { border-left-color: #7b3fe4; }
+.reveal .panel,
+.reveal .metric { box-shadow: 0 0.25em 0.9em rgba(20, 37, 35, 0.08); }
+.reveal table tbody tr:nth-child(even) { background: #e4d6fb; }
+html:has(.reveal .section-slide.present) .reveal-viewport {
+  background-color: #ecf3f2;
+  background-image:
+    radial-gradient(circle at 35% 50%, rgba(245, 48, 91, 0.13), transparent 476px),
+    radial-gradient(circle at 65% 50%, rgba(11, 166, 160, 0.13), transparent 476px);
+  background-size: auto;
+}

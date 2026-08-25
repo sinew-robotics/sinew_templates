@@ -1,0 +1,7 @@
+# the meeting {.section-slide data-style-preview="the-meeting"}
+
+<span class="kicker">Style 08</span>
+
+Two visual voices converging at one seam.
+
+<span class="visual-preview-label">color-the-meeting</span>

@@ -1,0 +1,20 @@
+## Use the 2D grid to browse the visual systems {data-style-preview="intro"}
+
+<span class="kicker">Navigation | 2D Reveal.js</span>
+
+<div class="profile-rail">
+<span class="profile-node is-current">Intro</span>
+<span class="profile-node">Origami</span>
+<span class="profile-node">Paper</span>
+<span class="profile-node">High contrast</span>
+<span class="profile-node">Blueprint</span>
+<span class="profile-node">Scholar</span>
+<span class="profile-node">unmasked</span>
+<span class="profile-node">the give</span>
+<span class="profile-node">the meeting</span>
+<span class="profile-node">movement</span>
+</div>
+
+::: {.evidence-card}
+Move right to select a style. Move down for guidance, problem, algorithm, plot, table, conclusion, and generation.
+:::

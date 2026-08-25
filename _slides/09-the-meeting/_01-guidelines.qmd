@@ -1,0 +1,22 @@
+## Two visual voices converging at one seam {data-style-preview="the-meeting"}
+
+<span class="kicker">Style guidance</span>
+
+::: {.metric-row}
+::: {.metric}
+**Surface**
+<span>Porcelain and lifted</span>
+:::
+::: {.metric}
+**Typography**
+<span>Editorial serif</span>
+:::
+::: {.metric}
+**Plot language**
+<span>Coral plus teal</span>
+:::
+:::
+
+::: {.evidence-card}
+Reserve accent color for key findings. Keep body copy neutral and verify plot labels at presentation distance.
+:::

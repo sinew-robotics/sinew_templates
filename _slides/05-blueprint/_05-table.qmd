@@ -1,0 +1,14 @@
+## Metric direction and method grouping make exact comparisons scannable {data-style-preview="blueprint"}
+
+<span class="kicker">Table</span>
+
+::: {.structured-results .ours-last-2}
+| Method | Success (%) $\uparrow$ | Peak force (N) $\downarrow$ | Recovery (%) $\uparrow$ | Total $\uparrow$ |
+|:--|--:|--:|--:|--:|
+| Behavioral cloning | 61.0 | **8.2** | 49.0 | 55.0 |
+| Diffusion policy | 76.0 | 10.8 | 65.0 | 70.0 |
+| Ours: contact objective | 82.0 | 9.6 | 74.0 | 78.0 |
+| Ours: contact + recovery | **86.0** | 9.1 | **81.0** | **84.0** |
+
+: Illustrative placeholder, not experimental evidence. Fictional metrics over 100 fictional trials per method. Arrows show preferred direction; bold marks the best value per metric. The highlighted final two rows are proposed methods. {#tbl-gallery-blueprint}
+:::

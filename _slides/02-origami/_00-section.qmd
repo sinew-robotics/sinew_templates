@@ -1,0 +1,7 @@
+# Origami {.section-slide data-style-preview="origami"}
+
+<span class="kicker">Style 01</span>
+
+A focused dark workbench for technical results.
+
+<span class="visual-preview-label">color-origami</span>

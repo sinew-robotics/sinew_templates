@@ -1,0 +1,44 @@
+## Choose one visual system and keep it consistent throughout a talk {data-style-preview="intro"}
+
+<span class="kicker">Style selection</span>
+
+::: {.metric-row}
+::: {.metric}
+**Origami**
+<span>Dark technical workbench</span>
+:::
+::: {.metric}
+**Paper**
+<span>Quiet light surface</span>
+:::
+::: {.metric}
+**High contrast**
+<span>Maximum separation</span>
+:::
+::: {.metric}
+**Blueprint**
+<span>Technical drawing</span>
+:::
+::: {.metric}
+**Scholar**
+<span>Editorial academic</span>
+:::
+::: {.metric}
+**unmasked**
+<span>Exposed monochrome</span>
+:::
+::: {.metric}
+**the give**
+<span>Soft compliance</span>
+:::
+::: {.metric}
+**the meeting**
+<span>Paired convergence</span>
+:::
+::: {.metric}
+**movement**
+<span>Visible momentum</span>
+:::
+:::
+
+<span class="source">Profiles: color-origami, color-paper, color-high-contrast, color-blueprint, color-scholar, color-unmasked, color-the-give, color-the-meeting, color-movement</span>

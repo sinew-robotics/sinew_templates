@@ -1,0 +1,22 @@
+## An exposed monochrome system with visible structure {data-style-preview="unmasked"}
+
+<span class="kicker">Style guidance</span>
+
+::: {.metric-row}
+::: {.metric}
+**Surface**
+<span>Monochrome and square</span>
+:::
+::: {.metric}
+**Typography**
+<span>Heavy sans plus serif</span>
+:::
+::: {.metric}
+**Plot language**
+<span>Black plus grey</span>
+:::
+:::
+
+::: {.evidence-card}
+Reserve accent color for key findings. Keep body copy neutral and verify plot labels at presentation distance.
+:::

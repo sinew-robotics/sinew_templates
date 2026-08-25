@@ -1,0 +1,159 @@
+---
+pagetitle: "Sinew style gallery"
+author:
+  - name: "Sinew Templates"
+    affiliation: "Academic Reveal.js templates for robotics and machine learning"
+date: "2026-08-25"
+bibliography: references.bib
+format: sinew-revealjs
+---
+
+{{< include _slides/01-intro/_00-section.qmd >}}
+
+{{< include _slides/01-intro/_01-navigation.qmd >}}
+
+{{< include _slides/01-intro/_02-selection.qmd >}}
+
+{{< include _slides/02-origami/_00-section.qmd >}}
+
+{{< include _slides/02-origami/_01-guidelines.qmd >}}
+
+{{< include _slides/02-origami/_02-problem.qmd >}}
+
+{{< include _slides/02-origami/_03-algorithm.qmd >}}
+
+{{< include _slides/02-origami/_04-plot.qmd >}}
+
+{{< include _slides/02-origami/_05-table.qmd >}}
+
+{{< include _slides/02-origami/_06-conclusion.qmd >}}
+
+{{< include _slides/02-origami/_07-generate.qmd >}}
+
+{{< include _slides/03-paper/_00-section.qmd >}}
+
+{{< include _slides/03-paper/_01-guidelines.qmd >}}
+
+{{< include _slides/03-paper/_02-problem.qmd >}}
+
+{{< include _slides/03-paper/_03-algorithm.qmd >}}
+
+{{< include _slides/03-paper/_04-plot.qmd >}}
+
+{{< include _slides/03-paper/_05-table.qmd >}}
+
+{{< include _slides/03-paper/_06-conclusion.qmd >}}
+
+{{< include _slides/03-paper/_07-generate.qmd >}}
+
+{{< include _slides/04-high-contrast/_00-section.qmd >}}
+
+{{< include _slides/04-high-contrast/_01-guidelines.qmd >}}
+
+{{< include _slides/04-high-contrast/_02-problem.qmd >}}
+
+{{< include _slides/04-high-contrast/_03-algorithm.qmd >}}
+
+{{< include _slides/04-high-contrast/_04-plot.qmd >}}
+
+{{< include _slides/04-high-contrast/_05-table.qmd >}}
+
+{{< include _slides/04-high-contrast/_06-conclusion.qmd >}}
+
+{{< include _slides/04-high-contrast/_07-generate.qmd >}}
+
+{{< include _slides/05-blueprint/_00-section.qmd >}}
+
+{{< include _slides/05-blueprint/_01-guidelines.qmd >}}
+
+{{< include _slides/05-blueprint/_02-problem.qmd >}}
+
+{{< include _slides/05-blueprint/_03-algorithm.qmd >}}
+
+{{< include _slides/05-blueprint/_04-plot.qmd >}}
+
+{{< include _slides/05-blueprint/_05-table.qmd >}}
+
+{{< include _slides/05-blueprint/_06-conclusion.qmd >}}
+
+{{< include _slides/05-blueprint/_07-generate.qmd >}}
+
+{{< include _slides/06-scholar/_00-section.qmd >}}
+
+{{< include _slides/06-scholar/_01-guidelines.qmd >}}
+
+{{< include _slides/06-scholar/_02-problem.qmd >}}
+
+{{< include _slides/06-scholar/_03-algorithm.qmd >}}
+
+{{< include _slides/06-scholar/_04-plot.qmd >}}
+
+{{< include _slides/06-scholar/_05-table.qmd >}}
+
+{{< include _slides/06-scholar/_06-conclusion.qmd >}}
+
+{{< include _slides/06-scholar/_07-generate.qmd >}}
+
+{{< include _slides/07-unmasked/_00-section.qmd >}}
+
+{{< include _slides/07-unmasked/_01-guidelines.qmd >}}
+
+{{< include _slides/07-unmasked/_02-problem.qmd >}}
+
+{{< include _slides/07-unmasked/_03-algorithm.qmd >}}
+
+{{< include _slides/07-unmasked/_04-plot.qmd >}}
+
+{{< include _slides/07-unmasked/_05-table.qmd >}}
+
+{{< include _slides/07-unmasked/_06-conclusion.qmd >}}
+
+{{< include _slides/07-unmasked/_07-generate.qmd >}}
+
+{{< include _slides/08-the-give/_00-section.qmd >}}
+
+{{< include _slides/08-the-give/_01-guidelines.qmd >}}
+
+{{< include _slides/08-the-give/_02-problem.qmd >}}
+
+{{< include _slides/08-the-give/_03-algorithm.qmd >}}
+
+{{< include _slides/08-the-give/_04-plot.qmd >}}
+
+{{< include _slides/08-the-give/_05-table.qmd >}}
+
+{{< include _slides/08-the-give/_06-conclusion.qmd >}}
+
+{{< include _slides/08-the-give/_07-generate.qmd >}}
+
+{{< include _slides/09-the-meeting/_00-section.qmd >}}
+
+{{< include _slides/09-the-meeting/_01-guidelines.qmd >}}
+
+{{< include _slides/09-the-meeting/_02-problem.qmd >}}
+
+{{< include _slides/09-the-meeting/_03-algorithm.qmd >}}
+
+{{< include _slides/09-the-meeting/_04-plot.qmd >}}
+
+{{< include _slides/09-the-meeting/_05-table.qmd >}}
+
+{{< include _slides/09-the-meeting/_06-conclusion.qmd >}}
+
+{{< include _slides/09-the-meeting/_07-generate.qmd >}}
+
+{{< include _slides/10-movement/_00-section.qmd >}}
+
+{{< include _slides/10-movement/_01-guidelines.qmd >}}
+
+{{< include _slides/10-movement/_02-problem.qmd >}}
+
+{{< include _slides/10-movement/_03-algorithm.qmd >}}
+
+{{< include _slides/10-movement/_04-plot.qmd >}}
+
+{{< include _slides/10-movement/_05-table.qmd >}}
+
+{{< include _slides/10-movement/_06-conclusion.qmd >}}
+
+{{< include _slides/10-movement/_07-generate.qmd >}}

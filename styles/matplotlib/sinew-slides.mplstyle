@@ -1,0 +1,22 @@
+# Sinew house overlay for projected figures. Apply after SciencePlots styles.
+font.family: sans-serif
+font.sans-serif: Source Sans 3, Noto Sans, DejaVu Sans
+font.size: 18
+axes.titlesize: 22
+axes.labelsize: 18
+axes.linewidth: 1.4
+axes.grid: True
+axes.axisbelow: True
+xtick.labelsize: 16
+ytick.labelsize: 16
+legend.fontsize: 16
+lines.linewidth: 2.5
+lines.markersize: 8
+grid.linewidth: 0.8
+grid.alpha: 0.28
+savefig.bbox: tight
+savefig.transparent: False
+savefig.dpi: 180
+pdf.fonttype: 42
+svg.fonttype: path
+svg.hashsalt: sinew-gallery

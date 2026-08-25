@@ -1,0 +1,22 @@
+## A focused dark workbench for technical results {data-style-preview="origami"}
+
+<span class="kicker">Style guidance</span>
+
+::: {.metric-row}
+::: {.metric}
+**Surface**
+<span>Dark workbench</span>
+:::
+::: {.metric}
+**Typography**
+<span>System sans plus mono</span>
+:::
+::: {.metric}
+**Plot language**
+<span>Cyan plus amber</span>
+:::
+:::
+
+::: {.evidence-card}
+Reserve accent color for key findings. Keep body copy neutral and verify plot labels at presentation distance.
+:::

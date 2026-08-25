@@ -1,0 +1,22 @@
+## A technical drawing language for systems and mechanisms {data-style-preview="blueprint"}
+
+<span class="kicker">Style guidance</span>
+
+::: {.metric-row}
+::: {.metric}
+**Surface**
+<span>Deep navy grid</span>
+:::
+::: {.metric}
+**Typography**
+<span>Compact display sans</span>
+:::
+::: {.metric}
+**Plot language**
+<span>Cyan plus yellow</span>
+:::
+:::
+
+::: {.evidence-card}
+Reserve accent color for key findings. Keep body copy neutral and verify plot labels at presentation distance.
+:::

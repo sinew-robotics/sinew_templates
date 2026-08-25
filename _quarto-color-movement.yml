@@ -1,0 +1,6 @@
+visual-style: "movement"
+format:
+  sinew-revealjs:
+    css:
+      - styles/colors/movement.css
+    highlight-style: github

@@ -1,0 +1,6 @@
+visual-style: "the give"
+format:
+  sinew-revealjs:
+    css:
+      - styles/colors/the-give.css
+    highlight-style: github

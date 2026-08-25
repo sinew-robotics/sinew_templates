@@ -1,0 +1,71 @@
+/*
+ * Origami - adapted 2026-08-25 from the Origami repository's
+ * tactile segmentation viewer at apps/tactile_segmentation_viewer/static/app.css.
+ *
+ * Preserved: dark workbench, amber focus, cyan model signal, fine rules,
+ * restrained radii, system sans + monospace, compact evidence panels.
+ * Adapted: larger projected typography, higher muted-text contrast, reduced
+ * decoration, and non-color chart differentiation requirements.
+ */
+
+.reveal {
+  --sinew-color-profile: "origami";
+  --sinew-bg: #131416;
+  --sinew-panel: #1b1d21;
+  --sinew-panel-raised: #202329;
+  --sinew-ink: #e6e6e6;
+  --sinew-muted: #a9adb4;
+  --sinew-line: #2b2e34;
+  --sinew-line-strong: #626873;
+  --sinew-accent: #e8b64c;
+  --sinew-accent-contrast: #14161a;
+  --sinew-danger: #ff8b73;
+  --sinew-success: #75d66e;
+  --sinew-data-1: #4cc2e8;
+  --sinew-data-2: #e8b64c;
+  --sinew-data-3: #b895f5;
+  --sinew-data-4: #75d66e;
+  --sinew-data-5: #ff8b73;
+  color: var(--sinew-ink);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+.reveal-viewport,
+.reveal .slide-background-content { background: #131416; }
+.reveal h1,
+.reveal h2,
+.reveal h3 {
+  color: #f2f3f4;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-weight: 700;
+}
+.reveal code,
+.reveal pre,
+.reveal .kicker,
+.reveal .eyebrow,
+.reveal .figcap,
+.reveal figcaption,
+.reveal caption,
+.reveal .source {
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+.reveal pre code { background: #08090b; color: #d9e2f2; }
+.reveal .panel,
+.reveal .evidence-card,
+.reveal .metric { box-shadow: 0 0.25em 0.9em rgba(0, 0, 0, 0.14); }
+.reveal #title-slide,
+.reveal .section-slide {
+  background-color: #131416;
+  background-image:
+    linear-gradient(rgba(232, 182, 76, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(232, 182, 76, 0.055) 1px, transparent 1px);
+}
+.reveal table tbody tr:nth-child(even) { background: #17191d; }
+.reveal .progress { background: #202329; }
+html:has(.reveal .section-slide.present) .reveal-viewport {
+  background-color: #131416;
+  background-image:
+    linear-gradient(rgba(232, 182, 76, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(232, 182, 76, 0.055) 1px, transparent 1px);
+  background-size: 82px 82px;
+}

@@ -1,0 +1,63 @@
+/* Conference-neutral editorial style for spacious academic storytelling. */
+.reveal {
+  --sinew-color-profile: "scholar";
+  --sinew-bg: #f7f3ff;
+  --sinew-panel: #ebe4f5;
+  --sinew-panel-raised: #ffffff;
+  --sinew-ink: #241b35;
+  --sinew-muted: #655b74;
+  --sinew-line: #d5cbe3;
+  --sinew-line-strong: #827394;
+  --sinew-accent: #5b35a5;
+  --sinew-accent-contrast: #ffffff;
+  --sinew-danger: #a3222a;
+  --sinew-success: #24683c;
+  --sinew-data-1: #1f5d9b;
+  --sinew-data-2: #8d4b00;
+  --sinew-data-3: #006d5b;
+  --sinew-data-4: #8b3b70;
+  --sinew-data-5: #614099;
+  color: var(--sinew-ink);
+  font-family: "Avenir Next", "Trebuchet MS", Arial, sans-serif;
+}
+
+.reveal-viewport,
+.reveal .slide-background-content { background: #f7f3ff; }
+.reveal h1,
+.reveal h2,
+.reveal h3 {
+  color: #241b35;
+  font-family: Charter, Georgia, "Times New Roman", serif;
+  font-weight: 700;
+  letter-spacing: -0.012em;
+}
+.reveal code,
+.reveal pre,
+.reveal .kicker,
+.reveal .eyebrow,
+.reveal .figcap,
+.reveal figcaption,
+.reveal caption,
+.reveal .source {
+  font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+}
+.reveal pre code { background: #eee8f7; color: #241b35; }
+.reveal #title-slide,
+.reveal .section-slide {
+  background-color: #f7f3ff;
+  background-image:
+    radial-gradient(circle at 82% 18%, rgba(91, 53, 165, 0.10), transparent 23em),
+    linear-gradient(rgba(91, 53, 165, 0.035) 1px, transparent 1px);
+  background-size: auto, 100% 2.4em;
+}
+.reveal .panel,
+.reveal .evidence-card,
+.reveal .metric { box-shadow: 0 0.2em 0.8em rgba(36, 27, 53, 0.07); }
+.reveal table tbody tr:nth-child(even) { background: #f0eaf8; }
+html:has(.reveal .section-slide.present) .reveal-viewport {
+  background-color: #f7f3ff;
+  background-image:
+    radial-gradient(circle at 82% 18%, rgba(91, 53, 165, 0.10), transparent 782px),
+    linear-gradient(rgba(91, 53, 165, 0.035) 1px, transparent 1px);
+  background-size: auto, 100% 82px;
+}

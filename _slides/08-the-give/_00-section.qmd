@@ -1,0 +1,7 @@
+# the give {.section-slide data-style-preview="the-give"}
+
+<span class="kicker">Style 07</span>
+
+Soft, compliant surfaces for approachable technical content.
+
+<span class="visual-preview-label">color-the-give</span>

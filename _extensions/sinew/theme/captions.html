@@ -1,0 +1,52 @@
+<script>
+(function () {
+  function boldFloatIdentifiers() {
+    document.querySelectorAll("figcaption.quarto-float-caption").forEach(function (caption) {
+      if (caption.querySelector(".sinew-caption-identifier")) return;
+
+      var textNode = Array.from(caption.childNodes).find(function (node) {
+        return node.nodeType === Node.TEXT_NODE && /\S/.test(node.nodeValue || "");
+      });
+      if (!textNode) return;
+
+      var match = textNode.nodeValue.match(/^(\s*)(Figure|Table)\s+([0-9]+(?:\.[0-9]+)*):\s*/);
+      if (!match) return;
+
+      var identifier = document.createElement("strong");
+      identifier.className = "sinew-caption-identifier";
+      identifier.textContent = match[2] + " " + match[3];
+
+      caption.insertBefore(document.createTextNode(match[1]), textNode);
+      caption.insertBefore(identifier, textNode);
+      caption.insertBefore(document.createTextNode(": " + textNode.nodeValue.slice(match[0].length)), textNode);
+      textNode.remove();
+    });
+  }
+
+  function numberAlgorithmCaptions() {
+    document.querySelectorAll(".algorithm-caption").forEach(function (caption, index) {
+      var identifier = caption.querySelector("strong");
+      if (!identifier) return;
+
+      identifier.className = "sinew-caption-identifier";
+      identifier.textContent = "Algorithm " + (index + 1);
+
+      var suffix = identifier.nextSibling;
+      if (suffix && suffix.nodeType === Node.TEXT_NODE && !/^\s*:/.test(suffix.nodeValue || "")) {
+        suffix.nodeValue = ": " + (suffix.nodeValue || "").replace(/^\s+/, "");
+      }
+    });
+  }
+
+  function formatCaptions() {
+    boldFloatIdentifiers();
+    numberAlgorithmCaptions();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", formatCaptions, { once: true });
+  } else {
+    formatCaptions();
+  }
+})();
+</script>

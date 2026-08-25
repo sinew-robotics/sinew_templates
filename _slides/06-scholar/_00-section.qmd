@@ -1,0 +1,7 @@
+# Scholar {.section-slide data-style-preview="scholar"}
+
+<span class="kicker">Style 05</span>
+
+A restrained editorial voice for academic arguments.
+
+<span class="visual-preview-label">color-scholar</span>

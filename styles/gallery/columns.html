@@ -1,0 +1,40 @@
+<script>
+(() => {
+  const knownStyles = new Set([
+    "intro",
+    "origami",
+    "paper",
+    "high-contrast",
+    "blueprint",
+    "scholar",
+    "unmasked",
+    "the-give",
+    "the-meeting",
+    "movement",
+  ]);
+
+  const applyColumnStyle = (slide) => {
+    const requested = slide?.dataset?.stylePreview ?? "intro";
+    document.documentElement.dataset.sinewGalleryStyle =
+      knownStyles.has(requested) ? requested : "intro";
+  };
+
+  const connectReveal = () => {
+    if (!window.Reveal || typeof window.Reveal.on !== "function") {
+      window.requestAnimationFrame(connectReveal);
+      return;
+    }
+
+    window.Reveal.on("ready", (event) => applyColumnStyle(event.currentSlide));
+    window.Reveal.on("slidechanged", (event) => applyColumnStyle(event.currentSlide));
+    applyColumnStyle(window.Reveal.getCurrentSlide());
+  };
+
+  document.documentElement.dataset.sinewGalleryStyle = "intro";
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", connectReveal, { once: true });
+  } else {
+    connectReveal();
+  }
+})();
+</script>

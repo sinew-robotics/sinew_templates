@@ -1,0 +1,6 @@
+visual-style: "the meeting"
+format:
+  sinew-revealjs:
+    css:
+      - styles/colors/the-meeting.css
+    highlight-style: github

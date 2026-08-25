@@ -1,0 +1,426 @@
+/*-- scss:defaults --*/
+
+$presentation-font-size-root: 34px !default;
+$presentation-line-height: 1.35 !default;
+$presentation-heading-line-height: 1.08 !default;
+$presentation-h1-font-size: 1.85em !default;
+$presentation-h2-font-size: 1.34em !default;
+$presentation-h3-font-size: 1em !default;
+$presentation-block-margin: 0.55em !default;
+$code-block-font-size: 0.58em !default;
+
+/*-- scss:rules --*/
+
+.reveal {
+  --sinew-bg: #ffffff;
+  --sinew-panel: #f5f6f8;
+  --sinew-panel-raised: #ffffff;
+  --sinew-ink: #17212b;
+  --sinew-muted: #5d6975;
+  --sinew-line: #d9dee4;
+  --sinew-line-strong: #8b96a3;
+  --sinew-accent: #006d77;
+  --sinew-accent-contrast: #ffffff;
+  --sinew-danger: #b42318;
+  --sinew-success: #237a3b;
+  --sinew-radius: 0.24em;
+  --sinew-data-1: #0072b2;
+  --sinew-data-2: #e69f00;
+  --sinew-data-3: #009e73;
+  --sinew-data-4: #cc79a7;
+  --sinew-data-5: #56b4e9;
+  color: var(--sinew-ink);
+  -webkit-font-smoothing: antialiased;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.reveal .slides { text-align: left; }
+.reveal .slides section,
+.reveal .slides section > section { box-sizing: border-box; }
+
+.reveal h1,
+.reveal h2,
+.reveal h3 {
+  color: var(--sinew-ink);
+  letter-spacing: -0.022em;
+  text-transform: none;
+}
+
+.reveal h1 { max-width: 22ch; }
+.reveal h2 { max-width: 31ch; margin-bottom: 0.48em; }
+.reveal h3 { letter-spacing: -0.01em; }
+.reveal p,
+.reveal li { color: var(--sinew-ink); }
+.reveal li + li { margin-top: 0.22em; }
+.reveal strong { color: var(--sinew-ink); font-weight: 700; }
+.reveal a { color: var(--sinew-accent); text-decoration-thickness: 0.07em; text-underline-offset: 0.11em; }
+
+/* Title and horizontal-stack divider slides. */
+.reveal #title-slide,
+.reveal .section-slide {
+  min-height: 100%;
+  text-align: left;
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--sinew-accent) 7%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--sinew-accent) 7%, transparent) 1px, transparent 1px);
+  background-size: 2.4em 2.4em;
+}
+
+.reveal #title-slide .title {
+  max-width: 23ch;
+  margin-top: 1.15em;
+  font-size: 1.72em;
+  line-height: 1.04;
+}
+
+.reveal #title-slide .subtitle {
+  max-width: 48ch;
+  color: var(--sinew-muted);
+  font-size: 0.72em;
+}
+
+.reveal #title-slide .quarto-title-authors {
+  display: block;
+  justify-content: flex-start;
+  margin-top: 1.2em;
+  text-align: left;
+}
+
+.reveal #title-slide .quarto-title-author,
+.reveal #title-slide .author,
+.reveal #title-slide .quarto-title-affiliation,
+.reveal #title-slide .date {
+  color: var(--sinew-muted);
+  font-family: var(--r-code-font);
+  font-size: 0.48em;
+  text-align: left;
+}
+
+.reveal .section-slide h1 { margin-top: 2.3em; }
+
+/* Reveal letterboxes a 16:9 canvas on wider displays. Put divider decoration
+   on the viewport, then keep the scaled slide and its generated background
+   transparent so the treatment remains full bleed. */
+html:has(.reveal .section-slide.present) .reveal .section-slide.present,
+html:has(.reveal .section-slide.present) .reveal .slide-background-content {
+  background-color: transparent;
+  background-image: none;
+}
+
+/* Quiet chrome leaves the evidence dominant. */
+.reveal .footer,
+.reveal .footer * ,
+.reveal .slide-number {
+  color: var(--sinew-muted);
+  background: transparent;
+  font-family: var(--r-code-font);
+  font-size: 13px;
+}
+.reveal .progress,
+.reveal .controls { color: var(--sinew-accent); }
+
+/* Semantic roles distilled from the source deck. */
+.reveal .kicker,
+.reveal .eyebrow {
+  display: block;
+  margin-bottom: 0.45em;
+  color: var(--sinew-muted);
+  font-family: var(--r-code-font);
+  font-size: 0.46em;
+  font-weight: 700;
+  letter-spacing: 0.075em;
+  text-transform: uppercase;
+}
+
+.reveal .figcap,
+.reveal .algorithm-caption,
+.reveal figcaption,
+.reveal .figure-caption,
+.reveal .table-caption,
+.reveal caption {
+  color: var(--sinew-muted);
+  font-family: var(--r-code-font);
+  font-size: 0.43em;
+  line-height: 1.35;
+  text-align: left;
+}
+
+.reveal .figcap strong,
+.reveal .algorithm-caption strong,
+.reveal figcaption strong,
+.reveal caption strong { color: var(--sinew-ink); }
+
+.reveal .algorithm-caption {
+  margin-top: 0.55em;
+}
+
+.reveal .algorithm-caption + .profile-checklist {
+  margin-top: 0.55em;
+}
+
+.reveal .source {
+  color: var(--sinew-muted);
+  font-family: var(--r-code-font);
+  font-size: 0.40em;
+}
+
+.reveal .panel,
+.reveal .evidence-card {
+  padding: 0.65em 0.75em;
+  border: 1px solid var(--sinew-line);
+  border-radius: var(--sinew-radius);
+  background: var(--sinew-panel);
+}
+
+.reveal .evidence-card {
+  border-left: 0.14em solid var(--sinew-accent);
+}
+
+.reveal .metric-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(6.5em, 1fr));
+  gap: 0.5em;
+}
+
+.reveal .metric {
+  padding: 0.55em 0.65em;
+  border: 1px solid var(--sinew-line);
+  border-radius: var(--sinew-radius);
+  background: var(--sinew-panel);
+}
+.reveal .metric strong { display: block; font-size: 1.15em; }
+.reveal .metric span { display: block; color: var(--sinew-muted); font-size: 0.48em; }
+
+.reveal .tag {
+  display: inline-block;
+  padding: 0.17em 0.55em;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  color: var(--sinew-accent);
+  font-family: var(--r-code-font);
+  font-size: 0.38em;
+  font-weight: 700;
+}
+
+/* Style-gallery components use only the selected visual tokens. */
+.reveal .profile-route,
+.reveal .profile-status {
+  display: inline-block;
+  margin-top: 1.1em;
+  padding: 0.3em 0.65em;
+  border: 1px solid var(--sinew-line-strong);
+  border-radius: 999px;
+  color: var(--sinew-muted);
+  background: var(--sinew-panel);
+  font-family: var(--r-code-font);
+  font-size: 0.43em;
+  font-weight: 700;
+}
+
+.reveal .profile-rail {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.32em;
+  margin: 0.65em 0 0.9em;
+}
+
+.reveal .profile-rail > p { display: contents; }
+
+.reveal .profile-node {
+  display: grid;
+  min-height: 2.8em;
+  place-items: center;
+  border: 1px solid var(--sinew-line);
+  border-radius: var(--sinew-radius);
+  color: var(--sinew-muted);
+  background: var(--sinew-panel);
+  font-family: var(--r-code-font);
+  font-size: 0.43em;
+  font-weight: 700;
+}
+
+.reveal .profile-node.is-current {
+  border-color: var(--sinew-accent);
+  color: var(--sinew-accent);
+  box-shadow: inset 0 -0.12em 0 var(--sinew-accent);
+}
+
+.reveal .profile-checklist {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0.45em 0.8em;
+  border: 1px solid var(--sinew-line);
+  border-left: 0.14em solid var(--sinew-accent);
+  border-radius: var(--sinew-radius);
+  background: var(--sinew-panel);
+  overflow-wrap: anywhere;
+}
+
+.reveal .profile-checklist ol {
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0;
+  padding-left: 1.45em;
+}
+.reveal .profile-checklist li {
+  padding-right: 0.25em;
+  font-size: 0.78em;
+  line-height: 1.32;
+}
+.reveal .profile-checklist li:last-child { margin-bottom: 0; }
+
+/* Keep adjacent content groups visually separate on guidance, problem, and
+   generation slides. */
+.reveal .metric-row + .evidence-card,
+.reveal .columns + .evidence-card,
+.reveal .code-copy-outer-scaffold + .profile-checklist {
+  margin-top: 0.55em;
+}
+
+.reveal .hot { color: var(--sinew-danger); font-weight: 700; }
+.reveal .ok { color: var(--sinew-success); font-weight: 700; }
+
+.reveal ol.takeaways {
+  margin: 0.45em 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: sinew-takeaway;
+}
+.reveal ol.takeaways li {
+  position: relative;
+  margin-bottom: 0.62em;
+  padding-left: 2em;
+  counter-increment: sinew-takeaway;
+}
+.reveal ol.takeaways li::before {
+  position: absolute;
+  top: 0.02em;
+  left: 0;
+  display: grid;
+  width: 1.55em;
+  height: 1.55em;
+  place-items: center;
+  border: 1px solid var(--sinew-line-strong);
+  border-radius: 50%;
+  color: var(--sinew-accent);
+  font-family: var(--r-code-font);
+  font-size: 0.62em;
+  content: counter(sinew-takeaway);
+}
+
+/* Academic figures: preserve aspect ratio and reserve room for captions. */
+.reveal .slide figure { margin: 0.2em auto 0; }
+.reveal .slide figure > img,
+.reveal .slide > img,
+.reveal .slide .quarto-figure > img {
+  display: block;
+  max-height: 12.3em;
+  margin-right: auto;
+  margin-left: auto;
+  object-fit: contain;
+}
+
+/* Booktabs-like tables: no vertical rules, visible hierarchy, tabular numbers. */
+.reveal table {
+  width: 100%;
+  border-collapse: collapse;
+  border-top: 2px solid var(--sinew-line-strong);
+  border-bottom: 2px solid var(--sinew-line-strong);
+  color: var(--sinew-ink);
+  font-size: 0.62em;
+}
+.reveal table th,
+.reveal table td {
+  padding: 0.42em 0.55em;
+  border-right: 0;
+  border-left: 0;
+  text-align: left;
+}
+.reveal table thead th {
+  border-bottom: 1px solid var(--sinew-line-strong);
+  background: transparent;
+  font-weight: 700;
+}
+.reveal table tbody tr + tr td { border-top: 1px solid var(--sinew-line); }
+.reveal table td[style*="text-align: right"],
+.reveal table th[style*="text-align: right"] { font-variant-numeric: tabular-nums; }
+
+/* Structured result tables use the final column for the aggregate and keep
+   proposed methods as a labeled, contiguous block at the bottom. */
+.reveal .structured-results table tbody tr {
+  background: transparent !important;
+}
+.reveal .structured-results table th:last-child,
+.reveal .structured-results table td:last-child {
+  border-left: 0.16em solid var(--sinew-line-strong);
+}
+.reveal .structured-results table strong { font-weight: 800; }
+.reveal .structured-results.ours-last-1 table tbody tr:nth-last-child(-n + 1) > *,
+.reveal .structured-results.ours-last-2 table tbody tr:nth-last-child(-n + 2) > *,
+.reveal .structured-results.ours-last-3 table tbody tr:nth-last-child(-n + 3) > *,
+.reveal .structured-results.ours-last-4 table tbody tr:nth-last-child(-n + 4) > * {
+  background: color-mix(in srgb, var(--sinew-accent) 12%, var(--sinew-panel));
+}
+.reveal .structured-results.ours-last-1 table tbody tr:nth-last-child(1) > *,
+.reveal .structured-results.ours-last-2 table tbody tr:nth-last-child(2) > *,
+.reveal .structured-results.ours-last-3 table tbody tr:nth-last-child(3) > *,
+.reveal .structured-results.ours-last-4 table tbody tr:nth-last-child(4) > * {
+  border-top: 0.16em solid var(--sinew-accent);
+}
+
+.reveal .sinew-caption-identifier {
+  color: var(--sinew-ink);
+  font-weight: 800;
+}
+
+.reveal pre {
+  box-sizing: border-box;
+  max-width: 100%;
+  border: 1px solid var(--sinew-line);
+  border-radius: var(--sinew-radius);
+  box-shadow: none;
+  overflow: hidden !important;
+}
+.reveal .slides .code-copy-outer-scaffold,
+.reveal .slides div.sourceCode {
+  box-sizing: border-box;
+  max-width: 100%;
+  overflow: hidden !important;
+}
+.reveal .slides pre code {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  max-height: none !important;
+  padding: 0.9em 1em;
+  overflow: visible !important;
+  white-space: pre-wrap !important;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.reveal .columns { align-items: center; gap: 0.75em; }
+.reveal blockquote {
+  width: auto;
+  padding: 0.35em 0.7em;
+  border-left: 0.12em solid var(--sinew-accent);
+  background: var(--sinew-panel);
+  box-shadow: none;
+}
+
+/* Focus and motion are part of the presentation, not optional polish. */
+.reveal a:focus-visible,
+.reveal button:focus-visible {
+  outline: 3px solid var(--sinew-accent);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal .slides section,
+  .reveal .slides section * {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

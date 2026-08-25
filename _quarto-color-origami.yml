@@ -1,0 +1,6 @@
+visual-style: "origami"
+format:
+  sinew-revealjs:
+    css:
+      - styles/colors/origami.css
+    highlight-style: github-dark

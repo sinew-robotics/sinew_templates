@@ -1,0 +1,19 @@
+figure.facecolor: ffffff
+axes.facecolor: ffffff
+savefig.facecolor: ffffff
+text.color: 000000
+axes.labelcolor: 000000
+axes.titlecolor: 000000
+axes.edgecolor: 000000
+xtick.color: 000000
+ytick.color: 000000
+grid.color: 777777
+legend.facecolor: ffffff
+legend.edgecolor: 000000
+legend.labelcolor: 000000
+axes.prop_cycle: cycler('color', ['0072b2', '9a5700', '007a59', '91406f', '5e3c00'])
+font.family: sans-serif
+font.sans-serif: DejaVu Sans, Arial
+axes.linewidth: 2.0
+lines.linewidth: 3.0
+lines.markersize: 9

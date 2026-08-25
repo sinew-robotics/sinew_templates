@@ -1,0 +1,16 @@
+figure.facecolor: ecf3f2
+axes.facecolor: ffffff
+savefig.facecolor: ecf3f2
+text.color: 142523
+axes.labelcolor: 142523
+axes.titlecolor: 142523
+axes.edgecolor: 607975
+xtick.color: 5c6e6c
+ytick.color: 5c6e6c
+grid.color: cfe0dd
+legend.facecolor: ffffff
+legend.edgecolor: 607975
+legend.labelcolor: 142523
+axes.prop_cycle: cycler('color', ['d51f4c', '087a75', '7b3fe4', 'b31e45', '5a22b8'])
+font.family: serif
+font.serif: DejaVu Serif, Georgia

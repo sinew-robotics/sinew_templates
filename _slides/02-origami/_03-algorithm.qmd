@@ -1,0 +1,32 @@
+## The algorithm adds contact supervision before policy evaluation {data-style-preview="origami"}
+
+<span class="kicker">Algorithm</span>
+
+::: {.columns}
+::: {.column width="66%"}
+```text
+for batch in demonstrations:
+    pose, wrench, action = batch
+    contact = label_contact(wrench, threshold)
+    loss = pose_loss(pose, action)
+    loss += lambda_contact * contact_loss(contact)
+    update(policy, loss)
+
+evaluate(policy, held_out_disturbances)
+```
+
+::: {.algorithm-caption}
+**Algorithm.** Illustrative contact-aware training. Inputs are pose, wrench, and action; evaluation uses held-out disturbances. Replace this placeholder with the traced research method.
+:::
+:::
+
+::: {.column width="30%"}
+::: {.panel}
+**Three stages**
+
+1. Label contact.
+2. Train jointly.
+3. Test recovery.
+:::
+:::
+:::

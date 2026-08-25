@@ -1,0 +1,7 @@
+# Paper {.section-slide data-style-preview="paper"}
+
+<span class="kicker">Style 02</span>
+
+A quiet paper-like surface for clear academic storytelling.
+
+<span class="visual-preview-label">color-paper</span>

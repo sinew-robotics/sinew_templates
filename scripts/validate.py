@@ -1,0 +1,312 @@
+#!/usr/bin/env python3
+"""Static validation for the Sinew starter source tree (stdlib only)."""
+
+from __future__ import annotations
+
+import re
+import sys
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+DECK = ROOT / "deck.qmd"
+COLORS = (
+    "origami",
+    "paper",
+    "high-contrast",
+    "blueprint",
+    "scholar",
+    "unmasked",
+    "the-give",
+    "the-meeting",
+    "movement",
+)
+REQUIRED_TOKENS = (
+    "--sinew-bg",
+    "--sinew-panel",
+    "--sinew-panel-raised",
+    "--sinew-ink",
+    "--sinew-muted",
+    "--sinew-line",
+    "--sinew-line-strong",
+    "--sinew-accent",
+    "--sinew-accent-contrast",
+    "--sinew-danger",
+    "--sinew-success",
+    "--sinew-data-1",
+    "--sinew-data-2",
+    "--sinew-data-3",
+    "--sinew-data-4",
+    "--sinew-data-5",
+)
+
+
+class Validation:
+    def __init__(self) -> None:
+        self.errors: list[str] = []
+        self.notes: list[str] = []
+
+    def require(self, condition: bool, message: str) -> None:
+        if not condition:
+            self.errors.append(message)
+
+    def run(self) -> int:
+        self.validate_repository()
+        self.validate_profiles()
+        self.validate_manifest_and_slides()
+        self.validate_styles()
+
+        if self.notes:
+            print("Sinew validation notes:")
+            for note in self.notes:
+                print(f"  - {note}")
+
+        if self.errors:
+            print("Sinew validation failed:", file=sys.stderr)
+            for error in self.errors:
+                print(f"  - {error}", file=sys.stderr)
+            return 1
+
+        print("Sinew validation passed.")
+        print(f"  styles={len(COLORS)}")
+        return 0
+
+    def validate_repository(self) -> None:
+        self.require(DECK.is_file(), "deck.qmd is missing")
+        ascii_sources = sorted(
+            {
+                DECK,
+                *ROOT.glob("_quarto*.yml"),
+                *ROOT.rglob("*.md"),
+            }
+        )
+        for path in ascii_sources:
+            if not path.is_file():
+                continue
+            source = path.read_text(encoding="utf-8")
+            non_ascii = sorted({character for character in source if ord(character) > 127})
+            self.require(
+                not non_ascii,
+                f"slide metadata and authoring instructions must use standard-keyboard ASCII in {path}; found {non_ascii}",
+            )
+        beads = [path for path in ROOT.rglob(".beads") if ".git" not in path.parts]
+        self.require(not beads, f".beads must stay outside the template: {beads}")
+        self.require((ROOT / "_extensions/sinew/_extension.yml").is_file(), "extension manifest is missing")
+        self.require((ROOT / "AGENTS.md").is_file(), "AGENTS.md is missing")
+        self.require((ROOT / "CLAUDE.md").is_file(), "CLAUDE.md is missing")
+        self.require(
+            (ROOT / "docs/agent-templates/AGENTS.template.md").is_file(),
+            "copyable AGENTS template is missing",
+        )
+        self.require(
+            (ROOT / "docs/agent-templates/CLAUDE.template.md").is_file(),
+            "copyable CLAUDE template is missing",
+        )
+        self.require((ROOT / "_quarto-gallery.yml").is_file(), "default gallery profile is missing")
+        self.require(
+            (ROOT / "styles/gallery/gallery.css").is_file(),
+            "default gallery marker CSS is missing",
+        )
+        legacy_profiles = sorted(ROOT.glob("_quarto-conf-*.yml"))
+        self.require(not legacy_profiles, f"conference profiles must not be present: {legacy_profiles}")
+        legacy_markers = sorted((ROOT / "styles/conferences").glob("*.css"))
+        self.require(not legacy_markers, f"conference marker CSS must not be present: {legacy_markers}")
+
+    def validate_profiles(self) -> None:
+        base = (ROOT / "_quarto.yml").read_text(encoding="utf-8")
+        for name in COLORS:
+            profile_name = f"color-{name}"
+            path = ROOT / f"_quarto-{profile_name}.yml"
+            self.require(path.is_file(), f"missing color profile: {profile_name}")
+            self.require(profile_name in base, f"{profile_name} missing from profile group")
+            if path.is_file():
+                source = path.read_text(encoding="utf-8")
+                self.require(
+                    f"styles/colors/{name}.css" in source,
+                    f"{profile_name} does not include its color CSS",
+                )
+
+    def validate_manifest_and_slides(self) -> None:
+        if not DECK.is_file():
+            return
+        deck = DECK.read_text(encoding="utf-8")
+        closing_yaml = deck.find("\n---", 4)
+        self.require(deck.startswith("---\n"), "deck.qmd must start with YAML")
+        self.require(closing_yaml >= 0, "deck.qmd YAML is not closed")
+
+        includes = re.findall(r"^\{\{<\s+include\s+([^ >]+)\s*>\}\}$", deck, re.MULTILINE)
+        self.require(bool(includes), "deck.qmd has no include manifest")
+        self.require(len(includes) == len(set(includes)), "deck.qmd includes a slide more than once")
+
+        first_include = deck.find("{{< include")
+        if closing_yaml >= 0 and first_include >= 0:
+            preamble = deck[closing_yaml + 4 : first_include]
+            visible = re.sub(r"<!--.*?-->", "", preamble, flags=re.DOTALL).strip()
+            self.require(not visible, "body content before the first include creates an extra slide")
+
+        included_paths = [ROOT / include for include in includes]
+        for path in included_paths:
+            self.require(path.is_file(), f"included slide does not exist: {path.relative_to(ROOT)}")
+
+        slide_files = sorted((ROOT / "_slides").glob("**/*.qmd"))
+        included_resolved = {path.resolve() for path in included_paths if path.exists()}
+        orphaned = [path.relative_to(ROOT) for path in slide_files if path.resolve() not in included_resolved]
+        self.require(not orphaned, f"slide files are not included: {orphaned}")
+
+        previous_folder: str | None = None
+        seen_folders: set[str] = set()
+        for path in included_paths:
+            if not path.is_file():
+                continue
+            rel = path.relative_to(ROOT)
+            self.require(path.name.startswith("_"), f"included slide must be underscore-prefixed: {rel}")
+            self.require("_slides" in path.parts, f"included content is outside _slides: {rel}")
+            folder = path.parent.name
+            if folder != previous_folder:
+                self.require(folder not in seen_folders, f"stack folder is split in the manifest: {folder}")
+                seen_folders.add(folder)
+                previous_folder = folder
+
+            text = path.read_text(encoding="utf-8")
+            self.require(not text.startswith("---\n"), f"included slide contains YAML: {rel}")
+            non_ascii = sorted({character for character in text if ord(character) > 127})
+            self.require(
+                not non_ascii,
+                f"slide source must use standard-keyboard ASCII in {rel}; found {non_ascii}",
+            )
+            headings = re.findall(r"^(#{1,2})\s+(.+)$", text, re.MULTILINE)
+            self.require(len(headings) == 1, f"slide must contain exactly one level-1/2 heading: {rel}")
+            self.require(
+                re.search(r"^#{3,6}\s+", text, re.MULTILINE) is None,
+                f"nested headings create nested Reveal sections; use bold labels inside a slide: {rel}",
+            )
+            if headings:
+                expected = "#" if path.name == "_00-section.qmd" else "##"
+                self.require(headings[0][0] == expected, f"wrong heading level in {rel}; expected {expected}")
+                if expected == "##":
+                    title = re.sub(r"\s+\{.*\}\s*$", "", headings[0][1]).strip()
+                    self.require(len(title.split()) >= 5, f"content title is too topic-like to be a claim: {rel}")
+
+            self.require(
+                not re.search(r"\b(?:TODO|FIXME|TBD)\b", text, re.IGNORECASE),
+                f"unresolved TODO/FIXME/TBD in {rel}",
+            )
+            for phrase in (
+                "identical pseudocode",
+                "identical data",
+                "same claim in every column",
+                "shared story",
+                "appearance only",
+                "matching plot",
+            ):
+                self.require(
+                    phrase not in text.lower(),
+                    f"remove gallery-comparison meta-copy from {rel}: {phrase}",
+                )
+
+            self.validate_images(path, text)
+            self.validate_tables(path, text)
+
+    def validate_images(self, path: Path, text: str) -> None:
+        rel = path.relative_to(ROOT)
+        image_pattern = re.compile(r"!\[(.*?)\]\(([^)]+)\)(?:\{([^}]*)\})?", re.DOTALL)
+        for caption, target, attrs in image_pattern.findall(text):
+            attrs = attrs or ""
+            decorative = re.search(r'fig-alt\s*=\s*""', attrs) is not None
+            self.require(
+                decorative or re.search(r'fig-alt\s*=\s*"[^"]+"', attrs) is not None,
+                f"informative image lacks fig-alt in {rel}: {target}",
+            )
+            self.require(
+                decorative or bool(caption.strip()),
+                f"informative image lacks a Markdown caption in {rel}: {target}",
+            )
+            asset = ROOT / target.split("#", 1)[0]
+            if not re.match(r"^(?:https?:|data:|/)", target):
+                self.require(asset.exists(), f"image asset does not exist in {rel}: {target}")
+
+    def validate_tables(self, path: Path, text: str) -> None:
+        rel = path.relative_to(ROOT)
+        separator = re.search(r"^\|(?:[^\n]*\|)+\n\|\s*:?-+", text, re.MULTILINE)
+        if separator:
+            self.require(
+                re.search(r"^:\s+.+\{#tbl-[^}]+\}\s*$", text, re.MULTILINE) is not None,
+                f"table needs a caption and #tbl- label in {rel}",
+            )
+
+    def validate_styles(self) -> None:
+        for name in COLORS:
+            path = ROOT / f"styles/colors/{name}.css"
+            self.require(path.is_file(), f"missing color stylesheet: {path.relative_to(ROOT)}")
+            if not path.is_file():
+                continue
+            source = path.read_text(encoding="utf-8")
+            for token in REQUIRED_TOKENS:
+                self.require(token in source, f"{path.name} missing token {token}")
+            self.require(
+                f'--sinew-color-profile: "{name}"' in source,
+                f"{path.name} missing profile marker",
+            )
+            self.require(
+                (ROOT / f"styles/matplotlib/sinew-{name}.mplstyle").is_file(),
+                f"missing Matplotlib style for {name}",
+            )
+            self.require(
+                (ROOT / f"assets/figures/gallery-{name}.svg").is_file(),
+                f"missing gallery plot for {name}",
+            )
+
+        style_folders = sorted((ROOT / "_slides").glob("[0-9][0-9]-*"))[1:]
+        self.require(len(style_folders) == len(COLORS), "the gallery must contain one column per style")
+        for name, folder in zip(COLORS, style_folders):
+            self.require(folder.name.endswith(name), f"style column order mismatch for {name}: {folder.name}")
+            algorithm_path = folder / "_03-algorithm.qmd"
+            plot_path = folder / "_04-plot.qmd"
+            table_path = folder / "_05-table.qmd"
+            generate_path = folder / "_07-generate.qmd"
+            self.require(algorithm_path.is_file(), f"algorithm slide missing for {name}")
+            self.require(plot_path.is_file(), f"plot slide missing for {name}")
+            self.require(table_path.is_file(), f"table slide missing for {name}")
+            self.require(generate_path.is_file(), f"generation slide missing for {name}")
+            if algorithm_path.is_file():
+                algorithm_source = algorithm_path.read_text(encoding="utf-8")
+                self.require(
+                    "```text" in algorithm_source,
+                    f"algorithm slide lacks pseudocode for {name}",
+                )
+                self.require(".algorithm-caption" in algorithm_source, f"algorithm slide lacks a caption for {name}")
+                self.require("**Algorithm.**" in algorithm_source, f"algorithm caption lacks its bold label for {name}")
+                self.require(
+                    algorithm_source.find(".algorithm-caption") < algorithm_source.find('::: {.column width="30%"}'),
+                    f"algorithm caption must stay inside the code column for {name}",
+                )
+            if plot_path.is_file():
+                self.require(
+                    f"assets/figures/gallery-{name}.svg" in plot_path.read_text(encoding="utf-8"),
+                    f"plot slide does not use the matching style asset for {name}",
+                )
+            if table_path.is_file():
+                table_source = table_path.read_text(encoding="utf-8")
+                self.require("| Method |" in table_source, f"table slide lacks the method comparison for {name}")
+                self.require("$\\uparrow$" in table_source, f"table slide lacks higher-is-better arrows for {name}")
+                self.require("$\\downarrow$" in table_source, f"table slide lacks lower-is-better arrows for {name}")
+                self.require("| Total $\\uparrow$ |" in table_source, f"table slide must put Total last for {name}")
+                self.require(".structured-results" in table_source, f"table slide lacks total-column styling for {name}")
+                self.require(".ours-last-2" in table_source, f"table slide lacks proposed-row highlighting for {name}")
+                self.require(table_source.count("| Ours:") == 2, f"table slide must end with two proposed methods for {name}")
+                self.require("**" in table_source, f"table slide lacks bold best values for {name}")
+                self.require(f"#tbl-gallery-{name}" in table_source, f"table slide lacks a unique label for {name}")
+            if generate_path.is_file():
+                generate_source = generate_path.read_text(encoding="utf-8")
+                self.require("```bash" in generate_source, f"generation slide lacks its command block for {name}")
+                self.require(
+                    ".algorithm-caption" in generate_source,
+                    f"generation command block lacks an algorithm caption for {name}",
+                )
+                self.require(
+                    "**Algorithm.**" in generate_source,
+                    f"generation command caption lacks its bold label for {name}",
+                )
+
+if __name__ == "__main__":
+    raise SystemExit(Validation().run())

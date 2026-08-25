@@ -1,0 +1,22 @@
+## A bright asymmetric system with visible forward momentum {data-style-preview="movement"}
+
+<span class="kicker">Style guidance</span>
+
+::: {.metric-row}
+::: {.metric}
+**Surface**
+<span>Bright and asymmetric</span>
+:::
+::: {.metric}
+**Typography**
+<span>Condensed plus serif</span>
+:::
+::: {.metric}
+**Plot language**
+<span>Scarlet plus green</span>
+:::
+:::
+
+::: {.evidence-card}
+Reserve accent color for key findings. Keep body copy neutral and verify plot labels at presentation distance.
+:::

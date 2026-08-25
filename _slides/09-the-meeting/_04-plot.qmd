@@ -1,0 +1,5 @@
+## Illustrative learning curves remain identifiable without color {data-style-preview="the-meeting"}
+
+<span class="kicker">Plot</span>
+
+![Illustrative template data, not experimental evidence. Means across 5 fictional seeds with fictional spread; markers and dashes repeat color.](assets/figures/gallery-the-meeting.svg){#fig-gallery-the-meeting fig-alt="Line plot of illustrative success rate versus training steps. The force-aware solid circle series rises faster and finishes above the pose-only dashed square series." width="72%"}

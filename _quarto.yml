@@ -1,0 +1,21 @@
+project:
+  type: default
+  output-dir: _site
+  render:
+    - deck.qmd
+  resources:
+    - assets/**
+
+# The gallery previews all styles. A real talk selects one visual profile.
+profile:
+  default: [gallery, color-origami]
+  group:
+    - [color-origami, color-paper, color-high-contrast, color-blueprint, color-scholar, color-unmasked, color-the-give, color-the-meeting, color-movement]
+
+format:
+  sinew-revealjs:
+    output-file: index.html
+
+execute:
+  echo: false
+  warning: false

@@ -1,0 +1,22 @@
+## A quiet paper-like surface for clear academic storytelling {data-style-preview="paper"}
+
+<span class="kicker">Style guidance</span>
+
+::: {.metric-row}
+::: {.metric}
+**Surface**
+<span>Warm paper</span>
+:::
+::: {.metric}
+**Typography**
+<span>Clear humanist sans</span>
+:::
+::: {.metric}
+**Plot language**
+<span>Blue plus ochre</span>
+:::
+:::
+
+::: {.evidence-card}
+Reserve accent color for key findings. Keep body copy neutral and verify plot labels at presentation distance.
+:::
