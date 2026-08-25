@@ -10,6 +10,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DECK = ROOT / "deck.qmd"
+EXTENSION_MANIFEST_CANDIDATES = (
+    ROOT / "_extensions/sinew/_extension.yml",
+    ROOT / "_extensions/sinew-robotics/sinew/_extension.yml",
+)
 COLORS = (
     "origami",
     "paper",
@@ -91,7 +95,8 @@ class Validation:
             )
         beads = [path for path in ROOT.rglob(".beads") if ".git" not in path.parts]
         self.require(not beads, f".beads must stay outside the template: {beads}")
-        self.require((ROOT / "_extensions/sinew/_extension.yml").is_file(), "extension manifest is missing")
+        extension_path = next((path for path in EXTENSION_MANIFEST_CANDIDATES if path.is_file()), None)
+        self.require(extension_path is not None, "extension manifest is missing")
         self.require(
             (ROOT / "docs/agent-templates/AGENTS.template.md").is_file(),
             "copyable AGENTS template is missing",
@@ -113,9 +118,10 @@ class Validation:
         legacy_markers = sorted((ROOT / "styles/conferences").glob("*.css"))
         self.require(not legacy_markers, f"conference marker CSS must not be present: {legacy_markers}")
 
-        extension = (ROOT / "_extensions/sinew/_extension.yml").read_text(encoding="utf-8")
-        self.require("link-citations: true" in extension, "citation links must be enabled")
-        self.require("citations-hover: true" in extension, "citation hover previews must be enabled")
+        if extension_path is not None:
+            extension = extension_path.read_text(encoding="utf-8")
+            self.require("link-citations: true" in extension, "citation links must be enabled")
+            self.require("citations-hover: true" in extension, "citation hover previews must be enabled")
 
         citation_source = (ROOT / "_slides/01-intro/_03-citations.qmd").read_text(encoding="utf-8")
         reference_source = (ROOT / "_slides/01-intro/_04-references.qmd").read_text(encoding="utf-8")

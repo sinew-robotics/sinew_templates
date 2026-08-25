@@ -1,6 +1,6 @@
 # Architecture
 
-The public repository targets its `template/` subdirectory for starter and extension installation. After `quarto use template sinew-robotics/sinew_templates/template`, that subdirectory becomes the new presentation root, so all paths below are project-root-relative.
+The public repository targets its `template/` subdirectory for starter and extension installation. After `quarto use template sinew-robotics/sinew_templates/template`, that subdirectory becomes the new presentation root, so all paths below are project-root-relative. Quarto may namespace a remotely installed extension as `_extensions/sinew-robotics/sinew/`; the format name remains `sinew-revealjs`, and the shipped validator accepts both the source and installed paths.
 
 ## Two products in one repository
 
