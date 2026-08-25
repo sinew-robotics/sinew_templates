@@ -14,6 +14,10 @@ format: sinew-revealjs
 
 {{< include _slides/01-intro/_02-selection.qmd >}}
 
+{{< include _slides/01-intro/_03-citations.qmd >}}
+
+{{< include _slides/01-intro/_04-references.qmd >}}
+
 {{< include _slides/02-origami/_00-section.qmd >}}
 
 {{< include _slides/02-origami/_01-guidelines.qmd >}}

@@ -64,6 +64,15 @@ def main() -> int:
     )
     require(html.count('class="algorithm-caption"') == 18, "expected two algorithm captions in every style column")
     require("numberAlgorithmCaptions" in html, "automatic algorithm numbering script is absent")
+    citation_links = re.findall(r'<a\b[^>]*\brole="doc-biblioref"', html)
+    require(len(citation_links) == 5, "expected five linked in-slide citations")
+    require(html.count('class="csl-entry"') == 5, "expected five bibliography entries")
+    require('class="references csl-bib-body hanging-indent"' in html, "citeproc bibliography is absent")
+    require("references-slide" in html, "styled references slide is absent")
+    require(
+        "window.document.querySelectorAll('a[role=\"doc-biblioref\"]')" in html,
+        "interactive citation preview script is absent",
+    )
 
     if len(sys.argv) == 3:
         color = sys.argv[2]

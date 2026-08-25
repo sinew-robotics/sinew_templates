@@ -176,6 +176,99 @@ html:has(.reveal .section-slide.present) .reveal .slide-background-content {
   border-left: 0.14em solid var(--sinew-accent);
 }
 
+/* Citations remain compact on the claim slide and actionable from keyboard,
+   pointer, and touch-capable browsers. */
+.reveal .citation-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.65em;
+}
+
+.reveal .citation-grid .evidence-card {
+  min-width: 0;
+  font-size: 0.72em;
+}
+
+.reveal .citation,
+.reveal .citation a {
+  white-space: normal;
+}
+
+.reveal .citation a,
+.reveal #refs a {
+  color: var(--sinew-accent);
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.12em;
+}
+
+.reveal .citation a {
+  padding: 0.05em 0.12em;
+  border-radius: 0.12em;
+}
+
+.reveal .citation a:hover,
+.reveal .citation a:focus-visible {
+  color: var(--sinew-accent-contrast);
+  background: var(--sinew-accent);
+}
+
+.reveal .citation-help {
+  margin-top: 0.65em;
+  padding: 0.55em 0.7em;
+  border: 1px solid var(--sinew-line-strong);
+  border-radius: var(--sinew-radius);
+  color: var(--sinew-muted);
+  background: var(--sinew-panel);
+  font-family: var(--r-code-font);
+  font-size: 0.48em;
+}
+
+/* Citeproc fills #refs. CSS columns retain semantic reference entries while
+   using the projection canvas efficiently. */
+.reveal .references-slide #refs {
+  column-count: 2;
+  column-gap: 1.6em;
+  column-rule: 1px solid var(--sinew-line);
+  margin: 0.2em 0 0.55em;
+  font-size: 0.54em;
+  line-height: 1.35;
+}
+
+.reveal .slides section.references-slide.smaller {
+  font-size: 1em !important;
+}
+
+.reveal .slides section.references-slide.scrollable {
+  overflow: hidden !important;
+}
+
+.reveal .references-slide #refs .csl-entry {
+  box-sizing: border-box;
+  break-inside: avoid-column;
+  margin: 0 0 0.85em;
+  padding: 0.62em 0.72em;
+  border: 1px solid var(--sinew-line);
+  border-left: 0.14em solid var(--sinew-accent);
+  border-radius: var(--sinew-radius);
+  background: var(--sinew-panel);
+}
+
+.reveal .references-slide #refs.hanging-indent .csl-entry {
+  margin-left: 0;
+  text-indent: 0;
+}
+
+.reveal .references-slide #refs a {
+  overflow-wrap: anywhere;
+}
+
+.reveal .references-slide #refs a:hover,
+.reveal .references-slide #refs a:focus-visible {
+  text-decoration-thickness: 0.14em;
+}
+
 .reveal .metric-row {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(6.5em, 1fr));

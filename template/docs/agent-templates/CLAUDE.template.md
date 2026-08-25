@@ -5,6 +5,7 @@ Rename this file to `CLAUDE.md` and follow `AGENTS.md` completely.
 ## Highest-risk rules
 
 - Scientific truth outranks polish. Never fabricate results, uncertainty, settings, citations, licenses, or delivery rules.
+- Keep citations backed by `references.bib`. Preserve hover/focus previews, linked citation jumps, external DOI/URL links, and the semantic two-column `#refs` bibliography. Split overfull references rather than shrinking or scrolling them.
 - Keep illustrative/preliminary content labeled and claim boundaries visible.
 - Verify the exact event edition, track, presentation type, and artifact using current official sources. Event research files are dated background guidance, not profiles.
 - Activate exactly one `color-*` profile. It owns visual style only; never place event logistics or invented branding in it.

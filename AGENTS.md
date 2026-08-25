@@ -22,12 +22,12 @@ When sources conflict, do not silently choose. Record the conflict and ask when 
 
 Before editing:
 
-1. Read `README.md`, `docs/research-notes.md`, `docs/authoring.md`, and `docs/figures-and-tables.md`. Read the relevant `docs/conferences/<event>.md` only when preparing for that delivery context.
-2. Inspect `_quarto.yml`, exactly one selected `_quarto-color-<style>.yml`, and `_extensions/sinew/_extension.yml`.
-3. Inspect `deck.qmd` and every included file in order.
+1. Read `README.md`, `template/docs/research-notes.md`, `template/docs/authoring.md`, and `template/docs/figures-and-tables.md`. Read the relevant `template/docs/conferences/<event>.md` only when preparing for that delivery context.
+2. Inspect `template/_quarto.yml`, exactly one selected `template/_quarto-color-<style>.yml`, and `template/_extensions/sinew/_extension.yml`.
+3. Inspect `template/deck.qmd` and every included file in order.
 4. Check `git status`; preserve unrelated user changes.
 5. Run `quarto --version`; require the version in the extension manifest.
-6. Run `python3 scripts/validate.py` before and after meaningful changes.
+6. Run `python3 template/scripts/validate.py` before and after meaningful changes.
 
 Do not initialize Beads or add `.beads` anywhere inside this template/project. If durable task tracking is requested, keep it outside the repository. Do not create ad hoc TODO files as a substitute for the user's tracker.
 
@@ -42,6 +42,7 @@ Do not initialize Beads or add `.beads` anywhere inside this template/project. I
 - If evidence is missing, narrow the title, mark the slide preliminary/missing, or stop and request the source. A polished false claim is a failed task.
 - Verify references against primary papers/official sources. Do not cite a search-result snippet as the source.
 - A citation is not permission to reuse a copyrighted visual. Record license/permission or redraw within allowed use.
+- Use Pandoc citation keys backed by `template/references.bib`; never hand-format a second bibliography. Preserve `link-citations`, `citations-hover`, and the single `.references-slide` containing `#refs`. Verify hover/focus previews, internal jumps, external DOI/URL links, and the fixed two-column layout. Split an overfull bibliography instead of shrinking or scrolling it.
 
 ## Venue and event delivery research
 
@@ -50,7 +51,7 @@ Event rules are volatile data, not visual styles or render profiles.
 - Select exactly one `color-*` profile for the deck.
 - Confirm the exact event edition, track, presentation type, and required artifact.
 - Open the official current presenter/author page before final delivery.
-- Treat `docs/conferences/` as dated background guidance only; it never configures Quarto.
+- Treat `template/docs/conferences/` as dated background guidance only; it never configures Quarto.
 - Do not carry timing/upload rules from a prior year unless explicitly targeting that year.
 - Do not invent event fonts, colors, logos, or slide templates.
 - Do not bundle or place event logos without current official assets, permission, and usage rules.
@@ -61,7 +62,7 @@ When current official instructions differ from the research notes, update the no
 
 ## Multi-file 2D structure
 
-`deck.qmd` is the ordered manifest.
+`template/deck.qmd` is the ordered manifest in this repository. A scaffolded presentation places the same file at its project root.
 
 - A subtopic folder maps to one horizontal stack.
 - `_00-section.qmd` starts with one `#` heading and `.section-slide`.
@@ -121,8 +122,8 @@ import matplotlib.pyplot as plt
 
 plt.style.use([
     "science", "no-latex", "notebook", "bright",
-    "styles/matplotlib/sinew-slides.mplstyle",
-    "styles/matplotlib/sinew-origami.mplstyle",
+    "template/styles/matplotlib/sinew-slides.mplstyle",
+    "template/styles/matplotlib/sinew-origami.mplstyle",
 ])
 ```
 
@@ -158,7 +159,7 @@ The rendered `Table N` identifier is bold; keep the descriptive caption text at 
 
 ## Accessibility
 
-- Follow `docs/accessibility.md` and current venue-specific guidance.
+- Follow `template/docs/accessibility.md` and current venue-specific guidance.
 - Do not rely on color alone.
 - Keep normal text at least 4.5:1 and large text at least 3:1 when claiming WCAG AA; meaningful graphics generally need 3:1 non-text contrast.
 - Use semantic headings/tables/lists/figures.
@@ -176,21 +177,21 @@ When adding an uploaded/reference style:
 
 1. Record source path/URL, owner/license, and inspection date.
 2. Extract semantic tokens; do not copy app-specific controls/navigation.
-3. Map every Sinew token in `styles/colors/<name>.css`.
+3. Map every Sinew token in `template/styles/colors/<name>.css`.
 4. Provide explicit sans/mono fallback stacks and offline behavior.
 5. Increase density/contrast/type for projection as needed and document changes.
 6. Add only a `color-*` profile. Do not edit conference constraints.
 7. Provide or document a matching Matplotlib palette.
 8. Add the matching Matplotlib overlay and generator entry.
-9. Run `scripts/render-styles.sh`; inspect representative screenshots and grayscale.
+9. Run `template/scripts/render-styles.sh`; inspect representative screenshots and grayscale.
 
-The Origami source mapping is documented in `docs/styles.md` and `styles/colors/origami.css`. Preserve its academic adaptation unless the user asks to revise it.
+The Origami source mapping is documented in `template/docs/styles.md` and `template/styles/colors/origami.css`. Preserve its academic adaptation unless the user asks to revise it.
 
 ## File/edit hygiene
 
 - Use `rg`/`rg --files` for discovery.
 - Preserve unrelated changes and existing assets.
-- Do not edit generated `_site/`, `_build/`, `.quarto/`, or `*_files/` as source.
+- Do not edit generated `template/_site/`, `template/_build/`, `template/.quarto/`, or `*_files/` as source.
 - Do not add secrets, private datasets, participant data, or machine-specific absolute paths to public artifacts/docs. The Origami local path is provenance documentation; replace it with a public source when publishing if needed.
 - Do not add remote analytics, tracking, or third-party scripts.
 - Do not add network font imports without explicit approval and offline fallback.
@@ -202,16 +203,16 @@ The Origami source mapping is documented in `docs/styles.md` and `styles/colors/
 Minimum after source changes:
 
 ```bash
-python3 scripts/validate.py
-python3 scripts/check_contrast.py
-quarto render --profile color-origami
-scripts/check-render.sh _site/index.html
+python3 template/scripts/validate.py
+python3 template/scripts/check_contrast.py
+quarto render template --profile color-origami
+template/scripts/check-render.sh template/_site/index.html
 ```
 
 After profile/theme/core changes:
 
 ```bash
-scripts/render-styles.sh
+template/scripts/render-styles.sh
 ```
 
 Then manually inspect:

@@ -92,8 +92,6 @@ class Validation:
         beads = [path for path in ROOT.rglob(".beads") if ".git" not in path.parts]
         self.require(not beads, f".beads must stay outside the template: {beads}")
         self.require((ROOT / "_extensions/sinew/_extension.yml").is_file(), "extension manifest is missing")
-        self.require((ROOT / "AGENTS.md").is_file(), "AGENTS.md is missing")
-        self.require((ROOT / "CLAUDE.md").is_file(), "CLAUDE.md is missing")
         self.require(
             (ROOT / "docs/agent-templates/AGENTS.template.md").is_file(),
             "copyable AGENTS template is missing",
@@ -103,6 +101,9 @@ class Validation:
             "copyable CLAUDE template is missing",
         )
         self.require((ROOT / "_quarto-gallery.yml").is_file(), "default gallery profile is missing")
+        self.require((ROOT / "references.bib").is_file(), "references.bib is missing")
+        self.require((ROOT / "_slides/01-intro/_03-citations.qmd").is_file(), "citation example slide is missing")
+        self.require((ROOT / "_slides/01-intro/_04-references.qmd").is_file(), "bibliography slide is missing")
         self.require(
             (ROOT / "styles/gallery/gallery.css").is_file(),
             "default gallery marker CSS is missing",
@@ -111,6 +112,20 @@ class Validation:
         self.require(not legacy_profiles, f"conference profiles must not be present: {legacy_profiles}")
         legacy_markers = sorted((ROOT / "styles/conferences").glob("*.css"))
         self.require(not legacy_markers, f"conference marker CSS must not be present: {legacy_markers}")
+
+        extension = (ROOT / "_extensions/sinew/_extension.yml").read_text(encoding="utf-8")
+        self.require("link-citations: true" in extension, "citation links must be enabled")
+        self.require("citations-hover: true" in extension, "citation hover previews must be enabled")
+
+        citation_source = (ROOT / "_slides/01-intro/_03-citations.qmd").read_text(encoding="utf-8")
+        reference_source = (ROOT / "_slides/01-intro/_04-references.qmd").read_text(encoding="utf-8")
+        bibliography = (ROOT / "references.bib").read_text(encoding="utf-8")
+        citation_keys = set(re.findall(r"@([A-Za-z0-9_.:+#$/-]+)", citation_source))
+        bibliography_keys = set(re.findall(r"^@[A-Za-z]+\{([^,]+),", bibliography, re.MULTILINE))
+        self.require(len(citation_keys) >= 5, "citation example must exercise at least five references")
+        self.require(citation_keys <= bibliography_keys, "every example citation key must exist in references.bib")
+        self.require("{#refs}" in reference_source, "bibliography slide must provide the citeproc #refs target")
+        self.require("references-slide" in reference_source, "bibliography slide must activate two-column styling")
 
     def validate_profiles(self) -> None:
         base = (ROOT / "_quarto.yml").read_text(encoding="utf-8")

@@ -1,7 +1,7 @@
-/.quarto/
-/_site/
-/_build/
-/.venv/
+**/.quarto/
+**/_site/
+**/_build/
+**/.venv/
 **/__pycache__/
 *.pdf
 *.pptx

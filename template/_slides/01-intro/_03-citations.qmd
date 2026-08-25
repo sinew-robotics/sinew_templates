@@ -1,0 +1,27 @@
+## Linked citations preserve context without crowding the claim {data-style-preview="intro"}
+
+<span class="kicker">Scholarly apparatus</span>
+
+::: {.citation-grid}
+::: {.evidence-card}
+**Claim structure**
+
+Assertion-evidence slides place a supported sentence above its evidence [@alley2013].
+:::
+
+::: {.evidence-card}
+**Authoring system**
+
+Quarto processes citations; Reveal.js supplies the two-dimensional presentation runtime [@quarto2026; @revealjs2026].
+:::
+
+::: {.evidence-card}
+**Figures and access**
+
+Plot guidance builds on SciencePlots, while interface checks use WCAG 2.2 [@scienceplots2021; @wcag2023].
+:::
+:::
+
+::: {.citation-help}
+Hover or focus a citation to preview its reference. Activate it to jump to the two-column bibliography.
+:::

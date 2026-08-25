@@ -17,6 +17,7 @@ Do not create `.beads` inside the presentation project. Keep any requested Beads
 - Distinguish simulation/real robot, offline/online, benchmark/deployment, and observed/causal claims.
 - Show failures/negative results when they bound the conclusion.
 - Verify citations against primary papers/official sources. Citation is not reuse permission.
+- Use Pandoc citation keys backed by `references.bib`; never hand-format a second bibliography. Preserve `link-citations`, `citations-hover`, and the single `.references-slide` containing `#refs`. Verify hover/focus previews, internal jumps, external DOI/URL links, and the fixed two-column layout. Split an overfull bibliography instead of shrinking or scrolling it.
 
 ## Style and delivery boundary
 

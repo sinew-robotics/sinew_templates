@@ -105,7 +105,11 @@ Quarto warns that audiences often miss vertical slides. Sinew mitigates, but doe
 
 ## Citations and provenance
 
-Use `references.bib` and Pandoc citations. Put a visible short source on the same slide as reused figures, video, datasets, or borrowed claims. Hover citations do not count as projected attribution. Confirm license/permission; a citation is not permission.
+Use `references.bib` and Pandoc citations such as `[@alley2013]`; do not hand-format a parallel reference list. Sinew enables `link-citations` and `citations-hover`, so every rendered citation must support a hover/focus preview and activation must move to the bibliography slide. Add a DOI or stable project URL to each BibTeX entry when one exists, then verify the rendered link with keyboard and pointer input.
+
+Keep exactly one `::: {#refs}` target in a slide with the `.references-slide` class. Citeproc fills it with semantic `.csl-entry` items, and Sinew lays those entries out in two columns without splitting an entry. Do not manually add `.smaller` or `.scrollable`; the theme overrides Quarto's automatic reference-slide helpers so the bibliography remains fixed to the slide canvas. If the bibliography no longer fits legibly in two columns, split it into scoped reference slides or move the complete list to a handout instead of shrinking or scrolling it.
+
+Only cited items appear by default. Use the documented Pandoc `nocite` metadata deliberately when the deck must list an uncited resource. Put a visible short source on the same slide as reused figures, video, datasets, or borrowed claims; a hover preview does not replace projected attribution. Confirm license/permission because citation is not reuse permission.
 
 ## Computation
 

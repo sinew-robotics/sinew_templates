@@ -2,6 +2,7 @@
 set -euo pipefail
 
 script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+project_dir="$(cd -- "$script_dir/.." && pwd)"
 if [[ -n "${SINEW_BUILD_DIR:-}" ]]; then
   build_dir="$SINEW_BUILD_DIR"
   mkdir -p "$build_dir"
@@ -16,7 +17,7 @@ python3 "$script_dir/check_contrast.py"
 for color in "${colors[@]}"; do
   output_dir="$build_dir/$color"
   echo "Rendering color-${color}"
-  quarto render \
+  quarto render "$project_dir" \
     --profile "color-${color}" \
     --output-dir "$output_dir" \
     --quiet

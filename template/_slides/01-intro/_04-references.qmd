@@ -1,0 +1,8 @@
+## Every cited source stays visible and actionable {.references-slide data-style-preview="intro"}
+
+<span class="kicker">References</span>
+
+::: {#refs}
+:::
+
+<span class="source">Reference entries are generated from references.bib. DOI and project links open in a new tab.</span>

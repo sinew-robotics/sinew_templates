@@ -1,0 +1,9 @@
+/.quarto/
+/_site/
+/_build/
+/.venv/
+**/__pycache__/
+**/*.quarto_ipynb
+*.pdf
+*.pptx
+*_files/

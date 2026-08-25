@@ -33,16 +33,16 @@ jobs:
 
       - name: Validate source and contrast
         run: |
-          python3 scripts/validate.py
-          python3 scripts/check_contrast.py
+          python3 template/scripts/validate.py
+          python3 template/scripts/check_contrast.py
 
       - name: Render and verify every standalone style
-        run: scripts/render-styles.sh
+        run: template/scripts/render-styles.sh
 
       - name: Build and verify the combined gallery
         run: |
-          quarto render --cache-refresh
-          scripts/check-render.sh _site/index.html origami
+          quarto render template --cache-refresh
+          template/scripts/check-render.sh template/_site/index.html origami
 
       - name: Configure GitHub Pages
         if: github.event_name != 'pull_request'
@@ -52,7 +52,7 @@ jobs:
         if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v4
         with:
-          path: _site
+          path: template/_site
 
   deploy:
     if: github.event_name != 'pull_request'

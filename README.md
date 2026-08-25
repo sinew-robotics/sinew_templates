@@ -1,27 +1,30 @@
 # sinew_templates
 
-[![Build and deploy gallery](https://github.com/domrachev03/sinew_templates/actions/workflows/pages.yml/badge.svg)](https://github.com/domrachev03/sinew_templates/actions/workflows/pages.yml)
+[![Build and deploy gallery](https://github.com/sinew-robotics/sinew_templates/actions/workflows/pages.yml/badge.svg)](https://github.com/sinew-robotics/sinew_templates/actions/workflows/pages.yml)
 
 An academic Quarto/Reveal.js presentation starter for robotics and machine-learning research. Sinew uses one selectable visual-style profile for palette, type, surfaces, syntax highlighting, and plot tokens:
 
 ```bash
-quarto render --profile color-origami
+quarto render template --profile color-origami
 ```
 
-The [live gallery](https://domrachev03.github.io/sinew_templates/) has one introduction column and one column for each of the nine visual styles. Move right between styles and down through the guidance -> problem -> algorithm -> plot -> table -> conclusion -> generation sequence. Runtime gallery code previews the style represented by each column. A real talk selects exactly one `color-*` profile for the whole deck. Local output is `_site/index.html`.
+The [live gallery](https://sinew-robotics.github.io/sinew_templates/) has one introduction column and one column for each of the nine visual styles. Move right between styles and down through the guidance -> problem -> algorithm -> plot -> table -> conclusion -> generation sequence. Runtime gallery code previews the style represented by each column. A real talk selects exactly one `color-*` profile for the whole deck. Repository builds write `template/_site/index.html`.
+
+The self-contained Quarto project lives in `template/`. It contains all `_quarto-color-*.yml` profiles, `deck.qmd`, `references.bib`, slides, styles, assets, scripts, documentation, and the bundled extension. Repository-level governance and CI stay at the top level.
 
 ## What is included
 
-- An installable `sinew-revealjs` custom format under `_extensions/sinew/`.
+- An installable `sinew-revealjs` custom format under `template/_extensions/sinew/`.
 - A starter project with one slide per underscore-prefixed `.qmd` file.
 - Folder-backed horizontal subtopics and vertical evidence stacks using Reveal's 2D grid.
 - Nine visual profiles: Origami, paper, high contrast, blueprint, scholar, unmasked, the give, the meeting, and movement.
 - Semantic figure, table, evidence, metric, source, and takeaway styles.
+- Linked citation previews and a generated two-column bibliography slide.
 - A common projected-figure overlay, one matching Matplotlib overlay per visual style, and a plot generator.
 - Human documentation plus comprehensive `AGENTS.md` and `CLAUDE.md` operating rules.
 - Structural validation and an all-styles rendering script.
 
-The researched venue pages are background delivery guidance only. They do not configure Quarto and do not define visual styles. Verify the exact current event instructions separately before delivery; see [venue and event delivery research](docs/conferences/README.md).
+The researched venue pages are background delivery guidance only. They do not configure Quarto and do not define visual styles. Verify the exact current event instructions separately before delivery; see [venue and event delivery research](template/docs/conferences/README.md).
 
 ## Requirements
 
@@ -33,12 +36,12 @@ The researched venue pages are background delivery guidance only. They do not co
 ## Use this repository now
 
 ```bash
-quarto preview
-quarto preview --profile color-origami
-quarto render --profile color-high-contrast
+quarto preview template
+quarto preview template --profile color-origami
+quarto render template --profile color-high-contrast
 ```
 
-Open `_site/index.html`. The starter embeds resources by default, so it works offline unless you add non-embedded media or remote fonts.
+Open `template/_site/index.html`. The starter embeds resources by default, so it works offline unless you add non-embedded media or remote fonts.
 
 Use arrow keys for the two-dimensional narrative:
 
@@ -49,15 +52,15 @@ Use arrow keys for the two-dimensional narrative:
 
 Quarto warns that vertical slides are unfamiliar and can be skipped. The template keeps arrow controls visible, uses `navigation-mode: grid`, and recommends putting the required talk path at vertical index 1, with drill-down detail below.
 
-## Use as a starter after publishing to GitHub
+## Use as a starter
 
 ```bash
-quarto use template domrachev03/sinew_templates
+quarto use template sinew-robotics/sinew_templates/template
 ```
 
-Quarto copies the project scaffold and bundled extension. `deck.qmd` has a stable name because project starter files named `template.qmd` are automatically renamed, which would break an explicit render target.
+Quarto accepts a repository subdirectory as the template target. It copies the project scaffold from `template/` and installs its bundled extension into the new presentation root. `deck.qmd` keeps a stable name because project starter files named `template.qmd` are automatically renamed, which would break an explicit render target.
 
-Quarto deliberately excludes root `README.md`, `LICENSE`, `AGENTS.md`, and `CLAUDE.md` from starter copies. Copy the shipped agent templates after scaffolding:
+The starter target is the `template/` subdirectory, so repository-level `README.md`, `LICENSE`, `AGENTS.md`, and `CLAUDE.md` are not copied. Install the shipped presentation-specific agent guides after scaffolding:
 
 ```bash
 cp docs/agent-templates/AGENTS.template.md AGENTS.md
@@ -68,17 +71,15 @@ If those docs were excluded by your distribution workflow, copy them from the so
 
 ## Add only the format to an existing Quarto project
 
-After this repository has a GitHub remote:
-
 ```bash
-quarto add domrachev03/sinew_templates
+quarto add sinew-robotics/sinew_templates/template
 ```
 
 Then use `format: sinew-revealjs`. Color profile files are part of the starter layer, not the extension-only install; copy one profile and its CSS or add equivalent project metadata.
 
 ## Multi-file 2D authoring
 
-`deck.qmd` is an ordered manifest. A folder is one horizontal stack; its level-1 divider and level-2 content slides are separate files:
+In the repository, `template/deck.qmd` is the ordered manifest. In a scaffolded presentation it is `deck.qmd`. A folder is one horizontal stack; its level-1 divider and level-2 content slides are separate files:
 
 ```text
 deck.qmd
@@ -104,7 +105,7 @@ Keep includes on their own lines with blank lines around them. Included content 
 
 Do not use level-3 or deeper headings inside a slide. Pandoc can emit nested section tags for them, and Reveal may interpret those tags as additional slide stacks. Use bold inline labels, `.kicker`, `.eyebrow`, or a semantic container instead.
 
-See [authoring](docs/authoring.md) for slide anatomy, speaker notes, references, computations, media, and safe grid use.
+See [authoring](template/docs/authoring.md) for slide anatomy, speaker notes, references, computations, media, and safe grid use.
 
 ## Visual styles
 
@@ -123,7 +124,7 @@ See [authoring](docs/authoring.md) for slide anatomy, speaker notes, references,
 Select exactly one profile for a deck. Render and verify every style with:
 
 ```bash
-scripts/render-styles.sh
+template/scripts/render-styles.sh
 ```
 
 Outputs go to a fresh external temporary directory so Quarto cannot recursively copy prior builds as project resources. Set `SINEW_BUILD_DIR=/absolute/path` to retain them at a known location outside the project.
@@ -131,36 +132,37 @@ Outputs go to a fresh external temporary directory so Quarto cannot recursively 
 Generate the matching illustrative Matplotlib figure for all styles with:
 
 ```bash
-python3 scripts/generate_gallery_plots.py
+python3 template/scripts/generate_gallery_plots.py
 ```
 
-Each plot composes `sinew-slides.mplstyle` with `sinew-<style>.mplstyle`. See [figures and tables](docs/figures-and-tables.md) before applying the palette to real evidence.
+Each plot composes `sinew-slides.mplstyle` with `sinew-<style>.mplstyle`. See [figures and tables](template/docs/figures-and-tables.md) before applying the palette to real evidence.
 
 ## Documentation
 
-- [Research record](docs/research-notes.md): authoritative sources and hard-rule versus house-default labels.
-- [Venue and event delivery research](docs/conferences/README.md): dated background guidance and re-verification procedure; not render configuration.
-- [Authoring](docs/authoring.md): multi-file grid workflow and slide structure.
-- [Figures and tables](docs/figures-and-tables.md): captions, alt text, statistics, SciencePlots, exports, robotics media.
-- [Styles](docs/styles.md): token contract, Origami provenance, fonts, adding new styles.
-- [Accessibility](docs/accessibility.md): WCAG-oriented HTML baseline and manual checks.
-- [Architecture](docs/architecture.md): extension/starter boundaries and profile merge design.
+- [Research record](template/docs/research-notes.md): authoritative sources and hard-rule versus house-default labels.
+- [Venue and event delivery research](template/docs/conferences/README.md): dated background guidance and re-verification procedure; not render configuration.
+- [Authoring](template/docs/authoring.md): multi-file grid workflow, citation behavior, and slide structure.
+- [Figures and tables](template/docs/figures-and-tables.md): captions, alt text, statistics, SciencePlots, exports, robotics media.
+- [Styles](template/docs/styles.md): token contract, Origami provenance, fonts, adding new styles.
+- [Accessibility](template/docs/accessibility.md): WCAG-oriented HTML baseline and manual checks.
+- [Architecture](template/docs/architecture.md): extension/starter boundaries and profile merge design.
 - [Agent workflow](AGENTS.md): evidence and quality gates for automated authors.
 
 ## Validate
 
 ```bash
-python3 scripts/validate.py
-python3 scripts/check_contrast.py
-scripts/check-render.sh _site/index.html
+python3 template/scripts/validate.py
+python3 template/scripts/check_contrast.py
+quarto render template --cache-refresh
+template/scripts/check-render.sh template/_site/index.html
 ```
 
 The validator checks style coverage, included slide ownership/order, heading levels, figure alt text, captions, placeholder disclosures, and absence of `.beads`. The render check verifies the selected style marker and nested Reveal sections in generated HTML.
 
 ## Continuous delivery
 
-Every push and release tag runs structural and contrast validation, renders all nine standalone styles, builds the combined gallery, and checks the generated Reveal hierarchy. Successful non-pull-request builds deploy `_site/` to GitHub Pages. The workflow is defined in [`.github/workflows/pages.yml`](.github/workflows/pages.yml).
+Every push and release tag runs structural and contrast validation, renders all nine standalone styles, builds the combined gallery, and checks the generated Reveal hierarchy and bibliography. Successful non-pull-request builds deploy `template/_site/` to GitHub Pages. The workflow is defined in [`.github/workflows/pages.yml`](.github/workflows/pages.yml).
 
 ## Status and scope
 
-This repository is an academic authoring system, not an official event template. Delivery rules change by event, edition, track, and presentation type; consult current official instructions instead of expecting a visual profile to encode them.
+This repository is an academic authoring system, not an official event template. Delivery rules change by event, edition, track, and presentation type; consult current official instructions instead of expecting a visual profile to encode them. The repository is currently a pre-release preview; v1.0.0 will be created only after review approval.

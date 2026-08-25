@@ -1,10 +1,11 @@
 # Changelog
 
-## 1.0.0  -  2026-08-25
+## Unreleased
 
 - Released nine selectable visual styles and a browser-based 2D gallery with one style per horizontal column.
 - Standardized repeated guidance, problem, algorithm, plot, structured table, conclusion, and generation examples in every style.
 - Added automatic bold numbering for figure, table, and algorithm captions, including procedural shell blocks.
+- Added linked citation previews and a generated, two-column bibliography slide.
 - Added structured result-table conventions: metric-direction arrows, a separated total column, bold best values, and highlighted final proposed-method rows.
 - Added matching Matplotlib overlays, SciencePlots guidance, accessibility checks, agent instructions, and dated event-delivery research.
 - Added continuous validation, all-style rendering, and GitHub Pages deployment for every push and release tag.
