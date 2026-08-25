@@ -8,7 +8,7 @@ An academic Quarto/Reveal.js presentation starter for robotics and machine-learn
 quarto render template --profile color-origami
 ```
 
-The [live gallery](https://sinew-robotics.github.io/sinew_templates/) has one introduction column and one column for each of the nine visual styles. Move right between styles and down through the guidance -> problem -> algorithm -> plot -> table -> conclusion -> generation sequence. Runtime gallery code previews the style represented by each column. A real talk selects exactly one `color-*` profile for the whole deck. Repository builds write `template/_site/index.html`.
+The [live gallery](https://sinew-robotics.github.io/sinew_templates/) has one introduction column and one column for each of the nine visual styles. Move right between styles and down through the guidance -> problem -> algorithm -> plot -> table -> conclusion -> generation -> citations -> references sequence. Runtime gallery code previews the style represented by each column. A real talk selects exactly one `color-*` profile for the whole deck. Repository builds write `template/_site/index.html`.
 
 The self-contained Quarto project lives in `template/`. It contains all `_quarto-color-*.yml` profiles, `deck.qmd`, `references.bib`, slides, styles, assets, scripts, documentation, and the bundled extension. Repository-level governance and CI stay at the top level.
 
@@ -19,7 +19,7 @@ The self-contained Quarto project lives in `template/`. It contains all `_quarto
 - Folder-backed horizontal subtopics and vertical evidence stacks using Reveal's 2D grid.
 - Nine visual profiles: Origami, paper, high contrast, blueprint, scholar, unmasked, the give, the meeting, and movement.
 - Semantic figure, table, evidence, metric, source, and takeaway styles.
-- Linked citation previews and a generated two-column bibliography slide.
+- Profile-aware citation hover cards, a generated shared bibliography, and local two-column references in every style column.
 - A common projected-figure overlay, one matching Matplotlib overlay per visual style, and a plot generator.
 - Human documentation plus comprehensive `AGENTS.md` and `CLAUDE.md` operating rules.
 - Structural validation and an all-styles rendering script.
@@ -146,7 +146,9 @@ Each plot composes `sinew-slides.mplstyle` with `sinew-<style>.mplstyle`. See [f
 - [Styles](template/docs/styles.md): token contract, Origami provenance, fonts, adding new styles.
 - [Accessibility](template/docs/accessibility.md): WCAG-oriented HTML baseline and manual checks.
 - [Architecture](template/docs/architecture.md): extension/starter boundaries and profile merge design.
+- [New visual style TODO](template/docs/adding-a-style.md): end-to-end style, index, citation, version, branch, PR, and CI checklist.
 - [Agent workflow](AGENTS.md): evidence and quality gates for automated authors.
+- [Contributing](CONTRIBUTING.md): GitHub branch protection and pull-request workflow.
 
 ## Validate
 
@@ -161,7 +163,7 @@ The validator checks style coverage, included slide ownership/order, heading lev
 
 ## Continuous delivery
 
-Every push and release tag runs structural and contrast validation, renders all nine standalone styles, builds the combined gallery, and checks the generated Reveal hierarchy and bibliography. Successful non-pull-request builds deploy `template/_site/` to GitHub Pages. The workflow is defined in [`.github/workflows/pages.yml`](.github/workflows/pages.yml).
+Every push, pull request, and release tag runs structural and contrast validation, renders every standalone style, builds the combined gallery, and checks the generated Reveal hierarchy and bibliography. Pull requests receive a downloadable `sinew-gallery-pr-<number>` demo artifact for review. Successful non-pull-request builds deploy `template/_site/` to GitHub Pages. The workflow is defined in [`.github/workflows/pages.yml`](.github/workflows/pages.yml).
 
 ## Status and scope
 

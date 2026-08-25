@@ -34,6 +34,10 @@ format: sinew-revealjs
 
 {{< include _slides/02-origami/_07-generate.qmd >}}
 
+{{< include _slides/02-origami/_08-citations.qmd >}}
+
+{{< include _slides/02-origami/_09-references.qmd >}}
+
 {{< include _slides/03-paper/_00-section.qmd >}}
 
 {{< include _slides/03-paper/_01-guidelines.qmd >}}
@@ -49,6 +53,10 @@ format: sinew-revealjs
 {{< include _slides/03-paper/_06-conclusion.qmd >}}
 
 {{< include _slides/03-paper/_07-generate.qmd >}}
+
+{{< include _slides/03-paper/_08-citations.qmd >}}
+
+{{< include _slides/03-paper/_09-references.qmd >}}
 
 {{< include _slides/04-high-contrast/_00-section.qmd >}}
 
@@ -66,6 +74,10 @@ format: sinew-revealjs
 
 {{< include _slides/04-high-contrast/_07-generate.qmd >}}
 
+{{< include _slides/04-high-contrast/_08-citations.qmd >}}
+
+{{< include _slides/04-high-contrast/_09-references.qmd >}}
+
 {{< include _slides/05-blueprint/_00-section.qmd >}}
 
 {{< include _slides/05-blueprint/_01-guidelines.qmd >}}
@@ -81,6 +93,10 @@ format: sinew-revealjs
 {{< include _slides/05-blueprint/_06-conclusion.qmd >}}
 
 {{< include _slides/05-blueprint/_07-generate.qmd >}}
+
+{{< include _slides/05-blueprint/_08-citations.qmd >}}
+
+{{< include _slides/05-blueprint/_09-references.qmd >}}
 
 {{< include _slides/06-scholar/_00-section.qmd >}}
 
@@ -98,6 +114,10 @@ format: sinew-revealjs
 
 {{< include _slides/06-scholar/_07-generate.qmd >}}
 
+{{< include _slides/06-scholar/_08-citations.qmd >}}
+
+{{< include _slides/06-scholar/_09-references.qmd >}}
+
 {{< include _slides/07-unmasked/_00-section.qmd >}}
 
 {{< include _slides/07-unmasked/_01-guidelines.qmd >}}
@@ -113,6 +133,10 @@ format: sinew-revealjs
 {{< include _slides/07-unmasked/_06-conclusion.qmd >}}
 
 {{< include _slides/07-unmasked/_07-generate.qmd >}}
+
+{{< include _slides/07-unmasked/_08-citations.qmd >}}
+
+{{< include _slides/07-unmasked/_09-references.qmd >}}
 
 {{< include _slides/08-the-give/_00-section.qmd >}}
 
@@ -130,6 +154,10 @@ format: sinew-revealjs
 
 {{< include _slides/08-the-give/_07-generate.qmd >}}
 
+{{< include _slides/08-the-give/_08-citations.qmd >}}
+
+{{< include _slides/08-the-give/_09-references.qmd >}}
+
 {{< include _slides/09-the-meeting/_00-section.qmd >}}
 
 {{< include _slides/09-the-meeting/_01-guidelines.qmd >}}
@@ -146,6 +174,10 @@ format: sinew-revealjs
 
 {{< include _slides/09-the-meeting/_07-generate.qmd >}}
 
+{{< include _slides/09-the-meeting/_08-citations.qmd >}}
+
+{{< include _slides/09-the-meeting/_09-references.qmd >}}
+
 {{< include _slides/10-movement/_00-section.qmd >}}
 
 {{< include _slides/10-movement/_01-guidelines.qmd >}}
@@ -161,3 +193,7 @@ format: sinew-revealjs
 {{< include _slides/10-movement/_06-conclusion.qmd >}}
 
 {{< include _slides/10-movement/_07-generate.qmd >}}
+
+{{< include _slides/10-movement/_08-citations.qmd >}}
+
+{{< include _slides/10-movement/_09-references.qmd >}}

@@ -124,6 +124,8 @@ The default repository gallery previews all nine styles in separate horizontal c
 
 ## Add a style from an uploaded reference
 
+Follow the complete checkbox workflow in [New visual style TODO](adding-a-style.md). The summary below describes the design work; the TODO also covers gallery registration, per-style citations, versioning, CI demos, branches, and pull requests.
+
 1. Establish provenance: original URL/path, owner/license, capture date, and which screens/components were reviewed.
 2. Extract semantic roles rather than copying selectors: background, surface, ink, muted, rules, focus/accent, statuses, data cycle, type, radius, shadows, density.
 3. Map to all Sinew tokens in `styles/colors/<name>.css`.

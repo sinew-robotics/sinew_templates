@@ -1,8 +1,8 @@
-## Every cited source stays visible and actionable {.references-slide data-style-preview="intro"}
+## Every shared source stays visible and actionable {.references-slide .global-references-slide data-style-preview="intro"}
 
 <span class="kicker">References</span>
 
 ::: {#refs}
 :::
 
-<span class="source">Reference entries are generated from references.bib. DOI and project links open in a new tab.</span>
+<span class="source">Shared entries are generated from references.bib. Each visual profile keeps its own source in its style column.</span>

@@ -28,7 +28,7 @@ Run `git status`, `quarto --version`, and `python3 template/scripts/validate.py`
 - Do not hide a claim-changing limitation only in speaker notes.
 - Label every template/illustrative number until replaced by traceable evidence.
 - Verify citations using primary papers or official sources. A URL/title that merely looks plausible is not enough.
-- Keep citations backed by `template/references.bib`. Preserve hover/focus previews, linked citation jumps, external DOI/URL links, and the semantic two-column `#refs` bibliography. Split overfull references rather than shrinking or scrolling them.
+- Keep citations backed by `template/references.bib`. Preserve the single global `#refs` source, generated per-style reference views, profile-aware hover/focus cards, local citation jumps, external DOI/URL links, and two-column scrollbar-free layout. Split overfull references rather than shrinking or scrolling them.
 - Distinguish real robot from simulation and success from cherry-picked demonstration.
 - Include representative failures when the conclusion depends on robustness.
 
@@ -72,7 +72,7 @@ For Python plots, import SciencePlots and compose `science + no-latex + notebook
 
 ## Style changes
 
-Extract roles/tokens from a reference, not application selectors. A visual profile must define every Sinew token, robust offline font fallbacks, and a matching Matplotlib overlay. Document source/owner/license/date and changes made for projection/accessibility. Add the style to the gallery plot generator and `template/scripts/render-styles.sh`.
+Follow `template/docs/adding-a-style.md` completely. Work on `style/<slug>` from current `main`, advance the minor development version, and use a reviewed pull request; never merge a style directly into `main`. Extract roles/tokens from a reference, not application selectors. A visual profile must define every Sinew token, robust offline font fallbacks, a matching Matplotlib overlay, a complete gallery column, and its own citation/reference entry. Document source/owner/license/date and changes made for projection/accessibility. Review the CI gallery artifact before merge.
 
 Do not add conference logos or remote fonts without explicit authorization, official assets/usage rights, and offline tests.
 

@@ -195,7 +195,8 @@ html:has(.reveal .section-slide.present) .reveal .slide-background-content {
 }
 
 .reveal .citation a,
-.reveal #refs a {
+.reveal #refs a,
+.reveal .style-references a {
   color: var(--sinew-accent);
   font-weight: 700;
   text-decoration: underline;
@@ -225,9 +226,43 @@ html:has(.reveal .section-slide.present) .reveal .slide-background-content {
   font-size: 0.48em;
 }
 
-/* Citeproc fills #refs. CSS columns retain semantic reference entries while
-   using the projection canvas efficiently. */
-.reveal .references-slide #refs {
+/* Quarto citation previews use Tippy's light-border theme. Rebind the full
+   surface to Sinew tokens so the hover card follows the selected profile. */
+.reveal .tippy-box[data-theme~="light-border"] {
+  max-width: min(32em, 700px) !important;
+  border: 1px solid var(--sinew-line-strong);
+  border-left: 0.18em solid var(--sinew-accent);
+  border-radius: var(--sinew-radius);
+  color: var(--sinew-ink);
+  background: var(--sinew-panel-raised);
+  box-shadow: 0 0.45em 1.4em color-mix(in srgb, var(--sinew-ink) 18%, transparent);
+  font-family: inherit;
+  font-size: 0.52em;
+  line-height: 1.35;
+}
+
+.reveal .tippy-box[data-theme~="light-border"] .tippy-content {
+  padding: 0.72em 0.82em;
+}
+
+.reveal .tippy-box[data-theme~="light-border"] .csl-entry,
+.reveal .tippy-box[data-theme~="light-border"] .hanging-indent {
+  margin: 0;
+  padding: 0;
+  text-indent: 0;
+}
+
+.reveal .tippy-box[data-theme~="light-border"] a {
+  color: var(--sinew-accent);
+  font-weight: 700;
+  overflow-wrap: anywhere;
+  text-decoration-thickness: 0.1em;
+  text-underline-offset: 0.12em;
+}
+
+/* Citeproc fills #refs. The runtime clones selected entries into each
+   style-references container while preserving the semantic list roles. */
+.reveal .references-slide :is(#refs, .style-references) {
   column-count: 2;
   column-gap: 1.6em;
   column-rule: 1px solid var(--sinew-line);
@@ -244,7 +279,11 @@ html:has(.reveal .section-slide.present) .reveal .slide-background-content {
   overflow: hidden !important;
 }
 
-.reveal .references-slide #refs .csl-entry {
+.reveal .global-references-slide #refs [id^="ref-sinew"] {
+  display: none;
+}
+
+.reveal .references-slide :is(#refs, .style-references) .csl-entry {
   box-sizing: border-box;
   break-inside: avoid-column;
   margin: 0 0 0.85em;
@@ -255,17 +294,17 @@ html:has(.reveal .section-slide.present) .reveal .slide-background-content {
   background: var(--sinew-panel);
 }
 
-.reveal .references-slide #refs.hanging-indent .csl-entry {
+.reveal .references-slide :is(#refs, .style-references).hanging-indent .csl-entry {
   margin-left: 0;
   text-indent: 0;
 }
 
-.reveal .references-slide #refs a {
+.reveal .references-slide :is(#refs, .style-references) a {
   overflow-wrap: anywhere;
 }
 
-.reveal .references-slide #refs a:hover,
-.reveal .references-slide #refs a:focus-visible {
+.reveal .references-slide :is(#refs, .style-references) a:hover,
+.reveal .references-slide :is(#refs, .style-references) a:focus-visible {
   text-decoration-thickness: 0.14em;
 }
 

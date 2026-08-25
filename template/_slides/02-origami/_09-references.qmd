@@ -1,0 +1,8 @@
+## Origami references remain beside the style evidence {#references-origami .references-slide .style-references-slide data-style-preview="origami"}
+
+<span class="kicker">References</span>
+
+::: {.style-references data-style-key="sinewOrigami2026" data-reference-keys="sinewOrigami2026 alley2013 scienceplots2021 wcag2023"}
+:::
+
+<span class="source">Entries are generated from references.bib. DOI and project links open in a new tab.</span>

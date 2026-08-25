@@ -42,7 +42,7 @@ Do not initialize Beads or add `.beads` anywhere inside this template/project. I
 - If evidence is missing, narrow the title, mark the slide preliminary/missing, or stop and request the source. A polished false claim is a failed task.
 - Verify references against primary papers/official sources. Do not cite a search-result snippet as the source.
 - A citation is not permission to reuse a copyrighted visual. Record license/permission or redraw within allowed use.
-- Use Pandoc citation keys backed by `template/references.bib`; never hand-format a second bibliography. Preserve `link-citations`, `citations-hover`, and the single `.references-slide` containing `#refs`. Verify hover/focus previews, internal jumps, external DOI/URL links, and the fixed two-column layout. Split an overfull bibliography instead of shrinking or scrolling it.
+- Use Pandoc citation keys backed by `template/references.bib`; never hand-format a second bibliography. Preserve `link-citations`, `citations-hover`, the single global `#refs` citeproc source, and each generated `.style-references` view. Verify that hover/focus cards inherit the active profile, citation activation stays in the current style column, external DOI/URL links work, and every references view remains two-column and scrollbar-free. Split overfull references instead of shrinking or scrolling them.
 
 ## Venue and event delivery research
 
@@ -175,6 +175,8 @@ Automated accessibility checks do not validate statistical honesty, chart semant
 
 When adding an uploaded/reference style:
 
+0. Follow `template/docs/adding-a-style.md` completely. Create `style/<slug>` from current `main`, advance the minor development version, open a pull request, review its CI gallery artifact, and merge only after approval and passing checks. Never add a style directly to `main`.
+
 1. Record source path/URL, owner/license, and inspection date.
 2. Extract semantic tokens; do not copy app-specific controls/navigation.
 3. Map every Sinew token in `template/styles/colors/<name>.css`.
@@ -183,7 +185,8 @@ When adding an uploaded/reference style:
 6. Add only a `color-*` profile. Do not edit conference constraints.
 7. Provide or document a matching Matplotlib palette.
 8. Add the matching Matplotlib overlay and generator entry.
-9. Run `template/scripts/render-styles.sh`; inspect representative screenshots and grayscale.
+9. Add the complete index column, per-style bibliography record, citation slide, and local references slide.
+10. Run `template/scripts/render-styles.sh`; inspect representative screenshots, citation hover cards, and grayscale.
 
 The Origami source mapping is documented in `template/docs/styles.md` and `template/styles/colors/origami.css`. Preserve its academic adaptation unless the user asks to revise it.
 

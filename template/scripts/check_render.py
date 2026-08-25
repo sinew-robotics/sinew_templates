@@ -37,6 +37,12 @@ def main() -> int:
     includes = re.findall(r"^\{\{<\s+include\s+([^ >]+)\s*>\}\}$", deck, re.MULTILINE)
     expected_level1 = sum(Path(include).name == "_00-section.qmd" for include in includes)
     expected_level2 = len(includes) - expected_level1
+    expected_style_columns = max(expected_level1 - 1, 0)
+    cited_keys: list[str] = []
+    for include in includes:
+        source_path = ROOT / include
+        if source_path.is_file():
+            cited_keys.extend(re.findall(r"@([A-Za-z0-9_.:+#$/-]+)", source_path.read_text(encoding="utf-8")))
 
     level1 = re.findall(
         r'<section\b[^>]*class="[^"]*\blevel1\b[^"]*\bsection-slide\b[^"]*"[^>]*>',
@@ -62,17 +68,39 @@ def main() -> int:
         not re.search(r'<section\b[^>]*class="[^"]*\bslide\s+level2\b[^"]*\bstack\b', html),
         "content panels created an accidental nested Reveal stack",
     )
-    require(html.count('class="algorithm-caption"') == 18, "expected two algorithm captions in every style column")
+    require(
+        html.count('class="algorithm-caption"') == 2 * expected_style_columns,
+        "expected two algorithm captions in every style column",
+    )
     require("numberAlgorithmCaptions" in html, "automatic algorithm numbering script is absent")
     citation_links = re.findall(r'<a\b[^>]*\brole="doc-biblioref"', html)
-    require(len(citation_links) == 5, "expected five linked in-slide citations")
-    require(html.count('class="csl-entry"') == 5, "expected five bibliography entries")
+    require(
+        len(citation_links) == len(cited_keys),
+        f"expected {len(cited_keys)} linked in-slide citations, found {len(citation_links)}",
+    )
+    require(
+        html.count('class="csl-entry"') == len(set(cited_keys)),
+        f"expected {len(set(cited_keys))} unique bibliography entries",
+    )
     require('class="references csl-bib-body hanging-indent"' in html, "citeproc bibliography is absent")
     require("references-slide" in html, "styled references slide is absent")
+    require(
+        html.count('class="style-references"') == expected_style_columns,
+        "expected one local references container in every style column",
+    )
+    require("buildStyleBibliographies" in html, "local citation routing script is absent")
     require(
         "window.document.querySelectorAll('a[role=\"doc-biblioref\"]')" in html,
         "interactive citation preview script is absent",
     )
+    core_candidates = list(ROOT.glob("_extensions/**/theme/core.scss"))
+    require(bool(core_candidates), "Sinew core theme source is absent")
+    if core_candidates:
+        core = core_candidates[0].read_text(encoding="utf-8")
+        require(
+            '.tippy-box[data-theme~="light-border"]' in core,
+            "profile-aware citation hover styling is absent",
+        )
 
     if len(sys.argv) == 3:
         color = sys.argv[2]

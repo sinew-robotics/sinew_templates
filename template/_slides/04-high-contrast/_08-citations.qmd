@@ -1,0 +1,27 @@
+## High contrast evidence links stay inside this style column {data-style-preview="high-contrast"}
+
+<span class="kicker">Citations</span>
+
+::: {.citation-grid}
+::: {.evidence-card}
+**Research narrative**
+
+Assertion-evidence structure keeps the spoken claim aligned with visible support [@alley2013].
+:::
+
+::: {.evidence-card}
+**Visual profile**
+
+The High Contrast palette, typography, and component tokens are versioned as a citable source [@sinewHighContrast2026].
+:::
+
+::: {.evidence-card}
+**Figures and access**
+
+Figure styling builds on SciencePlots and interface checks use WCAG 2.2 [@scienceplots2021; @wcag2023].
+:::
+:::
+
+::: {.citation-help}
+Hover or focus a citation to preview its reference. Activate it to open the High Contrast references slide in this column.
+:::

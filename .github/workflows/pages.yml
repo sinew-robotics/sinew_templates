@@ -44,6 +44,21 @@ jobs:
           quarto render template --cache-refresh
           template/scripts/check-render.sh template/_site/index.html origami
 
+      - name: Upload pull-request gallery demo
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: sinew-gallery-pr-${{ github.event.pull_request.number }}
+          path: template/_site
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Add pull-request demo instructions
+        if: github.event_name == 'pull_request'
+        run: |
+          echo '## Gallery demo' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Download the `sinew-gallery-pr-${{ github.event.pull_request.number }}` artifact and open `index.html`.' >> "$GITHUB_STEP_SUMMARY"
+
       - name: Configure GitHub Pages
         if: github.event_name != 'pull_request'
         uses: actions/configure-pages@v5

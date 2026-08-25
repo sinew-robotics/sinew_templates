@@ -5,7 +5,7 @@ Rename this file to `CLAUDE.md` and follow `AGENTS.md` completely.
 ## Highest-risk rules
 
 - Scientific truth outranks polish. Never fabricate results, uncertainty, settings, citations, licenses, or delivery rules.
-- Keep citations backed by `references.bib`. Preserve hover/focus previews, linked citation jumps, external DOI/URL links, and the semantic two-column `#refs` bibliography. Split overfull references rather than shrinking or scrolling them.
+- Keep citations backed by `references.bib`. Preserve the single global `#refs` source, generated per-style reference views, profile-aware hover/focus cards, local citation jumps, external DOI/URL links, and two-column scrollbar-free layout. Split overfull references rather than shrinking or scrolling them.
 - Keep illustrative/preliminary content labeled and claim boundaries visible.
 - Verify the exact event edition, track, presentation type, and artifact using current official sources. Event research files are dated background guidance, not profiles.
 - Activate exactly one `color-*` profile. It owns visual style only; never place event logistics or invented branding in it.
@@ -28,6 +28,8 @@ Rename this file to `CLAUDE.md` and follow `AGENTS.md` completely.
 Read the project docs, the selected color profile, and any relevant delivery-research file. Inspect every included slide and run the validator before editing. Use the built-in include manifest; do not add slide auto-discovery unless explicitly requested.
 
 For plots, apply the common Sinew slide overlay and then the matching per-style Matplotlib overlay. Do not use publication-sized `ieee` directly. Keep plot source and data provenance.
+
+For a new style, follow `docs/adding-a-style.md`; work on `style/<slug>`, advance the minor development version, add the complete index/citation/reference column, and use a reviewed pull request. Review the CI gallery artifact before merge.
 
 Validate with:
 

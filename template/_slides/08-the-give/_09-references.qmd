@@ -1,0 +1,8 @@
+## The Give references remain beside the style evidence {#references-the-give .references-slide .style-references-slide data-style-preview="the-give"}
+
+<span class="kicker">References</span>
+
+::: {.style-references data-style-key="sinewTheGive2026" data-reference-keys="sinewTheGive2026 alley2013 scienceplots2021 wcag2023"}
+:::
+
+<span class="source">Entries are generated from references.bib. DOI and project links open in a new tab.</span>

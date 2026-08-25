@@ -25,6 +25,17 @@ COLORS = (
     "the-meeting",
     "movement",
 )
+STYLE_CITATION_KEYS = {
+    "origami": "sinewOrigami2026",
+    "paper": "sinewPaper2026",
+    "high-contrast": "sinewHighContrast2026",
+    "blueprint": "sinewBlueprint2026",
+    "scholar": "sinewScholar2026",
+    "unmasked": "sinewUnmasked2026",
+    "the-give": "sinewTheGive2026",
+    "the-meeting": "sinewTheMeeting2026",
+    "movement": "sinewMovement2026",
+}
 REQUIRED_TOKENS = (
     "--sinew-bg",
     "--sinew-panel",
@@ -130,8 +141,16 @@ class Validation:
         bibliography_keys = set(re.findall(r"^@[A-Za-z]+\{([^,]+),", bibliography, re.MULTILINE))
         self.require(len(citation_keys) >= 5, "citation example must exercise at least five references")
         self.require(citation_keys <= bibliography_keys, "every example citation key must exist in references.bib")
+        self.require(
+            set(STYLE_CITATION_KEYS.values()) <= bibliography_keys,
+            "every visual profile must have its own bibliography record",
+        )
         self.require("{#refs}" in reference_source, "bibliography slide must provide the citeproc #refs target")
         self.require("references-slide" in reference_source, "bibliography slide must activate two-column styling")
+        self.require(
+            "global-references-slide" in reference_source,
+            "shared bibliography must be marked as the global citeproc source",
+        )
 
     def validate_profiles(self) -> None:
         base = (ROOT / "_quarto.yml").read_text(encoding="utf-8")
@@ -285,10 +304,14 @@ class Validation:
             plot_path = folder / "_04-plot.qmd"
             table_path = folder / "_05-table.qmd"
             generate_path = folder / "_07-generate.qmd"
+            citation_path = folder / "_08-citations.qmd"
+            references_path = folder / "_09-references.qmd"
             self.require(algorithm_path.is_file(), f"algorithm slide missing for {name}")
             self.require(plot_path.is_file(), f"plot slide missing for {name}")
             self.require(table_path.is_file(), f"table slide missing for {name}")
             self.require(generate_path.is_file(), f"generation slide missing for {name}")
+            self.require(citation_path.is_file(), f"citation slide missing for {name}")
+            self.require(references_path.is_file(), f"local references slide missing for {name}")
             if algorithm_path.is_file():
                 algorithm_source = algorithm_path.read_text(encoding="utf-8")
                 self.require(
@@ -327,6 +350,31 @@ class Validation:
                 self.require(
                     "**Algorithm.**" in generate_source,
                     f"generation command caption lacks its bold label for {name}",
+                )
+            if citation_path.is_file():
+                citation_source = citation_path.read_text(encoding="utf-8")
+                style_key = STYLE_CITATION_KEYS[name]
+                self.require(f"@{style_key}" in citation_source, f"citation slide lacks style source for {name}")
+                for shared_key in ("alley2013", "scienceplots2021", "wcag2023"):
+                    self.require(
+                        f"@{shared_key}" in citation_source,
+                        f"citation slide lacks shared source {shared_key} for {name}",
+                    )
+                self.require(".citation-help" in citation_source, f"citation interaction help is missing for {name}")
+            if references_path.is_file():
+                references_source = references_path.read_text(encoding="utf-8")
+                style_key = STYLE_CITATION_KEYS[name]
+                self.require(
+                    f'data-style-key="{style_key}"' in references_source,
+                    f"local references do not identify the style source for {name}",
+                )
+                self.require(
+                    f"#references-{name}" in references_source,
+                    f"local references slide lacks its stable target for {name}",
+                )
+                self.require(
+                    ".style-references" in references_source,
+                    f"local references container is missing for {name}",
                 )
 
 if __name__ == "__main__":

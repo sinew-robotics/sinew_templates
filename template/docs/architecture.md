@@ -61,6 +61,12 @@ Render one style with `quarto render --profile color-origami`. Render every supp
 
 New visual styles should target these roles and tokens, not sample-slide IDs.
 
+## Citation views
+
+Pandoc citeproc generates one authoritative `#refs` list. Sinew keeps that list in `.global-references-slide` and uses `captions.html` to clone selected entries into each `.style-references` container after the document loads. The clones remove source IDs, preserve list roles, and remain derived from `references.bib`. Citation links inside a style stack are then routed to that stack's stable `#references-<style>` slide; Quarto hover previews continue to read the original `ref-<key>` entries.
+
+The Tippy `light-border` citation preview is restyled in `core.scss` using the same `--sinew-*` tokens as the active deck. In gallery mode, the hover surface therefore changes with the current column. In a standalone profile, it follows the single selected profile.
+
 ## Plot-style pairing
 
 Static figures do not inherit Reveal CSS. Each color profile therefore has a matching `styles/matplotlib/sinew-<style>.mplstyle` overlay. Compose the common `sinew-slides.mplstyle` first and the selected style overlay last. `scripts/generate_gallery_plots.py` exercises every overlay with the same illustrative chart so palette, text, grid, legend, marker, and line behavior can be compared.

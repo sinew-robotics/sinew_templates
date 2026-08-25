@@ -1,0 +1,8 @@
+## Paper references remain beside the style evidence {#references-paper .references-slide .style-references-slide data-style-preview="paper"}
+
+<span class="kicker">References</span>
+
+::: {.style-references data-style-key="sinewPaper2026" data-reference-keys="sinewPaper2026 alley2013 scienceplots2021 wcag2023"}
+:::
+
+<span class="source">Entries are generated from references.bib. DOI and project links open in a new tab.</span>

@@ -17,7 +17,7 @@ Do not create `.beads` inside the presentation project. Keep any requested Beads
 - Distinguish simulation/real robot, offline/online, benchmark/deployment, and observed/causal claims.
 - Show failures/negative results when they bound the conclusion.
 - Verify citations against primary papers/official sources. Citation is not reuse permission.
-- Use Pandoc citation keys backed by `references.bib`; never hand-format a second bibliography. Preserve `link-citations`, `citations-hover`, and the single `.references-slide` containing `#refs`. Verify hover/focus previews, internal jumps, external DOI/URL links, and the fixed two-column layout. Split an overfull bibliography instead of shrinking or scrolling it.
+- Use Pandoc citation keys backed by `references.bib`; never hand-format a second bibliography. Preserve `link-citations`, `citations-hover`, the single global `#refs` source, and generated `.style-references` views. Verify profile-aware hover/focus cards, local citation jumps, external DOI/URL links, and two-column scrollbar-free layout. Split overfull references instead of shrinking or scrolling them.
 
 ## Style and delivery boundary
 
@@ -57,7 +57,7 @@ Do not rely on color alone. Use semantic headings, tables, and figures; short an
 
 ## Style changes
 
-Record a reference style's source, owner, license, date, and source slug. Extract semantic tokens rather than app controls. Define every Sinew token, robust offline font fallbacks, and a matching Matplotlib overlay. Add only one new `color-*` choice; do not mutate event rules. Add the style to `scripts/generate_gallery_plots.py` and `scripts/render-styles.sh`.
+Follow `docs/adding-a-style.md` completely. Work on `style/<slug>`, advance the minor development version, and use a reviewed pull request rather than adding a style directly to `main`. Record source, owner, license, date, and source slug. Extract semantic tokens rather than app controls. Define every Sinew token, robust offline font fallbacks, a matching Matplotlib overlay, a complete gallery column, and a per-style citation/reference entry. Do not mutate event rules. Review the CI gallery artifact before merge.
 
 ## Completion
 

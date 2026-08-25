@@ -38,15 +38,53 @@
     });
   }
 
-  function formatCaptions() {
+  function buildStyleBibliographies() {
+    var globalReferences = document.querySelector(".global-references-slide #refs");
+    if (!globalReferences) return;
+
+    document.querySelectorAll(".style-references[data-reference-keys]").forEach(function (container) {
+      var keys = (container.dataset.referenceKeys || "").trim().split(/\s+/).filter(Boolean);
+      var allowedKeys = new Set(keys);
+
+      container.classList.add("references", "csl-bib-body", "hanging-indent");
+      container.setAttribute("role", "list");
+      container.replaceChildren();
+
+      keys.forEach(function (key) {
+        var source = document.getElementById("ref-" + key);
+        if (!source) return;
+
+        var entry = source.cloneNode(true);
+        entry.removeAttribute("id");
+        entry.dataset.referenceKey = key;
+        entry.setAttribute("role", "listitem");
+        container.appendChild(entry);
+      });
+
+      var referencesSlide = container.closest("section.slide");
+      var stack = referencesSlide ? referencesSlide.parentElement : null;
+      if (!referencesSlide || !referencesSlide.id || !stack) return;
+
+      stack.querySelectorAll('a[role="doc-biblioref"]').forEach(function (link) {
+        var citation = link.closest("[data-cites]");
+        var citedKeys = citation ? (citation.dataset.cites || "").split(/\s+/) : [];
+        if (citedKeys.some(function (key) { return allowedKeys.has(key); })) {
+          link.setAttribute("href", "#/" + referencesSlide.id);
+        }
+      });
+    });
+  }
+
+  function enhanceDeck() {
     boldFloatIdentifiers();
     numberAlgorithmCaptions();
+    buildStyleBibliographies();
   }
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", formatCaptions, { once: true });
+    document.addEventListener("DOMContentLoaded", enhanceDeck, { once: true });
   } else {
-    formatCaptions();
+    enhanceDeck();
   }
 })();
 </script>
