@@ -36,6 +36,7 @@ Select exactly one `color-*` profile. It owns palette, fonts, surfaces, syntax h
 - Do not put body content before the first include; it creates a blank slide.
 - Put the required narrative at the first vertical index; optional detail goes below.
 - Every content title is a complete-sentence claim supported by that slide.
+- Use `<ol class="research-questions">` for Q1-Q9 and `<ol class="research-hypotheses">` for H1-H9. Never type the Q/H identifier in item text or exceed nine items per list. Use `.is-highlighted` on at most one primary item per list and map every item to evidence or a visibly unresolved result.
 - Use one primary evidence object per slide; minimize prose.
 - Put claim-changing caveats on screen, not only in notes.
 - Code must wrap and fit inside its allocated region without horizontal or vertical scrollbars.
@@ -46,6 +47,8 @@ Select exactly one `color-*` profile. It owns palette, fonts, surfaces, syntax h
 Figures require `fig-alt`, a visible caption, axes/units, aggregation/uncertainty, samples/seeds, scope/status, and source/license. Combine color with marker/dash/hatch/direct labels. Prefer SVG for charts and raster for photos/dense sensor data; never use plot screenshots.
 
 Rendered `Figure N` and `Table N` identifiers are bold while caption prose stays normal weight. Put `.algorithm-caption` directly beneath procedural code and inside the same column or container. Begin its source with `**Algorithm.**`; Sinew renders a globally numbered, bold `Algorithm N` identifier. State scope and evidence status, and caption procedural shell blocks too.
+
+Preserve the fullscreen inspector on every figure, table, and captioned algorithm. Test object click, keyboard activation of `Expand`, Escape/backdrop/Close dismissal, focus return, active-profile styling, and suppression of Reveal navigation while open. The original object must still fit without scrolling.
 
 For Python plots, import SciencePlots and compose `science`, `no-latex`, `notebook`, and a color-safe cycle, followed by `styles/matplotlib/sinew-slides.mplstyle` and the matching `styles/matplotlib/sinew-<style>.mplstyle`. The SciencePlots `ieee` style is paper-column sized and is not a projected-slide style.
 

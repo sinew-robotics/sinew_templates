@@ -16,5 +16,5 @@
 </div>
 
 ::: {.evidence-card}
-Move right to select a style. Move down for guidance, problem, algorithm, plot, table, conclusion, and generation.
+Move right to select a style. Move down through problem, research framing, method, evidence, and references.
 :::

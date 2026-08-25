@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Added required Q1-Q9 research-question and H1-H9 research-hypothesis lists, with an optional non-color-only primary-item highlight and examples in every visual style.
+- Added a keyboard-accessible fullscreen inspector for every rendered figure, table, and captioned algorithm.
+
 ## 1.0.0  -  2026-08-25
 
 - Released nine selectable visual styles and a browser-based 2D gallery with one style per horizontal column.

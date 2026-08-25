@@ -72,7 +72,23 @@ def main() -> int:
         html.count('class="algorithm-caption"') == 2 * expected_style_columns,
         "expected two algorithm captions in every style column",
     )
+    require(
+        html.count('class="research-questions"') == expected_style_columns,
+        "expected one Q1-Q9 research-question list in every style column",
+    )
+    require(
+        html.count('class="research-hypotheses"') == expected_style_columns,
+        "expected one H1-H9 research-hypothesis list in every style column",
+    )
+    highlighted_statements = re.findall(r'<li\b[^>]*class="[^"]*\bis-highlighted\b[^"]*"', html)
+    require(
+        len(highlighted_statements) == 2 * expected_style_columns,
+        "expected one highlighted question and hypothesis in every style column",
+    )
     require("numberAlgorithmCaptions" in html, "automatic algorithm numbering script is absent")
+    require("labelResearchStatements" in html, "accessible Q/H identifier script is absent")
+    require("buildEvidenceInspector" in html, "fullscreen evidence inspector script is absent")
+    require('dialog.id = "sinew-evidence-inspector"' in html, "fullscreen evidence dialog is absent")
     citation_links = re.findall(r'<a\b[^>]*\brole="doc-biblioref"', html)
     require(
         len(citation_links) == len(cited_keys),

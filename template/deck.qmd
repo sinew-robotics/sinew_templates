@@ -24,6 +24,8 @@ format: sinew-revealjs
 
 {{< include _slides/02-origami/_02-problem.qmd >}}
 
+{{< include _slides/02-origami/_03-research.qmd >}}
+
 {{< include _slides/02-origami/_03-algorithm.qmd >}}
 
 {{< include _slides/02-origami/_04-plot.qmd >}}
@@ -43,6 +45,8 @@ format: sinew-revealjs
 {{< include _slides/03-paper/_01-guidelines.qmd >}}
 
 {{< include _slides/03-paper/_02-problem.qmd >}}
+
+{{< include _slides/03-paper/_03-research.qmd >}}
 
 {{< include _slides/03-paper/_03-algorithm.qmd >}}
 
@@ -64,6 +68,8 @@ format: sinew-revealjs
 
 {{< include _slides/04-high-contrast/_02-problem.qmd >}}
 
+{{< include _slides/04-high-contrast/_03-research.qmd >}}
+
 {{< include _slides/04-high-contrast/_03-algorithm.qmd >}}
 
 {{< include _slides/04-high-contrast/_04-plot.qmd >}}
@@ -83,6 +89,8 @@ format: sinew-revealjs
 {{< include _slides/05-blueprint/_01-guidelines.qmd >}}
 
 {{< include _slides/05-blueprint/_02-problem.qmd >}}
+
+{{< include _slides/05-blueprint/_03-research.qmd >}}
 
 {{< include _slides/05-blueprint/_03-algorithm.qmd >}}
 
@@ -104,6 +112,8 @@ format: sinew-revealjs
 
 {{< include _slides/06-scholar/_02-problem.qmd >}}
 
+{{< include _slides/06-scholar/_03-research.qmd >}}
+
 {{< include _slides/06-scholar/_03-algorithm.qmd >}}
 
 {{< include _slides/06-scholar/_04-plot.qmd >}}
@@ -123,6 +133,8 @@ format: sinew-revealjs
 {{< include _slides/07-unmasked/_01-guidelines.qmd >}}
 
 {{< include _slides/07-unmasked/_02-problem.qmd >}}
+
+{{< include _slides/07-unmasked/_03-research.qmd >}}
 
 {{< include _slides/07-unmasked/_03-algorithm.qmd >}}
 
@@ -144,6 +156,8 @@ format: sinew-revealjs
 
 {{< include _slides/08-the-give/_02-problem.qmd >}}
 
+{{< include _slides/08-the-give/_03-research.qmd >}}
+
 {{< include _slides/08-the-give/_03-algorithm.qmd >}}
 
 {{< include _slides/08-the-give/_04-plot.qmd >}}
@@ -164,6 +178,8 @@ format: sinew-revealjs
 
 {{< include _slides/09-the-meeting/_02-problem.qmd >}}
 
+{{< include _slides/09-the-meeting/_03-research.qmd >}}
+
 {{< include _slides/09-the-meeting/_03-algorithm.qmd >}}
 
 {{< include _slides/09-the-meeting/_04-plot.qmd >}}
@@ -183,6 +199,8 @@ format: sinew-revealjs
 {{< include _slides/10-movement/_01-guidelines.qmd >}}
 
 {{< include _slides/10-movement/_02-problem.qmd >}}
+
+{{< include _slides/10-movement/_03-research.qmd >}}
 
 {{< include _slides/10-movement/_03-algorithm.qmd >}}
 

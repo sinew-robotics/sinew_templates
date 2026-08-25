@@ -124,6 +124,24 @@ class Validation:
             (ROOT / "styles/gallery/gallery.css").is_file(),
             "default gallery marker CSS is missing",
         )
+        core_theme = ROOT / "_extensions/sinew/theme/core.scss"
+        runtime = ROOT / "_extensions/sinew/theme/captions.html"
+        self.require(core_theme.is_file(), "core theme is missing")
+        self.require(runtime.is_file(), "post-body runtime is missing")
+        if core_theme.is_file():
+            core_source = core_theme.read_text(encoding="utf-8")
+            for marker in (
+                ".research-questions",
+                ".research-hypotheses",
+                'content: "Q" counter(sinew-research-question)',
+                'content: "H" counter(sinew-research-hypothesis)',
+                ".sinew-fullscreen-dialog",
+            ):
+                self.require(marker in core_source, f"core theme is missing required component: {marker}")
+        if runtime.is_file():
+            runtime_source = runtime.read_text(encoding="utf-8")
+            for marker in ("labelResearchStatements", "buildEvidenceInspector", "sinew-evidence-inspector", "showModal"):
+                self.require(marker in runtime_source, f"evidence inspector runtime is missing: {marker}")
         legacy_profiles = sorted(ROOT.glob("_quarto-conf-*.yml"))
         self.require(not legacy_profiles, f"conference profiles must not be present: {legacy_profiles}")
         legacy_markers = sorted((ROOT / "styles/conferences").glob("*.css"))
@@ -272,6 +290,7 @@ class Validation:
 
             self.validate_images(path, text)
             self.validate_tables(path, text)
+            self.validate_research_lists(path, text)
 
     def validate_images(self, path: Path, text: str) -> None:
         rel = path.relative_to(ROOT)
@@ -300,6 +319,34 @@ class Validation:
                 f"table needs a caption and #tbl- label in {rel}",
             )
 
+    def validate_research_lists(self, path: Path, text: str) -> None:
+        rel = path.relative_to(ROOT)
+        for list_class, prefix in (("research-questions", "Q"), ("research-hypotheses", "H")):
+            pattern = re.compile(
+                rf'<ol\b[^>]*class="[^"]*\b{re.escape(list_class)}\b[^"]*"[^>]*>(.*?)</ol>',
+                re.DOTALL,
+            )
+            for body in pattern.findall(text):
+                items = re.findall(r"<li\b([^>]*)>(.*?)</li>", body, re.DOTALL)
+                self.require(
+                    1 <= len(items) <= 9,
+                    f"{list_class} must contain one to nine items in {rel}",
+                )
+                highlighted = sum(
+                    re.search(r"\bis-highlighted\b", attributes) is not None
+                    for attributes, _ in items
+                )
+                self.require(
+                    highlighted <= 1,
+                    f"{list_class} may highlight at most one primary item in {rel}",
+                )
+                for _, item_body in items:
+                    visible = re.sub(r"<[^>]+>", "", item_body).strip()
+                    self.require(
+                        re.match(rf"{prefix}[1-9]\b", visible, re.IGNORECASE) is None,
+                        f"do not type generated {prefix} identifiers into item text in {rel}",
+                    )
+
     def validate_styles(self) -> None:
         for name in COLORS:
             path = ROOT / f"styles/colors/{name}.css"
@@ -326,35 +373,56 @@ class Validation:
         self.require(len(style_folders) == len(COLORS), "the gallery must contain one column per style")
         for name, folder in zip(COLORS, style_folders):
             self.require(folder.name.endswith(name), f"style column order mismatch for {name}: {folder.name}")
-            expected_slide_names = {f"_{index:02d}-{label}.qmd" for index, label in enumerate((
-                "section",
-                "guidelines",
-                "problem",
-                "algorithm",
-                "plot",
-                "table",
-                "conclusion",
-                "generate",
-                "citations",
-                "references",
-            ))}
+            expected_slide_names = {
+                "_00-section.qmd",
+                "_01-guidelines.qmd",
+                "_02-problem.qmd",
+                "_03-research.qmd",
+                "_03-algorithm.qmd",
+                "_04-plot.qmd",
+                "_05-table.qmd",
+                "_06-conclusion.qmd",
+                "_07-generate.qmd",
+                "_08-citations.qmd",
+                "_09-references.qmd",
+            }
             actual_slide_names = {path.name for path in folder.glob("*.qmd")}
             self.require(
                 actual_slide_names == expected_slide_names,
-                f"style column must contain the complete 00-09 demo sequence for {name}",
+                f"style column must contain the complete demo sequence, including research framing, for {name}",
             )
+            research_path = folder / "_03-research.qmd"
             algorithm_path = folder / "_03-algorithm.qmd"
             plot_path = folder / "_04-plot.qmd"
             table_path = folder / "_05-table.qmd"
             generate_path = folder / "_07-generate.qmd"
             citation_path = folder / "_08-citations.qmd"
             references_path = folder / "_09-references.qmd"
+            self.require(research_path.is_file(), f"research framing slide missing for {name}")
             self.require(algorithm_path.is_file(), f"algorithm slide missing for {name}")
             self.require(plot_path.is_file(), f"plot slide missing for {name}")
             self.require(table_path.is_file(), f"table slide missing for {name}")
             self.require(generate_path.is_file(), f"generation slide missing for {name}")
             self.require(citation_path.is_file(), f"citation slide missing for {name}")
             self.require(references_path.is_file(), f"local references slide missing for {name}")
+            if research_path.is_file():
+                research_source = research_path.read_text(encoding="utf-8")
+                self.require(
+                    research_source.count('<ol class="research-questions">') == 1,
+                    f"research framing slide must contain one question list for {name}",
+                )
+                self.require(
+                    research_source.count('<ol class="research-hypotheses">') == 1,
+                    f"research framing slide must contain one hypothesis list for {name}",
+                )
+                self.require(
+                    research_source.count('class="is-highlighted"') == 2,
+                    f"research framing slide must demonstrate one primary item in each list for {name}",
+                )
+                self.require(
+                    "Illustrative placeholder" in research_source,
+                    f"research framing example must disclose illustrative status for {name}",
+                )
             if algorithm_path.is_file():
                 algorithm_source = algorithm_path.read_text(encoding="utf-8")
                 self.require(

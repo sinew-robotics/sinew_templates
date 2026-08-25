@@ -19,8 +19,10 @@ Describe the academic use case, visual source, and intentional projection/access
 - [ ] Code blocks, tables, references, and hover cards fit without scrollbars.
 - [ ] Tables highlight only the final `Ours:` rows; baseline rows remain unhighlighted.
 - [ ] Figure, table, and algorithm identifiers are bold and numbered; algorithm captions remain inside their code containers.
+- [ ] Research framing uses generated Q1-Q9 and H1-H9 lists, with no more than one non-color-only primary highlight per list.
+- [ ] Figure, table, and algorithm fullscreen inspection works with pointer, keyboard, Escape/Close, focus return, and the active profile.
 - [ ] No generated `_site`, private URL, protected asset, or `.beads` content is committed.
 
 ## Evidence
 
-Add screenshots for the divider, problem, algorithm, plot, table, citation, references, and citation-hover states.
+Add screenshots for the divider, problem, research framing, algorithm, plot, table, fullscreen inspector, citation, references, and citation-hover states.

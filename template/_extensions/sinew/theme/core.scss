@@ -412,6 +412,111 @@ html:has(.reveal .section-slide.present) .reveal .slide-background-content {
 .reveal .hot { color: var(--sinew-danger); font-weight: 700; }
 .reveal .ok { color: var(--sinew-success); font-weight: 700; }
 
+/* Research framing is a visual identity component, not a generic numbered
+   list. CSS counters produce Q1-Q9 and H1-H9; authors provide semantic list
+   markup and never type the identifiers into the item text. */
+.reveal .research-framing {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75em;
+  align-items: stretch;
+}
+
+.reveal .research-block {
+  --sinew-statement-color: var(--sinew-accent);
+  min-width: 0;
+  padding: 0.68em 0.72em 0.72em;
+  border: 1px solid var(--sinew-line);
+  border-top: 0.16em solid var(--sinew-statement-color);
+  border-radius: var(--sinew-radius);
+  background: var(--sinew-panel);
+}
+
+.reveal .research-block-hypotheses {
+  --sinew-statement-color: var(--sinew-success);
+}
+
+.reveal .research-block > p:first-child {
+  margin: 0 0 0.5em;
+  color: var(--sinew-statement-color);
+  font-family: var(--r-code-font);
+  font-size: 0.48em;
+  font-weight: 800;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+}
+
+.reveal ol.research-questions,
+.reveal ol.research-hypotheses {
+  display: grid;
+  gap: 0.42em;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.reveal ol.research-questions { counter-reset: sinew-research-question; }
+.reveal ol.research-hypotheses { counter-reset: sinew-research-hypothesis; }
+
+.reveal ol.research-questions li,
+.reveal ol.research-hypotheses li {
+  position: relative;
+  box-sizing: border-box;
+  min-height: 3.25em;
+  margin: 0;
+  padding: 0.58em 0.65em 0.58em 3.7em;
+  border: 1px solid color-mix(in srgb, var(--sinew-statement-color) 58%, var(--sinew-line));
+  border-radius: calc(var(--sinew-radius) * 0.78);
+  background: color-mix(in srgb, var(--sinew-statement-color) 7%, var(--sinew-panel-raised));
+  font-size: 0.66em;
+  line-height: 1.28;
+}
+
+.reveal ol.research-questions li { counter-increment: sinew-research-question; }
+.reveal ol.research-hypotheses li { counter-increment: sinew-research-hypothesis; }
+
+.reveal ol.research-questions li::before,
+.reveal ol.research-hypotheses li::before {
+  position: absolute;
+  top: 50%;
+  left: 0.62em;
+  width: 2.7em;
+  padding: 0.25em 0;
+  transform: translateY(-50%);
+  border: 2px solid currentColor;
+  border-radius: calc(var(--sinew-radius) * 0.7);
+  color: var(--sinew-statement-color);
+  font-family: var(--r-code-font);
+  font-size: 0.68em;
+  font-weight: 800;
+  letter-spacing: 0.025em;
+  line-height: 1;
+  text-align: center;
+}
+
+.reveal ol.research-questions li::before {
+  content: "Q" counter(sinew-research-question);
+}
+
+.reveal ol.research-hypotheses li::before {
+  content: "H" counter(sinew-research-hypothesis);
+}
+
+/* Use on at most one primary item per list. Weight, rule thickness, and inset
+   line keep the emphasis visible without relying on color alone. */
+.reveal ol.research-questions li.is-highlighted,
+.reveal ol.research-hypotheses li.is-highlighted {
+  border-width: 2px;
+  border-color: var(--sinew-statement-color);
+  background: color-mix(in srgb, var(--sinew-statement-color) 15%, var(--sinew-panel-raised));
+  box-shadow: inset 0.16em 0 0 var(--sinew-statement-color);
+  font-weight: 700;
+}
+
+.reveal .research-framing + .source {
+  margin-top: 0.62em;
+}
+
 .reveal ol.takeaways {
   margin: 0.45em 0 0;
   padding: 0;
@@ -438,6 +543,167 @@ html:has(.reveal .section-slide.present) .reveal .slide-background-content {
   font-family: var(--r-code-font);
   font-size: 0.62em;
   content: counter(sinew-takeaway);
+}
+
+/* Figures, tables, and captioned algorithms expose the same inspect action.
+   The visible button preserves the object's native semantics for assistive
+   technology; pointer activation on the object opens the same dialog. */
+.reveal .sinew-expandable {
+  position: relative;
+  cursor: zoom-in;
+}
+
+.reveal .sinew-expand-control,
+.reveal .sinew-fullscreen-close {
+  border: 2px solid var(--sinew-accent);
+  border-radius: var(--sinew-radius);
+  color: var(--sinew-accent);
+  background: var(--sinew-panel-raised);
+  font-family: var(--r-code-font);
+  font-weight: 800;
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+}
+
+.reveal .sinew-expand-control {
+  position: absolute;
+  z-index: 4;
+  top: 0.5em;
+  right: 0.5em;
+  padding: 0.32em 0.52em;
+  font-size: 0.32em;
+  line-height: 1;
+  opacity: 0.78;
+  cursor: pointer;
+}
+
+.reveal .sinew-expand-control.sinew-expand-control-inline {
+  position: static;
+  display: inline-flex;
+  align-items: center;
+  margin-left: 0.7em;
+  padding: 0.3em 0.48em;
+  font-size: 0.72em;
+  vertical-align: 0.08em;
+}
+
+.reveal .sinew-expandable:hover .sinew-expand-control,
+.reveal .sinew-expand-control:focus-visible {
+  color: var(--sinew-accent-contrast);
+  background: var(--sinew-accent);
+  opacity: 1;
+}
+
+.reveal .sinew-fullscreen-dialog {
+  box-sizing: border-box;
+  width: 100vw;
+  max-width: none;
+  height: 100vh;
+  max-height: none;
+  margin: 0;
+  padding: clamp(22px, 3vw, 58px);
+  border: 0;
+  color: var(--sinew-ink);
+  background: var(--sinew-bg);
+  overflow: hidden;
+}
+
+.reveal .sinew-fullscreen-dialog::backdrop {
+  background: color-mix(in srgb, #000000 72%, transparent);
+}
+
+.reveal .sinew-fullscreen-shell {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 0.8em;
+  width: 100%;
+  height: 100%;
+}
+
+.reveal .sinew-fullscreen-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1em;
+  padding-bottom: 0.5em;
+  border-bottom: 2px solid var(--sinew-line-strong);
+}
+
+.reveal .sinew-fullscreen-title {
+  margin: 0;
+  color: var(--sinew-muted);
+  font-family: var(--r-code-font);
+  font-size: clamp(16px, 1.35vw, 25px);
+  font-weight: 800;
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+}
+
+.reveal .sinew-fullscreen-close {
+  flex: 0 0 auto;
+  padding: 0.5em 0.72em;
+  font-size: clamp(14px, 1.05vw, 20px);
+  cursor: pointer;
+}
+
+.reveal .sinew-fullscreen-close:hover,
+.reveal .sinew-fullscreen-close:focus-visible {
+  color: var(--sinew-accent-contrast);
+  background: var(--sinew-accent);
+}
+
+.reveal .sinew-fullscreen-content {
+  display: grid;
+  min-width: 0;
+  min-height: 0;
+  place-items: center;
+  overflow: hidden;
+}
+
+.reveal .sinew-fullscreen-content > * {
+  box-sizing: border-box;
+  width: min(94vw, 1600px);
+  max-width: 100%;
+  max-height: 100%;
+  margin: 0;
+}
+
+.reveal .sinew-fullscreen-content figure,
+.reveal .sinew-fullscreen-content .quarto-figure {
+  display: grid;
+  gap: 0.5em;
+  place-items: center;
+}
+
+.reveal .sinew-fullscreen-content img,
+.reveal .sinew-fullscreen-content svg {
+  width: auto;
+  max-width: 94vw;
+  height: auto;
+  max-height: 76vh !important;
+  object-fit: contain;
+}
+
+.reveal .sinew-fullscreen-content table {
+  width: 100%;
+  font-size: clamp(16px, 1.35vw, 27px);
+}
+
+.reveal .sinew-fullscreen-algorithm {
+  display: grid;
+  gap: 0.65em;
+  align-content: center;
+}
+
+.reveal .sinew-fullscreen-algorithm pre {
+  width: 100%;
+  margin: 0;
+  font-size: clamp(15px, 1.2vw, 23px);
+}
+
+.reveal .sinew-fullscreen-content :is(figcaption, caption, .algorithm-caption) {
+  max-width: min(94vw, 1500px);
+  font-size: clamp(13px, 0.95vw, 19px);
 }
 
 /* Academic figures: preserve aspect ratio and reserve room for captions. */

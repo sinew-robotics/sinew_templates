@@ -89,6 +89,7 @@ Core narrative belongs at the first vertical index in each stack. Optional detai
 - Minimize prose; the speaker carries explanation.
 - Avoid topic labels such as "Results," "Method," and "Ablation" as content titles.
 - Avoid marketing language, hero metrics, all caps, underline, italics-for-emphasis, and color-only emphasis.
+- Present research questions only as `<ol class="research-questions">` and hypotheses only as `<ol class="research-hypotheses">` inside their semantic research blocks. Sinew generates Q1-Q9 and H1-H9; never type identifiers into item text, never exceed nine items in one list, and split longer sets across slides. Use `.is-highlighted` on at most one primary item per list and map every item to evidence or an explicitly unresolved result.
 - Use `.kicker` for the role, `.figcap` for visible evidence detail, `.source` for provenance, `.panel`/`.evidence-card` for bounded content, and `ol.takeaways` for the close.
 - Use `.hot` only for a rare warning/error, never as the sole data encoding.
 - Keep caveats on the projected slide when they materially bound the claim; do not bury them only in notes.
@@ -109,6 +110,8 @@ Every informative figure must have:
 - an honest baseline/scale and disclosed axis truncation;
 - sufficient text, line, and object contrast on the plot surface;
 - source/license/permission for reused/adapted visuals.
+
+Every rendered figure, table, and captioned algorithm must retain the Sinew fullscreen inspector. Test pointer activation, the visible `Expand` control with keyboard, Escape/backdrop/Close dismissal, focus return, active-profile inheritance, and suppression of Reveal navigation while open. Fullscreen inspection never excuses overflow on the original slide.
 
 The rendered `Figure N` identifier is bold; keep the descriptive caption text at normal weight.
 

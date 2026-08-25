@@ -23,7 +23,3 @@
 :::
 :::
 :::
-
-::: {.evidence-card}
-**Research question.** Can contact-aware supervision improve recovery under held-out disturbances?
-:::

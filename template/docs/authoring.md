@@ -66,6 +66,39 @@ Quarto-generated `Figure N` and `Table N` identifiers are bolded by the format; 
 
 The source project's quiet visual hierarchy, assertion headlines, one-evidence discipline, figure captions, and numbered takeaways are retained. Branding and app-specific UI are not.
 
+## Research questions and hypotheses
+
+Research questions and research hypotheses use required semantic list classes. Do not type `Q1`, `Q2`, `H1`, or `H2` into item text: Sinew generates Q1-Q9 and H1-H9 with CSS counters so identifiers remain consistent across every visual profile.
+
+```markdown
+:::: {.research-framing}
+::: {.research-block .research-block-questions}
+**Research questions**
+
+<ol class="research-questions">
+<li class="is-highlighted">Which observation resolves the stated uncertainty?</li>
+<li>Under which condition does the effect fail?</li>
+</ol>
+:::
+
+::: {.research-block .research-block-hypotheses}
+**Research hypotheses**
+
+<ol class="research-hypotheses">
+<li class="is-highlighted">The proposed signal improves the primary outcome relative to the named baseline.</li>
+<li>The effect persists under the stated distribution shift.</li>
+</ol>
+:::
+::::
+```
+
+- Use one to nine items per list. Split a longer set across explicit slides instead of producing Q10/H10 or shrinking the slide.
+- A question states an uncertainty the study can answer; a hypothesis states a falsifiable expected relation, direction, population/task, and comparison when known.
+- Keep identifiers stable across the deck and map each question/hypothesis to visible evidence or a clearly marked unresolved result.
+- Use `.is-highlighted` on at most one primary item per list. It adds weight, a thicker rule, and an inset line as well as profile color, so emphasis does not depend on color alone.
+- Questions use the selected profile's accent role; hypotheses use its success role. Do not override those colors per slide.
+- Keep illustrative examples labeled until paper-grounded wording and evidence replace them.
+
 ## Grid navigation without losing the audience
 
 Quarto warns that audiences often miss vertical slides. Sinew mitigates, but does not eliminate, that risk.

@@ -75,10 +75,178 @@
     });
   }
 
+  function labelResearchStatements() {
+    [
+      [".research-questions", "Q"],
+      [".research-hypotheses", "H"]
+    ].forEach(function (definition) {
+      document.querySelectorAll(definition[0]).forEach(function (list) {
+        Array.from(list.children).filter(function (item) {
+          return item.matches("li");
+        }).forEach(function (item, index) {
+          var identifier = definition[1] + (index + 1);
+          item.dataset.sinewStatementId = identifier;
+          item.setAttribute("aria-label", identifier + ": " + item.textContent.trim());
+        });
+      });
+    });
+  }
+
+  function stripInspectorMetadata(node) {
+    if (!(node instanceof Element)) return node;
+
+    node.classList.remove("sinew-expandable");
+    node.removeAttribute("data-sinew-expandable");
+    node.querySelectorAll(".sinew-expand-control, .code-copy-button").forEach(function (control) {
+      control.remove();
+    });
+    [node].concat(Array.from(node.querySelectorAll("[id]"))).forEach(function (element) {
+      element.removeAttribute("id");
+    });
+    return node;
+  }
+
+  function evidenceIdentifier(scope, fallback) {
+    var identifier = scope.querySelector(".sinew-caption-identifier");
+    return identifier ? identifier.textContent.trim() : fallback;
+  }
+
+  function buildEvidenceInspector() {
+    var reveal = document.querySelector(".reveal");
+    var slides = reveal ? reveal.querySelector(".slides") : null;
+    if (!reveal || !slides || typeof HTMLDialogElement === "undefined") return;
+
+    var dialog = document.createElement("dialog");
+    dialog.id = "sinew-evidence-inspector";
+    dialog.className = "sinew-fullscreen-dialog";
+    dialog.setAttribute("aria-labelledby", "sinew-fullscreen-title");
+    dialog.innerHTML = [
+      '<div class="sinew-fullscreen-shell">',
+      '  <div class="sinew-fullscreen-header">',
+      '    <p class="sinew-fullscreen-title" id="sinew-fullscreen-title"></p>',
+      '    <button class="sinew-fullscreen-close" type="button">Close</button>',
+      '  </div>',
+      '  <div class="sinew-fullscreen-content"></div>',
+      '</div>'
+    ].join("");
+    reveal.appendChild(dialog);
+
+    var title = dialog.querySelector(".sinew-fullscreen-title");
+    var content = dialog.querySelector(".sinew-fullscreen-content");
+    var closeButton = dialog.querySelector(".sinew-fullscreen-close");
+    var returnFocus = null;
+
+    function closeInspector() {
+      if (dialog.open) dialog.close();
+    }
+
+    function openInspector(label, clone, opener) {
+      title.textContent = label;
+      content.replaceChildren(stripInspectorMetadata(clone));
+      returnFocus = opener;
+      dialog.showModal();
+      closeButton.focus();
+    }
+
+    closeButton.addEventListener("click", closeInspector);
+    dialog.addEventListener("cancel", function (event) {
+      event.preventDefault();
+      closeInspector();
+    });
+    dialog.addEventListener("click", function (event) {
+      if (event.target === dialog) closeInspector();
+    });
+    dialog.addEventListener("keydown", function (event) {
+      event.stopPropagation();
+    });
+    dialog.addEventListener("close", function () {
+      content.replaceChildren();
+      if (returnFocus && typeof returnFocus.focus === "function") returnFocus.focus();
+      returnFocus = null;
+    });
+
+    function registerExpandable(target, kind, cloneFactory, explicitLabel, controlHost) {
+      if (!target || target.dataset.sinewExpandable === "true") return;
+
+      var identifier = explicitLabel || evidenceIdentifier(target, kind);
+      var accessibleLabel = "Open " + identifier + " fullscreen";
+      var control = document.createElement("button");
+      control.type = "button";
+      control.className = "sinew-expand-control";
+      control.textContent = "Expand";
+      control.setAttribute("aria-label", accessibleLabel);
+      control.setAttribute("aria-haspopup", "dialog");
+      control.setAttribute("aria-controls", dialog.id);
+
+      target.dataset.sinewExpandable = "true";
+      target.classList.add("sinew-expandable");
+      if (controlHost && controlHost !== target) {
+        control.classList.add("sinew-expand-control-inline");
+        controlHost.appendChild(control);
+      } else {
+        target.appendChild(control);
+      }
+
+      function activate() {
+        openInspector(identifier, cloneFactory(), control);
+      }
+
+      control.addEventListener("click", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        activate();
+      });
+      control.addEventListener("keydown", function (event) {
+        if (event.key !== "Enter" && event.key !== " ") return;
+        event.preventDefault();
+        event.stopPropagation();
+        activate();
+      });
+      target.addEventListener("click", function (event) {
+        if (event.defaultPrevented || event.target.closest("a, button, video, audio")) return;
+        activate();
+      });
+    }
+
+    slides.querySelectorAll("section.slide figure").forEach(function (figure) {
+      if (figure.querySelector("table")) return;
+      registerExpandable(figure, "figure", function () {
+        return figure.cloneNode(true);
+      }, null, figure.querySelector("figcaption"));
+    });
+
+    slides.querySelectorAll("section.slide table").forEach(function (table) {
+      var target = table.closest(".structured-results") || table.closest(".quarto-float") || table.parentElement;
+      var tableCaption = target.querySelector("figcaption") || target.querySelector("caption");
+      registerExpandable(target, "table", function () {
+        return target.cloneNode(true);
+      }, null, tableCaption);
+    });
+
+    slides.querySelectorAll("section.slide .algorithm-caption").forEach(function (caption) {
+      var code = caption.previousElementSibling;
+      while (code && !code.matches(".sourceCode, .code-copy-outer-scaffold, pre")) {
+        code = code.previousElementSibling;
+      }
+      if (!code) return;
+
+      var label = evidenceIdentifier(caption, "algorithm");
+      registerExpandable(code, "algorithm", function () {
+        var algorithm = document.createElement("div");
+        algorithm.className = "sinew-fullscreen-algorithm";
+        algorithm.appendChild(code.cloneNode(true));
+        algorithm.appendChild(caption.cloneNode(true));
+        return algorithm;
+      }, label, caption);
+    });
+  }
+
   function enhanceDeck() {
     boldFloatIdentifiers();
     numberAlgorithmCaptions();
     buildStyleBibliographies();
+    labelResearchStatements();
+    buildEvidenceInspector();
   }
 
   if (document.readyState === "loading") {

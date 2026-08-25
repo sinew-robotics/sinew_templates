@@ -30,6 +30,8 @@ WAI's [complex-image tutorial](https://www.w3.org/WAI/tutorials/images/complex/)
 - Do not skip heading levels to make text smaller.
 - Use semantic Markdown tables with captions and headers.
 - Use real lists, figures, captions, and links rather than screenshots of text.
+- Use the semantic research-question and research-hypothesis lists so Q1-Q9/H1-H9 remain textual as well as colored; the primary highlight also uses weight and rules.
+- Keep the native semantics of figures and tables. Use the separate `Expand` button for keyboard access to fullscreen inspection rather than turning the evidence object itself into a button role.
 
 ### Typography and language
 
@@ -82,5 +84,6 @@ Manual review still checks:
 - whether speaker narration covers visual-only information;
 - whether PDF/video exports retain tags, fonts, captions, and legibility;
 - whether animations/media can be paused where required.
+- whether every evidence inspector opens with pointer and keyboard, retains the active profile, traps Reveal navigation, closes with Escape/Close, and restores focus.
 
 An automated "pass" is not evidence of statistical honesty, accessible chart semantics, or a comprehensible talk.

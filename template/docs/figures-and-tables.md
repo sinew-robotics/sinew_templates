@@ -147,6 +147,10 @@ Use semantic Markdown/HTML, not an image. Sinew uses an academic booktabs-like t
 
 Sinew renders the automatic `Figure N` and `Table N` identifier in bold while leaving the descriptive caption at normal weight. Do not type the identifier manually. Put a visible `.algorithm-caption` directly beneath procedural code and inside the same column or container. Start it with `**Algorithm.**`; Sinew renders that source label as a globally numbered, bold `Algorithm N` identifier. State scope, inputs/outputs, and evidence status or provenance. Procedural shell blocks need the same treatment.
 
+Every rendered figure, table, and captioned algorithm receives an `Expand` control. Pointer activation on the evidence object or keyboard activation on the control opens a viewport-filling, profile-aware dialog. Escape, backdrop activation, or `Close` dismisses it and returns focus to the originating control. The expanded view clones the rendered evidence and caption, removes duplicate IDs and code-copy controls, and does not alter the source object.
+
+The inspector is a legibility aid, not an overflow strategy. The original projected object must still fit its slide without scrollbars. Test each evidence type with pointer, Tab, Enter/Space, Escape, and the close button; confirm that Reveal navigation does not move while the dialog is open and that the active color profile remains intact.
+
 A strong caption includes:
 
 1. content/metric;

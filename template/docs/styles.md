@@ -25,6 +25,10 @@ It also sets explicit sans-serif and monospace stacks for Reveal headings/body/c
 
 Core layout and components live in `_extensions/sinew/theme/core.scss`. Styles should not target sample-slide IDs or change the meaning/order of content.
 
+The research-framing identity is part of that stable component layer. `.research-questions` uses `--sinew-accent`; `.research-hypotheses` uses `--sinew-success`; the Q/H identifier, item border, title rule, and optional `.is-highlighted` treatment inherit automatically in every profile. A profile must keep both semantic colors readable on its panel surfaces and must not replace the Q/H labels with color-only meaning.
+
+The evidence inspector is also profile-neutral core UI. Its controls, fullscreen surface, rules, text, and focus state inherit the active profile tokens. Style-specific rules may refine geometry or depth, but must preserve the visible `Expand` control, keyboard focus, viewport fit, and dialog contrast.
+
 Every adapted style record must state the inspected source route or URL, inspection date, owner/license when known, extracted visual roles, deliberate projection/accessibility changes, font fallback policy, and any mismatch between deck CSS and the Matplotlib overlay. A source reference is provenance, not permission to redistribute protected assets.
 
 ## Origami

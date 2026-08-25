@@ -34,17 +34,17 @@ Profiles own palette, typography, surfaces, syntax highlighting, and plot tokens
 ## 4. Add a complete index column
 
 - [ ] Copy one complete numbered folder under `_slides/` to the next available folder, such as `11-<slug>/`.
-- [ ] Keep `_00-section.qmd` through `_09-references.qmd`; update every title and `data-style-preview` value.
+- [ ] Keep the complete 11-slide file set from `_00-section.qmd` through `_09-references.qmd`, including `_03-research.qmd` as well as `_03-algorithm.qmd`; update every title and `data-style-preview` value.
 - [ ] Give the table a unique `#tbl-gallery-<slug>` identifier.
 - [ ] Give the local references slide the stable target `#references-<slug>`.
 - [ ] Add a unique bibliography key such as `sinew<StyleName><Year>` to `references.bib`, linking to the public profile source.
 - [ ] Cite that key in `_08-citations.qmd` and set it as `data-style-key` in `_09-references.qmd`.
-- [ ] Append all ten includes to `deck.qmd` in the intended horizontal order.
+- [ ] Append all eleven includes to `deck.qmd` in the intended horizontal order.
 - [ ] Add the slug to `styles/gallery/columns.html`.
 - [ ] Mirror every profile token and font stack in `styles/gallery/columns.css` so runtime preview matches standalone rendering.
 - [ ] Add any restrained style-specific gallery component rules needed for geometry or depth.
 
-The column must keep the same guidance -> problem -> algorithm -> plot -> table -> conclusion -> generation -> citations -> references sequence. Do not add gallery-comparison narration to individual slides.
+The column must keep the same guidance -> problem -> research framing -> algorithm -> plot -> table -> conclusion -> generation -> citations -> references sequence. Do not add gallery-comparison narration to individual slides.
 
 ## 5. Register validation and documentation
 
@@ -63,16 +63,16 @@ These are acceptance notes from regressions found while developing the existing 
 ### Style and content boundaries
 
 - [ ] Keep the profile event-neutral. Do not add conference profiles, conference names, venue colors, logos, timing, or upload rules to the visual-style axis.
-- [ ] Preserve the complete repeated story in every column: divider, guidance, problem, algorithm, plot, table, conclusion, generation, citations, and references.
+- [ ] Preserve the complete repeated story in every column: divider, guidance, problem, research framing, algorithm, plot, table, conclusion, generation, citations, and references.
 - [ ] Keep the evidence content and slide order structurally equivalent across styles; only the visual treatment and style-specific source citation change.
 - [ ] Remove gallery-comparison meta-copy such as "identical pseudocode," "identical data," "same claim," "shared story," "appearance only," or similar notes from visible slides.
-- [ ] Keep one algorithm, one style-specific plot, one structured table, and one local citation/reference example in every column.
+- [ ] Keep one Q1-Q9 question list, one H1-H9 hypothesis list, one algorithm, one style-specific plot, one structured table, and one local citation/reference example in every column.
 
 ### Keyboard characters, spacing, and overflow
 
 - [ ] Use only printable ASCII from a standard US keyboard in slide source and visible text. Do not paste Unicode arrows, bullets, multiplication signs, smart quotes, dashes, daggers, or math glyphs.
 - [ ] Put mathematical notation inside dollar delimiters with ASCII LaTeX commands. Metric directions use `$\uparrow$` and `$\downarrow$`, never Unicode arrow characters.
-- [ ] Keep visible vertical gaps between adjacent content groups, especially on the copied problem, algorithm/evidence, and generation slides (`_02`, `_03`, and `_07`).
+- [ ] Keep visible vertical gaps between adjacent content groups, especially on the copied problem, research framing, algorithm/evidence, and generation slides (`_02`, both `_03` slides, and `_07`).
 - [ ] Make the final checklist/highlight block contain every bullet completely; preserve its padding, wrapping, and width.
 - [ ] Keep code, `pre`, syntax wrappers, and copy-button wrappers free of horizontal and vertical scrollbars. Wrap short code and split long examples instead of scrolling or shrinking.
 
@@ -105,6 +105,21 @@ These are acceptance notes from regressions found while developing the existing 
 - [ ] Start the caption with `**Algorithm.**`; the runtime must produce a bold, sequential `Algorithm N` label.
 - [ ] Number and caption the generation command block on `_07-generate.qmd` as an algorithm too.
 - [ ] Confirm both procedural blocks fit without scrollbars and that their captions stay attached at all checked viewports.
+
+### Research questions and hypotheses
+
+- [ ] Preserve `<ol class="research-questions">` and `<ol class="research-hypotheses">`; CSS counters must render Q1-Q9 and H1-H9 without identifiers typed into item text.
+- [ ] Keep each list to one through nine items. Split longer sets across explicit slides rather than producing Q10/H10 or shrinking the slide.
+- [ ] Use `.is-highlighted` on at most one primary question and one primary hypothesis. Keep its thicker rule, weight, and inset line so emphasis is not color-only.
+- [ ] Let questions inherit the profile accent and hypotheses inherit the profile success color. Do not add slide-local color overrides.
+- [ ] Map every question/hypothesis to evidence or visibly mark it unresolved, and keep illustrative gallery wording labeled as a placeholder.
+
+### Fullscreen evidence inspection
+
+- [ ] Preserve the runtime `Expand` control on every figure, table, and captioned algorithm; do not hide or overlap it with content or Quarto's code-copy control.
+- [ ] Test object click and keyboard activation, then Escape, backdrop, and `Close` dismissal with focus return.
+- [ ] Confirm the dialog inherits the active profile, prevents Reveal navigation while open, removes duplicate IDs/copy controls from clones, and fits without scrollbars.
+- [ ] Keep the original evidence legible on its slide; fullscreen inspection is not a workaround for overflow.
 
 ### Citations and references
 
@@ -150,6 +165,7 @@ scripts/check-render.sh _site/index.html gallery
 - [ ] Hover and keyboard-focus citations; confirm the hover card follows the style.
 - [ ] Activate citations; confirm they open the local references slide.
 - [ ] Verify figures, tables, algorithms, code, and references have no clipping or scrollbars.
+- [ ] Activate the fullscreen inspector for a figure, table, and both algorithm types in the new profile.
 - [ ] Test with the network disabled and with reduced motion enabled.
 - [ ] Confirm `git diff --check` and inspect the final diff for generated or private files.
 
