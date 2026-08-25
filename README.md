@@ -2,11 +2,13 @@
 
 [![Build and deploy gallery](https://github.com/sinew-robotics/sinew_templates/actions/workflows/pages.yml/badge.svg)](https://github.com/sinew-robotics/sinew_templates/actions/workflows/pages.yml)
 
-An academic Quarto/Reveal.js presentation starter for robotics and machine-learning research. Sinew uses one selectable visual-style profile for palette, type, surfaces, syntax highlighting, and plot tokens:
+An academic Quarto/Reveal.js presentation starter for robotics and machine-learning research. Render the zero-config demo with every included style:
 
 ```bash
-quarto render template --profile color-origami
+quarto render template
 ```
+
+No profile selection or source edit is required for the demo. Sinew also provides one selectable visual-style profile for delivery builds, covering palette, type, surfaces, syntax highlighting, and plot tokens.
 
 The [live gallery](https://sinew-robotics.github.io/sinew_templates/) has one introduction column and one column for each of the nine visual styles. Move right between styles and down through the guidance -> problem -> algorithm -> plot -> table -> conclusion -> generation -> citations -> references sequence. Runtime gallery code previews the style represented by each column. A real talk selects exactly one `color-*` profile for the whole deck. Repository builds write `template/_site/index.html`.
 
@@ -36,12 +38,13 @@ The researched venue pages are background delivery guidance only. They do not co
 ## Use this repository now
 
 ```bash
+quarto render template
 quarto preview template
 quarto preview template --profile color-origami
 quarto render template --profile color-high-contrast
 ```
 
-Open `template/_site/index.html`. The starter embeds resources by default, so it works offline unless you add non-embedded media or remote fonts.
+Open `template/_site/index.html`. The first command is the zero-config gallery and includes every registered style column. The starter embeds resources by default, so it works offline unless you add non-embedded media or remote fonts.
 
 Use arrow keys for the two-dimensional narrative:
 
@@ -56,7 +59,10 @@ Quarto warns that vertical slides are unfamiliar and can be skipped. The templat
 
 ```bash
 quarto use template sinew-robotics/sinew_templates/template
+quarto render
 ```
+
+The plain render command produces the complete gallery immediately; do not edit `deck.qmd` or select a profile merely to see the shipped styles.
 
 Quarto accepts a repository subdirectory as the template target. It copies the project scaffold from `template/` and installs its bundled extension into the new presentation root. `deck.qmd` keeps a stable name because project starter files named `template.qmd` are automatically renamed, which would break an explicit render target.
 
@@ -156,7 +162,7 @@ Each plot composes `sinew-slides.mplstyle` with `sinew-<style>.mplstyle`. See [f
 python3 template/scripts/validate.py
 python3 template/scripts/check_contrast.py
 quarto render template --cache-refresh
-template/scripts/check-render.sh template/_site/index.html
+template/scripts/check-render.sh template/_site/index.html gallery
 ```
 
 The validator checks style coverage, included slide ownership/order, heading levels, figure alt text, captions, placeholder disclosures, and absence of `.beads`. The render check verifies the selected style marker and nested Reveal sections in generated HTML.

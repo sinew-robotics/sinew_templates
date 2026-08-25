@@ -216,7 +216,11 @@ After profile/theme/core changes:
 
 ```bash
 template/scripts/render-styles.sh
+quarto render template --cache-refresh
+template/scripts/check-render.sh template/_site/index.html gallery
 ```
+
+The plain gallery render must contain one horizontal column for every `_quarto-color-*.yml` profile without editing source or supplying a profile argument.
 
 Then manually inspect:
 

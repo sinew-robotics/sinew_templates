@@ -9,6 +9,7 @@
 - Added structured result-table conventions: metric-direction arrows, a separated total column, bold best values, and highlighted final proposed-method rows.
 - Added matching Matplotlib overlays, SciencePlots guidance, accessibility checks, agent instructions, and dated event-delivery research.
 - Added a new-style TODO, branch/PR contribution rules, continuous validation, all-style rendering, pull-request demo artifacts, and GitHub Pages deployment for reviewed builds.
+- Added explicit prior-review regression notes and zero-config checks that require plain `quarto render` to include every registered visual profile.
 
 ## 0.2.0  -  2026-08-25
 

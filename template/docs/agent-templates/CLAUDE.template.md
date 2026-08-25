@@ -39,4 +39,4 @@ quarto render --profile color-<style>
 scripts/check-render.sh _site/index.html
 ```
 
-After style/profile/core changes, run `scripts/render-styles.sh` and visually inspect representative outputs offline. Handoff must state the selected visual profile, delivery context verified separately, evidence changes, artifact path, checks/results, source freshness, unresolved risks, and git status.
+After style/profile/core changes, run `scripts/render-styles.sh`, then run `quarto render --cache-refresh` and `scripts/check-render.sh _site/index.html gallery`. The plain render must include every registered style without edits or a profile argument. Visually inspect representative outputs offline. Handoff must state the selected visual profile, delivery context verified separately, evidence changes, artifact path, checks/results, source freshness, unresolved risks, and git status.

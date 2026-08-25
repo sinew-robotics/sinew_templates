@@ -51,12 +51,78 @@ The column must keep the same guidance -> problem -> algorithm -> plot -> table 
 - [ ] Add the slug to `COLORS` and its citation key to `STYLE_CITATION_KEYS` in `scripts/validate.py`.
 - [ ] Add the slug to `STYLES` in `scripts/check_contrast.py`.
 - [ ] Add the slug to `colors` in `scripts/render-styles.sh`.
-- [ ] Add the slug to the gallery preview list in `scripts/check_render.py`.
+- [ ] Run `scripts/check_render.py`; it discovers `_quarto-color-*.yml` files automatically and must find one rendered column per profile.
 - [ ] Add the profile to the style table in the repository `README.md`.
 - [ ] Add a provenance/adaptation section to `docs/styles.md`.
 - [ ] Add an `Unreleased` changelog entry.
 
-## 6. Advance the version
+## 6. Preserve every prior review catch
+
+These are acceptance notes from regressions found while developing the existing profiles. Treat each item as part of the style contract, even if the copied column currently looks correct.
+
+### Style and content boundaries
+
+- [ ] Keep the profile event-neutral. Do not add conference profiles, conference names, venue colors, logos, timing, or upload rules to the visual-style axis.
+- [ ] Preserve the complete repeated story in every column: divider, guidance, problem, algorithm, plot, table, conclusion, generation, citations, and references.
+- [ ] Keep the evidence content and slide order structurally equivalent across styles; only the visual treatment and style-specific source citation change.
+- [ ] Remove gallery-comparison meta-copy such as "identical pseudocode," "identical data," "same claim," "shared story," "appearance only," or similar notes from visible slides.
+- [ ] Keep one algorithm, one style-specific plot, one structured table, and one local citation/reference example in every column.
+
+### Keyboard characters, spacing, and overflow
+
+- [ ] Use only printable ASCII from a standard US keyboard in slide source and visible text. Do not paste Unicode arrows, bullets, multiplication signs, smart quotes, dashes, daggers, or math glyphs.
+- [ ] Put mathematical notation inside dollar delimiters with ASCII LaTeX commands. Metric directions use `$\uparrow$` and `$\downarrow$`, never Unicode arrow characters.
+- [ ] Keep visible vertical gaps between adjacent content groups, especially on the copied problem, algorithm/evidence, and generation slides (`_02`, `_03`, and `_07`).
+- [ ] Make the final checklist/highlight block contain every bullet completely; preserve its padding, wrapping, and width.
+- [ ] Keep code, `pre`, syntax wrappers, and copy-button wrappers free of horizontal and vertical scrollbars. Wrap short code and split long examples instead of scrolling or shrinking.
+
+### Responsive and ultrawide backgrounds
+
+- [ ] Keep section-divider backgrounds full bleed through the Reveal viewport/background layer. Do not size a background only to the centered 16:9 content canvas.
+- [ ] Inspect an ultrawide viewport and confirm both outer edges use the same intended background as the center.
+- [ ] Keep substantive content inside the 1600x900 safe canvas while allowing only decorative backgrounds to extend beyond it.
+- [ ] Check common widescreen and ultrawide layouts for clipped headings, cards, navigation controls, and footers.
+
+### Figures and plots
+
+- [ ] Remember that Reveal CSS does not recolor a static plot. Add and apply the matching Matplotlib overlay, then regenerate the profile-specific SVG.
+- [ ] Match the CSS data-color order, while retaining marker, dash, direct-label, or shape redundancy so color is never the only encoding.
+- [ ] Keep the figure caption below the figure with a bold generated `Figure N` identifier and normal-weight descriptive text.
+- [ ] Verify axes, units, legends, labels, line weights, grayscale separation, transparent surfaces, and projected font size.
+
+### Structured result tables
+
+- [ ] Put `$\uparrow$` or `$\downarrow$` in every reference metric heading according to direction.
+- [ ] Keep `Total` as the final column and separate it with the strong vertical rule.
+- [ ] Bold the best result independently in each metric column.
+- [ ] Put only the final contiguous `Ours:` rows in the `.ours-last-N` highlight block.
+- [ ] Keep baselines such as Behavior Cloning and Diffusion Policy visually identical and unhighlighted; a strong metric value may be bold without highlighting the row.
+- [ ] Keep the caption above the table, with a bold generated `Table N` identifier, and state the arrow, best-value, total-column, and proposed-row conventions.
+
+### Algorithms and procedural code
+
+- [ ] Place the algorithm caption immediately below its code and inside the same code column/container, never beneath an adjacent right-hand block.
+- [ ] Start the caption with `**Algorithm.**`; the runtime must produce a bold, sequential `Algorithm N` label.
+- [ ] Number and caption the generation command block on `_07-generate.qmd` as an algorithm too.
+- [ ] Confirm both procedural blocks fit without scrollbars and that their captions stay attached at all checked viewports.
+
+### Citations and references
+
+- [ ] Give the style its own BibTeX key and stable public profile URL; do not cite a private network route.
+- [ ] Preserve exactly one global `#refs` citeproc source and one generated `.style-references` view per style. Do not hand-copy bibliography prose or duplicate `ref-*` IDs.
+- [ ] Keep references in two columns, keep each entry unsplit, and remove every reference scrollbar. Reduce/split scope instead of shrinking illegibly.
+- [ ] Verify pointer hover and keyboard focus. The Tippy card must inherit the current profile's surface, ink, border, accent, radius, and font stack.
+- [ ] Activate every citation type and confirm it routes to the local `#references-<slug>` slide in the same horizontal column.
+- [ ] Confirm DOI/project links are actionable and open in a new tab with `noopener`.
+
+### Repository and demo integrity
+
+- [ ] Do not commit `_site`, `_build`, `.quarto`, private URLs, machine-specific paths, protected source assets, secrets, or `.beads`.
+- [ ] Run the zero-config `quarto render` and confirm the demo contains exactly one horizontal column for every `_quarto-color-*.yml` profile, with no source edits or profile argument.
+- [ ] Run each standalone color profile as well; the combined demo passing does not prove a delivery profile passes.
+- [ ] Review the pull-request demo artifact before merge, then verify the public Pages build after merge.
+
+## 7. Advance the version
 
 A new visual profile is a user-visible feature, so advance the minor version in `_extensions/sinew/_extension.yml`:
 
@@ -68,17 +134,18 @@ A new visual profile is a user-visible feature, so advance the minor version in 
 - [ ] Keep the `-dev` suffix during review; removing it and creating a tag belong to the later release process.
 - [ ] Mention the proposed version in the pull-request summary.
 
-## 7. Run local quality gates
+## 8. Run local quality gates
 
 ```bash
 python3 scripts/validate.py
 python3 scripts/check_contrast.py
 scripts/render-styles.sh
 quarto render --cache-refresh
-scripts/check-render.sh _site/index.html
+scripts/check-render.sh _site/index.html gallery
 ```
 
 - [ ] Inspect the new standalone style and combined runtime-gallery column.
+- [ ] Confirm plain `quarto render` includes every registered style without edits or a profile argument.
 - [ ] Inspect 16:9, common widescreen, and ultrawide browser windows.
 - [ ] Hover and keyboard-focus citations; confirm the hover card follows the style.
 - [ ] Activate citations; confirm they open the local references slide.
@@ -86,7 +153,7 @@ scripts/check-render.sh _site/index.html
 - [ ] Test with the network disabled and with reduced motion enabled.
 - [ ] Confirm `git diff --check` and inspect the final diff for generated or private files.
 
-## 8. Open and review the pull request
+## 9. Open and review the pull request
 
 - [ ] Push `style/<slug>` and open a pull request into `main`.
 - [ ] Complete `.github/pull_request_template.md` and attach the requested screenshots.

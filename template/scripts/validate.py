@@ -154,6 +154,27 @@ class Validation:
 
     def validate_profiles(self) -> None:
         base = (ROOT / "_quarto.yml").read_text(encoding="utf-8")
+        expected_names = set(COLORS)
+        profile_names = {
+            path.stem.removeprefix("_quarto-color-")
+            for path in ROOT.glob("_quarto-color-*.yml")
+        }
+        self.require(
+            profile_names == expected_names,
+            f"color profile files and registered styles differ: files={sorted(profile_names)} registered={sorted(expected_names)}",
+        )
+        self.require(
+            "default: [gallery, color-origami]" in base,
+            "zero-config rendering must activate the gallery and a base color profile",
+        )
+
+        gallery = (ROOT / "_quarto-gallery.yml").read_text(encoding="utf-8")
+        columns_html = (ROOT / "styles/gallery/columns.html").read_text(encoding="utf-8")
+        columns_css = (ROOT / "styles/gallery/columns.css").read_text(encoding="utf-8")
+        self.require('gallery-mode: "runtime-style-preview"' in gallery, "gallery runtime metadata is missing")
+        self.require("styles/gallery/columns.css" in gallery, "gallery profile does not load column styles")
+        self.require("styles/gallery/columns.html" in gallery, "gallery profile does not load column switching")
+
         for name in COLORS:
             profile_name = f"color-{name}"
             path = ROOT / f"_quarto-{profile_name}.yml"
@@ -165,6 +186,11 @@ class Validation:
                     f"styles/colors/{name}.css" in source,
                     f"{profile_name} does not include its color CSS",
                 )
+            self.require(f'"{name}"' in columns_html, f"gallery switcher does not register {name}")
+            self.require(
+                f'data-sinew-gallery-style="{name}"' in columns_css,
+                f"gallery runtime CSS does not mirror {name}",
+            )
 
     def validate_manifest_and_slides(self) -> None:
         if not DECK.is_file():
@@ -300,6 +326,23 @@ class Validation:
         self.require(len(style_folders) == len(COLORS), "the gallery must contain one column per style")
         for name, folder in zip(COLORS, style_folders):
             self.require(folder.name.endswith(name), f"style column order mismatch for {name}: {folder.name}")
+            expected_slide_names = {f"_{index:02d}-{label}.qmd" for index, label in enumerate((
+                "section",
+                "guidelines",
+                "problem",
+                "algorithm",
+                "plot",
+                "table",
+                "conclusion",
+                "generate",
+                "citations",
+                "references",
+            ))}
+            actual_slide_names = {path.name for path in folder.glob("*.qmd")}
+            self.require(
+                actual_slide_names == expected_slide_names,
+                f"style column must contain the complete 00-09 demo sequence for {name}",
+            )
             algorithm_path = folder / "_03-algorithm.qmd"
             plot_path = folder / "_04-plot.qmd"
             table_path = folder / "_05-table.qmd"

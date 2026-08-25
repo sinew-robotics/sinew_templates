@@ -14,7 +14,7 @@ Changes to visual profiles use a branch and pull request. Do not push a new styl
    git switch -c style/<slug>
    ```
 
-4. Complete every item in the new-style TODO guide, including the gallery column, plot overlay, per-style citation, documentation, and version bump.
+4. Complete every item in the new-style TODO guide, including its prior-review regression catches, gallery column, plot overlay, per-style citation, documentation, zero-config demo check, and version bump.
 5. Run the local quality gates listed in the guide.
 6. Push the branch and open a pull request into `main`. External contributors may use the same branch name in a fork.
 7. Review the downloadable gallery demo produced by CI. Attach representative screenshots to the pull request.

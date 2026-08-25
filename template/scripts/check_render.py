@@ -102,29 +102,33 @@ def main() -> int:
             "profile-aware citation hover styling is absent",
         )
 
-    if len(sys.argv) == 3:
-        color = sys.argv[2]
+    requested_mode = sys.argv[2] if len(sys.argv) == 3 else None
+    if requested_mode and requested_mode != "gallery":
         require(
-            f'--sinew-color-profile: "{color}"' in html,
-            f"expected color marker {color}",
+            f'--sinew-color-profile: "{requested_mode}"' in html,
+            f"expected color marker {requested_mode}",
         )
 
-    if '--sinew-gallery: "runtime"' in html:
+    gallery_runtime = '--sinew-gallery: "runtime"' in html
+    if requested_mode == "gallery":
+        require(gallery_runtime, "zero-config render did not activate the runtime gallery")
+
+    gallery_profile_count = 0
+    if gallery_runtime:
         require(
             "sinewGalleryStyle" in html and 'window.Reveal.on("slidechanged"' in html,
             "runtime gallery style switcher is absent",
         )
-        for preview in (
-            "origami",
-            "paper",
-            "high-contrast",
-            "blueprint",
-            "scholar",
-            "unmasked",
-            "the-give",
-            "the-meeting",
-            "movement",
-        ):
+        profile_names = {
+            profile.stem.removeprefix("_quarto-color-")
+            for profile in ROOT.glob("_quarto-color-*.yml")
+        }
+        gallery_profile_count = len(profile_names)
+        require(
+            len(profile_names) == expected_style_columns,
+            "the zero-config gallery does not contain one column per color profile",
+        )
+        for preview in sorted(profile_names):
             require(
                 f'data-style-preview="{preview}"' in html,
                 f"gallery style column marker is absent: {preview}",
@@ -138,6 +142,8 @@ def main() -> int:
 
     print(f"Render check passed: {path}")
     print(f"  horizontal_stacks={len(level1)} vertical_content_slides={len(level2)}")
+    if gallery_runtime:
+        print(f"  zero_config_gallery_profiles={gallery_profile_count}")
     return 0
 
 

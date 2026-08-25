@@ -92,6 +92,6 @@ quarto render template --profile color-<style>
 template/scripts/check-render.sh template/_site/index.html
 ```
 
-For theme/profile/core changes run `template/scripts/render-styles.sh`. Inspect representative outputs visually and offline. Verify the event's final PDF/video/upload artifact separately.
+For theme/profile/core changes run `template/scripts/render-styles.sh`, then run `quarto render template --cache-refresh` and `template/scripts/check-render.sh template/_site/index.html gallery`. The plain render must include every registered style without source edits or a profile argument. Inspect representative outputs visually and offline. Verify the event's final PDF/video/upload artifact separately.
 
 At handoff, state the chosen visual profile, separately verified delivery context, changed claims/evidence, artifact path, exact checks/results, source freshness, unresolved risks, and git status. Do not commit or push without explicit authority.

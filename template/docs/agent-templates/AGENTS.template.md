@@ -69,4 +69,4 @@ quarto render --profile color-<style>
 scripts/check-render.sh _site/index.html
 ```
 
-For style/profile/core changes run `scripts/render-styles.sh`. Inspect visually, offline, and in the required PDF/video format. Report the selected visual profile, delivery context verified separately, evidence changes, artifact, checks, source freshness, unresolved risks, and git status.
+For style/profile/core changes run `scripts/render-styles.sh`, then run `quarto render --cache-refresh` and `scripts/check-render.sh _site/index.html gallery`. The plain render must include every registered style without source edits or a profile argument. Inspect visually, offline, and in the required PDF/video format. Report the selected visual profile, delivery context verified separately, evidence changes, artifact, checks, source freshness, unresolved risks, and git status.

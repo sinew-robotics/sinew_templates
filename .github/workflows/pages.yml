@@ -39,10 +39,10 @@ jobs:
       - name: Render and verify every standalone style
         run: template/scripts/render-styles.sh
 
-      - name: Build and verify the combined gallery
+      - name: Build and verify the zero-config combined gallery
         run: |
           quarto render template --cache-refresh
-          template/scripts/check-render.sh template/_site/index.html origami
+          template/scripts/check-render.sh template/_site/index.html gallery
 
       - name: Upload pull-request gallery demo
         if: github.event_name == 'pull_request'
