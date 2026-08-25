@@ -3,7 +3,10 @@
 ## Unreleased
 
 - Added required Q1-Q9 research-question and H1-H9 research-hypothesis lists, with an optional non-color-only primary-item highlight and examples in every visual style.
+- Added bare Q/H reference shortcodes, stable algorithm references, and profile-aware hover/focus previews for figure, table, algorithm, question, and hypothesis links.
 - Added a keyboard-accessible fullscreen inspector for every rendered figure, table, and captioned algorithm.
+- Added owner-supplied KAIST and Interactive Robotic Systems Laboratory affiliation marks with a reusable divider-slide lockup.
+- Switched Reveal math rendering from the incompatible MathJax 2 loader to Quarto's KaTeX browser path so dollar-delimited table arrows render reliably.
 
 ## 1.0.0  -  2026-08-25
 

@@ -36,6 +36,7 @@ Profiles own palette, typography, surfaces, syntax highlighting, and plot tokens
 - [ ] Copy one complete numbered folder under `_slides/` to the next available folder, such as `11-<slug>/`.
 - [ ] Keep the complete 11-slide file set from `_00-section.qmd` through `_09-references.qmd`, including `_03-research.qmd` as well as `_03-algorithm.qmd`; update every title and `data-style-preview` value.
 - [ ] Give the table a unique `#tbl-gallery-<slug>` identifier.
+- [ ] Give both algorithm captions stable `#algorithm-gallery-<slug>-method` and `#algorithm-gallery-<slug>-render` identifiers.
 - [ ] Give the local references slide the stable target `#references-<slug>`.
 - [ ] Add a unique bibliography key such as `sinew<StyleName><Year>` to `references.bib`, linking to the public profile source.
 - [ ] Cite that key in `_08-citations.qmd` and set it as `data-style-key` in `_09-references.qmd`.
@@ -67,6 +68,7 @@ These are acceptance notes from regressions found while developing the existing 
 - [ ] Keep the evidence content and slide order structurally equivalent across styles; only the visual treatment and style-specific source citation change.
 - [ ] Remove gallery-comparison meta-copy such as "identical pseudocode," "identical data," "same claim," "shared story," "appearance only," or similar notes from visible slides.
 - [ ] Keep one Q1-Q9 question list, one H1-H9 hypothesis list, one algorithm, one style-specific plot, one structured table, and one local citation/reference example in every column.
+- [ ] Keep the local reference example wired to `@fig-gallery-<slug>`, `@tbl-gallery-<slug>`, `{{< alg algorithm-gallery-<slug>-method >}}`, `{{< q 1 >}}`, and `{{< h 1 >}}`.
 
 ### Keyboard characters, spacing, and overflow
 
@@ -113,6 +115,7 @@ These are acceptance notes from regressions found while developing the existing 
 - [ ] Use `.is-highlighted` on at most one primary question and one primary hypothesis. Keep its thicker rule, weight, and inset line so emphasis is not color-only.
 - [ ] Let questions inherit the profile accent and hypotheses inherit the profile success color. Do not add slide-local color overrides.
 - [ ] Map every question/hypothesis to evidence or visibly mark it unresolved, and keep illustrative gallery wording labeled as a placeholder.
+- [ ] Reference questions and hypotheses only with `{{< q N >}}` and `{{< h N >}}`. Keep the rendered inline labels bare, with no permanent box or pill, and preserve keyboard-visible underline/weight.
 
 ### Fullscreen evidence inspection
 
@@ -127,8 +130,15 @@ These are acceptance notes from regressions found while developing the existing 
 - [ ] Preserve exactly one global `#refs` citeproc source and one generated `.style-references` view per style. Do not hand-copy bibliography prose or duplicate `ref-*` IDs.
 - [ ] Keep references in two columns, keep each entry unsplit, and remove every reference scrollbar. Reduce/split scope instead of shrinking illegibly.
 - [ ] Verify pointer hover and keyboard focus. The Tippy card must inherit the current profile's surface, ink, border, accent, radius, and font stack.
-- [ ] Activate every citation type and confirm it routes to the local `#references-<slug>` slide in the same horizontal column.
+- [ ] Hover/focus the figure, table, method algorithm, Q1, and H1 links; confirm each preview contains the correct original object or statement and inherits the active profile.
+- [ ] Activate bibliography citations and confirm they route to the local `#references-<slug>` slide. Activate internal references and confirm they route to the original figure, table, algorithm, question, or hypothesis in the same column.
 - [ ] Confirm DOI/project links are actionable and open in a new tab with `noopener`.
+
+### Affiliation marks
+
+- [ ] Preserve the `.institution-lockup` on the divider example unless the presentation owner explicitly removes or replaces the affiliations.
+- [ ] Keep logo aspect ratios, informative alt text, neutral backing plate, and recorded authorization/provenance. Do not recolor protected marks to fit a profile.
+- [ ] Confirm both marks remain legible without clipping on light, dark, 16:9, and ultrawide divider backgrounds.
 
 ### Repository and demo integrity
 
@@ -164,6 +174,7 @@ scripts/check-render.sh _site/index.html gallery
 - [ ] Inspect 16:9, common widescreen, and ultrawide browser windows.
 - [ ] Hover and keyboard-focus citations; confirm the hover card follows the style.
 - [ ] Activate citations; confirm they open the local references slide.
+- [ ] Hover/focus and activate the figure, table, algorithm, Q1, and H1 links on the citation slide; confirm previews and original-target routes.
 - [ ] Verify figures, tables, algorithms, code, and references have no clipping or scrollbars.
 - [ ] Activate the fullscreen inspector for a figure, table, and both algorithm types in the new profile.
 - [ ] Test with the network disabled and with reduced motion enabled.

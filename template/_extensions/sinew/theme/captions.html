@@ -85,9 +85,148 @@
           return item.matches("li");
         }).forEach(function (item, index) {
           var identifier = definition[1] + (index + 1);
+          var slide = item.closest("section.slide");
+          var scope = slide && slide.dataset.stylePreview
+            ? slide.dataset.stylePreview
+            : "deck";
           item.dataset.sinewStatementId = identifier;
+          item.dataset.sinewStatementKind = definition[1] === "Q" ? "question" : "hypothesis";
+          if (!item.id) item.id = "research-" + scope + "-" + identifier.toLowerCase();
           item.setAttribute("aria-label", identifier + ": " + item.textContent.trim());
         });
+      });
+    });
+  }
+
+  function referenceStack(element) {
+    var slide = element.closest("section.slide");
+    return slide ? slide.parentElement : null;
+  }
+
+  function findAlgorithmCode(caption) {
+    var code = caption ? caption.previousElementSibling : null;
+    while (code && !code.matches(".sourceCode, .code-copy-outer-scaffold, pre")) {
+      code = code.previousElementSibling;
+    }
+    return code;
+  }
+
+  function resolveSinewReference(reference) {
+    var kind = reference.dataset.sinewReferenceKind;
+    if (kind === "algorithm") {
+      return document.getElementById(reference.dataset.sinewReferenceTarget || "");
+    }
+
+    var number = reference.dataset.sinewReferenceNumber;
+    var identifier = (kind === "question" ? "Q" : "H") + number;
+    var selector = '[data-sinew-statement-id="' + identifier + '"]';
+    var stack = referenceStack(reference);
+    var localTargets = stack ? Array.from(stack.querySelectorAll(selector)) : [];
+    if (localTargets.length === 1) return localTargets[0];
+
+    var globalTargets = Array.from(document.querySelectorAll(selector));
+    return globalTargets.length === 1 ? globalTargets[0] : null;
+  }
+
+  function buildSinewReferencePreview(reference, target) {
+    var kind = reference.dataset.sinewReferenceKind;
+    var preview = document.createElement("div");
+    preview.className = "sinew-reference-preview sinew-reference-preview-" + kind;
+
+    if (kind === "algorithm") {
+      var code = findAlgorithmCode(target);
+      if (code) preview.appendChild(stripInspectorMetadata(code.cloneNode(true)));
+      preview.appendChild(stripInspectorMetadata(target.cloneNode(true)));
+      return preview;
+    }
+
+    var heading = document.createElement("p");
+    heading.className = "sinew-reference-preview-label";
+    heading.textContent = (kind === "question" ? "Research question " : "Research hypothesis ")
+      + target.dataset.sinewStatementId;
+    var statement = document.createElement("p");
+    statement.className = "sinew-reference-preview-statement";
+    statement.textContent = target.textContent.trim();
+    preview.append(heading, statement);
+    return preview;
+  }
+
+  function buildQuartoCrossReferencePreview(target) {
+    var preview = document.createElement("div");
+    preview.className = "sinew-reference-preview sinew-reference-preview-evidence";
+
+    if (target.matches("img") || target.querySelector("figure.quarto-float-fig")) {
+      preview.classList.add("sinew-reference-preview-figure");
+      if (!target.matches("img")) {
+        preview.appendChild(stripInspectorMetadata(target.cloneNode(true)));
+        return preview;
+      }
+      var figure = document.createElement("figure");
+      figure.appendChild(stripInspectorMetadata(target.cloneNode(true)));
+      var caption = target.nextElementSibling;
+      if (caption && caption.matches(".caption, figcaption")) {
+        figure.appendChild(stripInspectorMetadata(caption.cloneNode(true)));
+      }
+      preview.appendChild(figure);
+      return preview;
+    }
+
+    preview.classList.add("sinew-reference-preview-table");
+    preview.appendChild(stripInspectorMetadata(target.cloneNode(true)));
+    return preview;
+  }
+
+  function registerReferencePreview(reference, contentFactory) {
+    if (typeof window.tippy !== "function") return;
+    window.tippy(reference, {
+      allowHTML: true,
+      appendTo: function () {
+        return reference.closest("section.slide") || reference.parentElement;
+      },
+      arrow: false,
+      content: contentFactory,
+      delay: 100,
+      interactive: true,
+      interactiveBorder: 10,
+      maxWidth: 700,
+      offset: [0, 0],
+      placement: "bottom-start",
+      theme: "light-border"
+    });
+  }
+
+  function wireSinewReferences() {
+    document.querySelectorAll("a.sinew-reference").forEach(function (reference) {
+      var target = resolveSinewReference(reference);
+      if (!target || !target.id) {
+        reference.classList.add("is-unresolved");
+        reference.setAttribute("aria-disabled", "true");
+        reference.setAttribute("title", "Unresolved Sinew reference");
+        return;
+      }
+
+      var kind = reference.dataset.sinewReferenceKind;
+      var label = kind === "algorithm"
+        ? evidenceIdentifier(target, "Algorithm")
+        : target.dataset.sinewStatementId;
+      reference.textContent = label;
+      reference.setAttribute("href", "#/" + target.id);
+      reference.setAttribute(
+        "aria-label",
+        "Open " + label + (kind === "algorithm" ? " at its source" : " at its original statement")
+      );
+      registerReferencePreview(reference, function () {
+        return buildSinewReferencePreview(reference, target);
+      });
+    });
+
+    document.querySelectorAll("a.quarto-xref").forEach(function (reference) {
+      var href = reference.getAttribute("href") || "";
+      var targetId = href.replace(/^#\/?/, "");
+      var target = targetId ? document.getElementById(targetId) : null;
+      if (!target) return;
+      registerReferencePreview(reference, function () {
+        return buildQuartoCrossReferencePreview(target);
       });
     });
   }
@@ -224,10 +363,7 @@
     });
 
     slides.querySelectorAll("section.slide .algorithm-caption").forEach(function (caption) {
-      var code = caption.previousElementSibling;
-      while (code && !code.matches(".sourceCode, .code-copy-outer-scaffold, pre")) {
-        code = code.previousElementSibling;
-      }
+      var code = findAlgorithmCode(caption);
       if (!code) return;
 
       var label = evidenceIdentifier(caption, "algorithm");
@@ -247,6 +383,7 @@
     buildStyleBibliographies();
     labelResearchStatements();
     buildEvidenceInspector();
+    wireSinewReferences();
   }
 
   if (document.readyState === "loading") {

@@ -15,7 +15,7 @@ for batch in demonstrations:
 evaluate(policy, held_out_disturbances)
 ```
 
-::: {.algorithm-caption}
+::: {#algorithm-gallery-the-give-method .algorithm-caption}
 **Algorithm.** Illustrative contact-aware training. Inputs are pose, wrench, and action; evaluation uses held-out disturbances. Replace this placeholder with the traced research method.
 :::
 :::

@@ -146,3 +146,7 @@ Copy `styles/colors/paper.css` as the contract reference. A later style may defi
 ## Event branding
 
 Do not add event colors or logos merely because a deck will be presented there. A separate opt-in `color-*` style is acceptable only when official assets and usage rules are cited, use is permitted, trademark constraints are followed, and the author deliberately requests it. Event logistics remain outside the visual-style system.
+
+## Affiliation marks
+
+Affiliation marks are deck content, not color-profile tokens. The starter's `.institution-lockup` uses owner-supplied KAIST and Interactive Robotic Systems Laboratory PNGs on one neutral plate so their original colors survive every profile. Do not recolor protected marks to imitate a theme. Preserve aspect ratio and alt text, record authorization and reuse constraints, and replace or remove the assets when the presentation affiliation changes.

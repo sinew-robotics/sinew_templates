@@ -22,7 +22,9 @@ The self-contained Quarto project lives in `template/`. It contains all `_quarto
 - Nine visual profiles: Origami, paper, high contrast, blueprint, scholar, unmasked, the give, the meeting, and movement.
 - Semantic figure, table, evidence, metric, source, and takeaway styles.
 - Required Q1-Q9 research-question and H1-H9 research-hypothesis lists with a primary-item highlight treatment.
+- Bare `{{< q N >}}` and `{{< h N >}}` hyperlinks that preview and return to the original statement, plus automatic figure, table, and algorithm cross-reference previews.
 - Click or keyboard activation to inspect figures, tables, and captioned algorithms in a profile-aware fullscreen dialog.
+- A reusable divider-slide lockup with owner-supplied KAIST and Interactive Robotic Systems Laboratory marks.
 - Profile-aware citation hover cards, a generated shared bibliography, and local two-column references in every style column.
 - A common projected-figure overlay, one matching Matplotlib overlay per visual style, and a plot generator.
 - Human documentation plus comprehensive `AGENTS.md` and `CLAUDE.md` operating rules.

@@ -120,14 +120,33 @@ class Validation:
         self.require((ROOT / "references.bib").is_file(), "references.bib is missing")
         self.require((ROOT / "_slides/01-intro/_03-citations.qmd").is_file(), "citation example slide is missing")
         self.require((ROOT / "_slides/01-intro/_04-references.qmd").is_file(), "bibliography slide is missing")
+        intro_section = ROOT / "_slides/01-intro/_00-section.qmd"
+        self.require(intro_section.is_file(), "intro divider slide is missing")
+        if intro_section.is_file():
+            intro_source = intro_section.read_text(encoding="utf-8")
+            self.require(
+                'class="institution-lockup"' in intro_source,
+                "intro divider slide lacks the affiliation lockup",
+            )
         self.require(
             (ROOT / "styles/gallery/gallery.css").is_file(),
             "default gallery marker CSS is missing",
         )
         core_theme = ROOT / "_extensions/sinew/theme/core.scss"
         runtime = ROOT / "_extensions/sinew/theme/captions.html"
+        reference_shortcodes = ROOT / "_extensions/sinew/research-references.lua"
         self.require(core_theme.is_file(), "core theme is missing")
         self.require(runtime.is_file(), "post-body runtime is missing")
+        self.require(reference_shortcodes.is_file(), "research reference shortcodes are missing")
+        for logo_name in ("kaist_logo.png", "iris_logo.png"):
+            self.require(
+                (ROOT / f"assets/branding/{logo_name}").is_file(),
+                f"affiliation mark is missing: {logo_name}",
+            )
+        self.require(
+            (ROOT / "assets/branding/README.md").is_file(),
+            "affiliation-mark provenance note is missing",
+        )
         if core_theme.is_file():
             core_source = core_theme.read_text(encoding="utf-8")
             for marker in (
@@ -135,12 +154,22 @@ class Validation:
                 ".research-hypotheses",
                 'content: "Q" counter(sinew-research-question)',
                 'content: "H" counter(sinew-research-hypothesis)',
+                ".sinew-reference",
+                ".institution-lockup",
                 ".sinew-fullscreen-dialog",
             ):
                 self.require(marker in core_source, f"core theme is missing required component: {marker}")
         if runtime.is_file():
             runtime_source = runtime.read_text(encoding="utf-8")
-            for marker in ("labelResearchStatements", "buildEvidenceInspector", "sinew-evidence-inspector", "showModal"):
+            for marker in (
+                "labelResearchStatements",
+                "wireSinewReferences",
+                "registerReferencePreview",
+                "buildQuartoCrossReferencePreview",
+                "buildEvidenceInspector",
+                "sinew-evidence-inspector",
+                "showModal",
+            ):
                 self.require(marker in runtime_source, f"evidence inspector runtime is missing: {marker}")
         legacy_profiles = sorted(ROOT.glob("_quarto-conf-*.yml"))
         self.require(not legacy_profiles, f"conference profiles must not be present: {legacy_profiles}")
@@ -151,6 +180,19 @@ class Validation:
             extension = extension_path.read_text(encoding="utf-8")
             self.require("link-citations: true" in extension, "citation links must be enabled")
             self.require("citations-hover: true" in extension, "citation hover previews must be enabled")
+            self.require(
+                "html-math-method: katex" in extension,
+                "KaTeX is required for reliable dollar-delimited math in Reveal",
+            )
+            self.require(
+                "shortcodes:" in extension and "research-references.lua" in extension,
+                "research reference shortcodes must be contributed by the extension",
+            )
+
+        if reference_shortcodes.is_file():
+            shortcode_source = reference_shortcodes.read_text(encoding="utf-8")
+            for marker in ('["q"]', '["h"]', '["alg"]', "sinew-reference", "algorithm-"):
+                self.require(marker in shortcode_source, f"research reference shortcode is missing: {marker}")
 
         citation_source = (ROOT / "_slides/01-intro/_03-citations.qmd").read_text(encoding="utf-8")
         reference_source = (ROOT / "_slides/01-intro/_04-references.qmd").read_text(encoding="utf-8")
@@ -392,6 +434,7 @@ class Validation:
                 f"style column must contain the complete demo sequence, including research framing, for {name}",
             )
             research_path = folder / "_03-research.qmd"
+            section_path = folder / "_00-section.qmd"
             algorithm_path = folder / "_03-algorithm.qmd"
             plot_path = folder / "_04-plot.qmd"
             table_path = folder / "_05-table.qmd"
@@ -405,6 +448,17 @@ class Validation:
             self.require(generate_path.is_file(), f"generation slide missing for {name}")
             self.require(citation_path.is_file(), f"citation slide missing for {name}")
             self.require(references_path.is_file(), f"local references slide missing for {name}")
+            if section_path.is_file():
+                section_source = section_path.read_text(encoding="utf-8")
+                self.require(
+                    'class="institution-lockup"' in section_source,
+                    f"divider slide lacks the affiliation lockup for {name}",
+                )
+                for logo_name in ("kaist_logo.png", "iris_logo.png"):
+                    self.require(
+                        f"assets/branding/{logo_name}" in section_source,
+                        f"divider slide lacks {logo_name} for {name}",
+                    )
             if research_path.is_file():
                 research_source = research_path.read_text(encoding="utf-8")
                 self.require(
@@ -435,6 +489,10 @@ class Validation:
                     algorithm_source.find(".algorithm-caption") < algorithm_source.find('::: {.column width="30%"}'),
                     f"algorithm caption must stay inside the code column for {name}",
                 )
+                self.require(
+                    f"#algorithm-gallery-{name}-method" in algorithm_source,
+                    f"method algorithm lacks a stable reference target for {name}",
+                )
             if plot_path.is_file():
                 self.require(
                     f"assets/figures/gallery-{name}.svg" in plot_path.read_text(encoding="utf-8"),
@@ -462,6 +520,10 @@ class Validation:
                     "**Algorithm.**" in generate_source,
                     f"generation command caption lacks its bold label for {name}",
                 )
+                self.require(
+                    f"#algorithm-gallery-{name}-render" in generate_source,
+                    f"generation algorithm lacks a stable reference target for {name}",
+                )
             if citation_path.is_file():
                 citation_source = citation_path.read_text(encoding="utf-8")
                 style_key = STYLE_CITATION_KEYS[name]
@@ -472,6 +534,17 @@ class Validation:
                         f"citation slide lacks shared source {shared_key} for {name}",
                     )
                 self.require(".citation-help" in citation_source, f"citation interaction help is missing for {name}")
+                for reference_source in (
+                    f"@fig-gallery-{name}",
+                    f"@tbl-gallery-{name}",
+                    f"{{{{< alg algorithm-gallery-{name}-method >}}}}",
+                    "{{< q 1 >}}",
+                    "{{< h 1 >}}",
+                ):
+                    self.require(
+                        reference_source in citation_source,
+                        f"citation slide lacks internal reference {reference_source} for {name}",
+                    )
             if references_path.is_file():
                 references_source = references_path.read_text(encoding="utf-8")
                 style_key = STYLE_CITATION_KEYS[name]

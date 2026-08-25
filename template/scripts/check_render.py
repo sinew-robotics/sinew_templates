@@ -38,11 +38,14 @@ def main() -> int:
     expected_level1 = sum(Path(include).name == "_00-section.qmd" for include in includes)
     expected_level2 = len(includes) - expected_level1
     expected_style_columns = max(expected_level1 - 1, 0)
+    bibliography_source = (ROOT / "references.bib").read_text(encoding="utf-8")
+    bibliography_keys = set(re.findall(r"^@[A-Za-z]+\{([^,]+),", bibliography_source, re.MULTILINE))
     cited_keys: list[str] = []
     for include in includes:
         source_path = ROOT / include
         if source_path.is_file():
-            cited_keys.extend(re.findall(r"@([A-Za-z0-9_.:+#$/-]+)", source_path.read_text(encoding="utf-8")))
+            source_keys = re.findall(r"@([A-Za-z0-9_.:+#$/-]+)", source_path.read_text(encoding="utf-8"))
+            cited_keys.extend(key for key in source_keys if key in bibliography_keys)
 
     level1 = re.findall(
         r'<section\b[^>]*class="[^"]*\blevel1\b[^"]*\bsection-slide\b[^"]*"[^>]*>',
@@ -85,8 +88,43 @@ def main() -> int:
         len(highlighted_statements) == 2 * expected_style_columns,
         "expected one highlighted question and hypothesis in every style column",
     )
+    require(
+        html.count('class="institution-lockup"') == expected_level1,
+        "expected one affiliation lockup on every divider slide",
+    )
+    require(
+        len(re.findall(r'id="algorithm-gallery-[^"]+-(?:method|render)"', html)) == 2 * expected_style_columns,
+        "expected stable IDs on both algorithms in every style column",
+    )
+    require(
+        len(re.findall(r'<a\b[^>]*class="quarto-xref"', html)) == 2 * expected_style_columns,
+        "expected one figure and one table cross-reference in every style column",
+    )
+    require(
+        len(re.findall(r'<a\b[^>]*\bsinew-algorithm-reference\b', html)) == expected_style_columns,
+        "expected one algorithm reference in every style column",
+    )
+    require(
+        len(re.findall(r'<a\b[^>]*\bsinew-reference-question\b', html)) == expected_style_columns,
+        "expected one Q reference in every style column",
+    )
+    require(
+        len(re.findall(r'<a\b[^>]*\bsinew-reference-hypothesis\b', html)) == expected_style_columns,
+        "expected one H reference in every style column",
+    )
+    require(
+        html.count('class="math inline"') >= 4 * expected_style_columns,
+        "expected dollar-delimited table metric directions",
+    )
+    require(
+        "window.katex" in html and "katex.render" in html,
+        "expected Quarto's KaTeX browser runtime",
+    )
     require("numberAlgorithmCaptions" in html, "automatic algorithm numbering script is absent")
     require("labelResearchStatements" in html, "accessible Q/H identifier script is absent")
+    require("wireSinewReferences" in html, "internal reference routing script is absent")
+    require("buildQuartoCrossReferencePreview" in html, "figure/table reference preview script is absent")
+    require("registerReferencePreview" in html, "profile-aware internal reference preview script is absent")
     require("buildEvidenceInspector" in html, "fullscreen evidence inspector script is absent")
     require('dialog.id = "sinew-evidence-inspector"' in html, "fullscreen evidence dialog is absent")
     citation_links = re.findall(r'<a\b[^>]*\brole="doc-biblioref"', html)
@@ -116,6 +154,10 @@ def main() -> int:
         require(
             '.tippy-box[data-theme~="light-border"]' in core,
             "profile-aware citation hover styling is absent",
+        )
+        require(
+            ".sinew-reference-preview" in core and ".sinew-reference-hypothesis" in core,
+            "profile-aware internal reference styling is absent",
         )
 
     requested_mode = sys.argv[2] if len(sys.argv) == 3 else None

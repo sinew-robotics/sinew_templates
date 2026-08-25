@@ -20,7 +20,9 @@ Describe the academic use case, visual source, and intentional projection/access
 - [ ] Tables highlight only the final `Ours:` rows; baseline rows remain unhighlighted.
 - [ ] Figure, table, and algorithm identifiers are bold and numbered; algorithm captions remain inside their code containers.
 - [ ] Research framing uses generated Q1-Q9 and H1-H9 lists, with no more than one non-color-only primary highlight per list.
+- [ ] The citation slide references its figure, table, algorithm, Q1, and H1; every link previews and navigates to the correct original target without hard-coded numbering.
 - [ ] Figure, table, and algorithm fullscreen inspection works with pointer, keyboard, Escape/Close, focus return, and the active profile.
+- [ ] Affiliation marks retain aspect ratio, alt text, authorization notes, and legibility across the divider backgrounds.
 - [ ] No generated `_site`, private URL, protected asset, or `.beads` content is committed.
 
 ## Evidence

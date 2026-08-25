@@ -3,6 +3,8 @@ author: Ivan Domrachev and contributors
 version: 1.1.0-dev
 quarto-required: ">=1.5.0"
 contributes:
+  shortcodes:
+    - research-references.lua
   formats:
     revealjs:
       theme:
@@ -34,6 +36,6 @@ contributes:
       citations-hover: true
       link-external-newwindow: true
       code-overflow: wrap
-      html-math-method: mathjax
+      html-math-method: katex
       include-after-body:
         - theme/captions.html

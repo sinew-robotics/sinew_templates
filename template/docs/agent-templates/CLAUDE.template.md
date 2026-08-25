@@ -15,10 +15,12 @@ Rename this file to `CLAUDE.md` and follow `AGENTS.md` completely.
 - Never use level-3 or deeper headings inside slides. Pandoc can emit nested section tags that Reveal treats as stacks; use bold labels or semantic containers.
 - Every content title is a supported full-sentence claim with one primary evidence object.
 - Use `<ol class="research-questions">` for Q1-Q9 and `<ol class="research-hypotheses">` for H1-H9. Never type identifiers manually or exceed nine items in one list; use `.is-highlighted` on at most one primary item per list and map each item to evidence or an unresolved result.
+- Use `{{< q N >}}` and `{{< h N >}}` for in-text statement references. Preserve established numbering and verify preview plus navigation to the same-stack or unique deck-wide target.
 - Code must wrap and fit without horizontal or vertical scrollbars.
 - Preserve visible vertical separation between adjacent panels, code blocks, evidence groups, and generation steps.
 - Figures need alt text, caption, units, uncertainty/sample/seeds, non-color encodings, scope, and provenance.
 - Rendered `Figure N` and `Table N` identifiers are bold. Put `.algorithm-caption` directly beneath procedural code and inside its column or container. Begin with `**Algorithm.**`; Sinew renders a globally numbered, bold `Algorithm N` identifier. Caption procedural shell blocks too.
+- Use native `@fig-...`/`@tbl-...` references and stable `#algorithm-...` captions with `{{< alg algorithm-id >}}`; verify automatic labels and profile-aware preview/navigation for figure, table, algorithm, Q, and H links.
 - Preserve and test the fullscreen inspector on every figure, table, and captioned algorithm with pointer, keyboard, Escape/Close, focus return, active-profile inheritance, and Reveal navigation suppression.
 - Structured result tables are semantic and captioned above; use `$\uparrow$`/`$\downarrow$` in metric headings, put `Total` last behind a strong rule, bold the best per metric, and place labeled `Ours:` rows last in a highlighted `.ours-last-N` block. Define the conventions in the caption. Videos disclose domain, speed, and conditions and work offline.
 - Apply accessibility to CSS, figures, media, artifacts, and live narration. Automated checks are insufficient.

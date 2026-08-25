@@ -90,10 +90,12 @@ Core narrative belongs at the first vertical index in each stack. Optional detai
 - Avoid topic labels such as "Results," "Method," and "Ablation" as content titles.
 - Avoid marketing language, hero metrics, all caps, underline, italics-for-emphasis, and color-only emphasis.
 - Present research questions only as `<ol class="research-questions">` and hypotheses only as `<ol class="research-hypotheses">` inside their semantic research blocks. Sinew generates Q1-Q9 and H1-H9; never type identifiers into item text, never exceed nine items in one list, and split longer sets across slides. Use `.is-highlighted` on at most one primary item per list and map every item to evidence or an explicitly unresolved result.
+- Reference those statements only with `{{< q N >}}` and `{{< h N >}}`. Keep one canonical list pair per logical deck when possible; same-stack targets take priority and an out-of-stack reference must have exactly one deck-wide match. Never hand-build Q/H links or silently renumber identifiers already used in prose, notes, or discussion.
 - Use `.kicker` for the role, `.figcap` for visible evidence detail, `.source` for provenance, `.panel`/`.evidence-card` for bounded content, and `ol.takeaways` for the close.
 - Use `.hot` only for a rare warning/error, never as the sole data encoding.
 - Keep caveats on the projected slide when they materially bound the claim; do not bury them only in notes.
 - Put each `.algorithm-caption` directly beneath its procedural code and inside the same column or container. Start the source with `**Algorithm.**`; Sinew converts it to a globally numbered, bold `Algorithm N` identifier at render time. State inputs/outputs or scope and evidence status/provenance. Caption procedural shell blocks the same way.
+- Give every referenced algorithm caption a stable `#algorithm-...` ID and cite it with `{{< alg algorithm-id >}}`. Reference figures and tables with native `@fig-...` and `@tbl-...`; never hard-code rendered object numbers.
 - Put long derivations, full tables, and secondary ablations in vertical backup slides.
 - Code must wrap and fit inside its allocated region without horizontal or vertical scrollbars.
 - Preserve visible vertical separation between adjacent panels, code blocks, evidence groups, and generation steps.
@@ -112,6 +114,8 @@ Every informative figure must have:
 - source/license/permission for reused/adapted visuals.
 
 Every rendered figure, table, and captioned algorithm must retain the Sinew fullscreen inspector. Test pointer activation, the visible `Expand` control with keyboard, Escape/backdrop/Close dismissal, focus return, active-profile inheritance, and suppression of Reveal navigation while open. Fullscreen inspection never excuses overflow on the original slide.
+
+Every in-text figure, table, algorithm, Q, and H reference must retain its profile-aware hover/focus preview and direct hyperlink to the original target. Test pointer, keyboard focus, activation, same-column routing, automatic labels, and unresolved-target handling. Q/H links remain bare labels without permanent boxes.
 
 The rendered `Figure N` identifier is bold; keep the descriptive caption text at normal weight.
 
@@ -200,6 +204,7 @@ The Origami source mapping is documented in `template/docs/styles.md` and `templ
 - Do not edit generated `template/_site/`, `template/_build/`, `template/.quarto/`, or `*_files/` as source.
 - Do not add secrets, private datasets, participant data, or machine-specific absolute paths to public artifacts/docs. The Origami local path is provenance documentation; replace it with a public source when publishing if needed.
 - Do not add remote analytics, tracking, or third-party scripts.
+- Treat affiliation marks as protected assets: add them only with explicit authorization, record provenance/reuse constraints, preserve aspect ratio and alt text, and verify them on every selected profile.
 - Do not add network font imports without explicit approval and offline fallback.
 - Do not commit generated presentations unless the user asks for distributable artifacts.
 - Do not commit or push without explicit authority.

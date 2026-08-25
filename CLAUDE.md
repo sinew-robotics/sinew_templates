@@ -60,6 +60,7 @@ Color profiles own palette, fonts, surfaces, syntax highlighting, and chart toke
 - Required narrative stays at the first vertical index; detail/backups go below.
 - Every content title is a supported full-sentence claim.
 - Use the required semantic research lists: `<ol class="research-questions">` for Q1-Q9 and `<ol class="research-hypotheses">` for H1-H9. Never type Q/H identifiers manually or exceed nine items per list. Use `.is-highlighted` on at most one primary item in each list and connect every item to evidence or an unresolved result.
+- Use `{{< q N >}}` and `{{< h N >}}` for every in-text statement reference. Keep one canonical list pair where possible, preserve established numbering, and verify hover/focus preview plus navigation to the correct local or unique deck-wide target.
 - Code must wrap and fit without horizontal or vertical scrollbars.
 - Preserve visible vertical separation between adjacent panels, code blocks, evidence groups, and generation steps.
 
@@ -68,6 +69,8 @@ Do not introduce filesystem auto-discovery or a custom composition filter unless
 ## Visual evidence contract
 
 Figures need alt text, visible caption, axes/units, statistics/uncertainty, `n`/seeds, scope/status, and source/license. Use color plus markers/dashes/labels. Rendered `Figure N` and `Table N` identifiers are bold while caption prose remains normal weight. Put `.algorithm-caption` directly beneath procedural code and inside the same column or container. Begin it with `**Algorithm.**`; Sinew renders a globally numbered, bold `Algorithm N` identifier. State scope and evidence status, and caption procedural shell blocks too. Tables are semantic, compact, and captioned above. Structured result tables put `$\uparrow$`/`$\downarrow$` in metric headings, `Total` last behind a strong rule, bold the best value per metric, and place the labeled `Ours:` rows last in a highlighted `.ours-last-N` block. Define every convention in the caption. Preserve and test the fullscreen inspector on every figure, table, and captioned algorithm with pointer, keyboard, Escape/Close, focus return, and active-profile styling. Videos disclose domain/speed/conditions, include failures when relevant, and work offline.
+
+Use native `@fig-...` and `@tbl-...` cross-references. Give referenced algorithm captions stable `#algorithm-...` IDs and use `{{< alg algorithm-id >}}`. Verify automatic labels, profile-aware hover/focus previews, direct target navigation, and no hard-coded object numbers.
 
 For Python plots, import SciencePlots and compose `science + no-latex + notebook + bright`, then `template/styles/matplotlib/sinew-slides.mplstyle`, then the matching `template/styles/matplotlib/sinew-<style>.mplstyle`. Do not use publication-sized `ieee` directly for projector slides. Keep plot-generation code/data provenance.
 

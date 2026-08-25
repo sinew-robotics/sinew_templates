@@ -149,6 +149,8 @@ Sinew renders the automatic `Figure N` and `Table N` identifier in bold while le
 
 Every rendered figure, table, and captioned algorithm receives an `Expand` control. Pointer activation on the evidence object or keyboard activation on the control opens a viewport-filling, profile-aware dialog. Escape, backdrop activation, or `Close` dismisses it and returns focus to the originating control. The expanded view clones the rendered evidence and caption, removes duplicate IDs and code-copy controls, and does not alter the source object.
 
+Reference a figure with native Quarto `@fig-...` syntax and a table with `@tbl-...`. Give each `.algorithm-caption` a stable `#algorithm-...` ID and reference it with `{{< alg algorithm-name >}}`. All three render as automatically labeled hyperlinks with profile-aware hover/focus previews of the original object. Activation returns to that object; fullscreen inspection remains a separate action at the source slide. Never hard-code object numbers in prose.
+
 The inspector is a legibility aid, not an overflow strategy. The original projected object must still fit its slide without scrollbars. Test each evidence type with pointer, Tab, Enter/Space, Escape, and the close button; confirm that Reveal navigation does not move while the dialog is open and that the active color profile remains intact.
 
 A strong caption includes:

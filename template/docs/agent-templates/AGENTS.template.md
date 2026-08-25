@@ -37,6 +37,7 @@ Select exactly one `color-*` profile. It owns palette, fonts, surfaces, syntax h
 - Put the required narrative at the first vertical index; optional detail goes below.
 - Every content title is a complete-sentence claim supported by that slide.
 - Use `<ol class="research-questions">` for Q1-Q9 and `<ol class="research-hypotheses">` for H1-H9. Never type the Q/H identifier in item text or exceed nine items per list. Use `.is-highlighted` on at most one primary item per list and map every item to evidence or a visibly unresolved result.
+- Reference statements only with `{{< q N >}}` and `{{< h N >}}`. Prefer one canonical list pair, preserve established numbering, and verify the same-stack or unique deck-wide target, hover/focus preview, and direct navigation.
 - Use one primary evidence object per slide; minimize prose.
 - Put claim-changing caveats on screen, not only in notes.
 - Code must wrap and fit inside its allocated region without horizontal or vertical scrollbars.
@@ -47,6 +48,8 @@ Select exactly one `color-*` profile. It owns palette, fonts, surfaces, syntax h
 Figures require `fig-alt`, a visible caption, axes/units, aggregation/uncertainty, samples/seeds, scope/status, and source/license. Combine color with marker/dash/hatch/direct labels. Prefer SVG for charts and raster for photos/dense sensor data; never use plot screenshots.
 
 Rendered `Figure N` and `Table N` identifiers are bold while caption prose stays normal weight. Put `.algorithm-caption` directly beneath procedural code and inside the same column or container. Begin its source with `**Algorithm.**`; Sinew renders a globally numbered, bold `Algorithm N` identifier. State scope and evidence status, and caption procedural shell blocks too.
+
+Use native `@fig-...` and `@tbl-...` links. Give every referenced algorithm caption a stable `#algorithm-...` ID and cite it with `{{< alg algorithm-id >}}`. Never hard-code object numbers. Test the profile-aware hover/focus preview and activation route for figure, table, algorithm, Q, and H references; Q/H links remain bare labels without permanent boxes.
 
 Preserve the fullscreen inspector on every figure, table, and captioned algorithm. Test object click, keyboard activation of `Expand`, Escape/backdrop/Close dismissal, focus return, active-profile styling, and suppression of Reveal navigation while open. The original object must still fit without scrolling.
 

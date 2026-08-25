@@ -99,6 +99,16 @@ Research questions and research hypotheses use required semantic list classes. D
 - Questions use the selected profile's accent role; hypotheses use its success role. Do not override those colors per slide.
 - Keep illustrative examples labeled until paper-grounded wording and evidence replace them.
 
+Reference a generated identifier in prose with the bundled shortcodes:
+
+```markdown
+The primary evaluation answers {{< q 1 >}} and tests {{< h 1 >}}.
+```
+
+The rendered `Q1` and `H1` are bare, emphasized text links rather than badges or boxed chips. Pointer hover and keyboard focus open a profile-aware preview containing the original statement; activation follows a hyperlink to that statement. Never type a manual `Q1`/`H1` link or hand-build its HTML. Shortcodes accept only integers 1 through 9, so `{{< q 10 >}}` and `{{< h primary >}}` fail at render time.
+
+Keep one canonical question list and one canonical hypothesis list per logical deck whenever possible. Resolution prefers a matching statement in the reference's current horizontal stack, which lets the style gallery repeat Q1/H1 independently. If there is no local target, Sinew resolves only one unique deck-wide match. Multiple out-of-stack Q1 or H1 targets are ambiguous and remain visibly unresolved. Once colleagues or speaker notes refer to an identifier, append or deliberately migrate items instead of silently renumbering them.
+
 ## Grid navigation without losing the audience
 
 Quarto warns that audiences often miss vertical slides. Sinew mitigates, but does not eliminate, that risk.
@@ -145,6 +155,27 @@ Keep exactly one `::: {#refs}` target in `.global-references-slide`; it is the s
 Every global or local references view uses two columns without splitting an entry. Do not manually add `.smaller` or `.scrollable`; the theme overrides Quarto's automatic helpers so references remain fixed to the slide canvas. If a scoped view no longer fits legibly, reduce its key set, split the scope across additional explicit slides, or move the complete list to a handout instead of shrinking or scrolling it.
 
 Only cited items appear by default. Use the documented Pandoc `nocite` metadata deliberately when the deck must list an uncited resource. Put a visible short source on the same slide as reused figures, video, datasets, or borrowed claims; a hover preview does not replace projected attribution. Confirm license/permission because citation is not reuse permission.
+
+Internal cross-references are distinct from scholarly citations. Use stable object labels and automatic references:
+
+```markdown
+The evidence chain uses @fig-contact, @tbl-ablation,
+{{< alg algorithm-contact-training >}}, {{< q 1 >}}, and {{< h 1 >}}.
+```
+
+- Figures use `#fig-...` and tables use `#tbl-...`; cite them with native Quarto `@fig-...` and `@tbl-...` syntax.
+- Captioned algorithms put a stable `#algorithm-...` ID on `.algorithm-caption`, for example `::: {#algorithm-contact-training .algorithm-caption}`, then cite it with `{{< alg algorithm-contact-training >}}`. Do not use Quarto's theorem-style `#alg-...` block for this caption-below-code component.
+- Questions and hypotheses use `{{< q N >}}` and `{{< h N >}}`; do not manually write linked labels.
+- Hover or focus previews the original figure, table, algorithm, question, or hypothesis in the active profile. Activation navigates to the original target. From there, figures, tables, and algorithms can still be opened in the fullscreen inspector.
+- Never hard-code rendered numbers such as `Figure 2`, `Table 3`, or `Algorithm 4`; numbering can change when slides move.
+
+Treat a source citation and an internal reference according to their different jobs: a bibliography citation identifies outside evidence and permissions provenance, while an internal reference points to a claim or object already in this deck. Many slides legitimately need both.
+
+## Affiliation marks
+
+The starter demonstrates KAIST and Interactive Robotic Systems Laboratory affiliation marks on divider slides. The owner supplied the PNGs under `assets/branding/`; their provenance and reuse caveat are recorded in `assets/branding/README.md`. The `.institution-lockup` component preserves the original artwork on a neutral plate so dark and light profiles do not recolor or obscure it.
+
+Replace or remove these marks when the author affiliation changes. Confirm current institutional identity and trademark rules before public delivery, keep informative `alt` text, do not distort or recolor the files, and inspect the lockup on both ordinary widescreen and ultrawide displays.
 
 ## Computation
 
