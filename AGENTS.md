@@ -258,6 +258,7 @@ python3 template/scripts/validate.py
 python3 template/scripts/check_contrast.py
 quarto render template --profile color-origami
 template/scripts/check-render.sh template/_site/index.html
+python3 template/scripts/check_overflow.py template/_site/index.html
 ```
 
 After profile/theme/core changes:
@@ -266,6 +267,7 @@ After profile/theme/core changes:
 template/scripts/render-styles.sh
 quarto render template --cache-refresh
 template/scripts/check-render.sh template/_site/index.html gallery
+python3 template/scripts/check_overflow.py template/_site/index.html
 ```
 
 The plain gallery render must contain one horizontal column for every `_quarto-color-*.yml` profile without editing source or supplying a profile argument.

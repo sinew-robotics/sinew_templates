@@ -44,6 +44,9 @@ jobs:
           quarto render template --cache-refresh
           template/scripts/check-render.sh template/_site/index.html gallery
 
+      - name: Check that no slide overflows its frame
+        run: python3 template/scripts/check_overflow.py template/_site/index.html
+
       - name: Upload pull-request gallery demo
         if: github.event_name == 'pull_request'
         uses: actions/upload-artifact@v4
