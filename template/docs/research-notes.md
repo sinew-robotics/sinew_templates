@@ -1,6 +1,6 @@
 # Research record
 
-Last researched: **2026-08-25** (Asia/Seoul).
+Last researched: **2026-08-25** (Asia/Seoul); the CSL and Reveal-source entries below were added and inspected on 2026-08-30. The event-delivery pages under "Event delivery evidence" were not re-checked on 2026-08-30 and keep their original 2026-08-25 verification.
 
 This file is the evidence record behind the template. Labels have precise meanings:
 
@@ -22,6 +22,8 @@ Primary documentation reviewed:
 - [Figures](https://quarto.org/docs/authoring/figures-and-layout.html): `fig-alt`, captions, sizing, and figure layout.
 - [Cross-references](https://quarto.org/docs/authoring/cross-references.html): stable `#fig-...` and `#tbl-...` targets render automatic labels and hyperlinks; Quarto also reserves `#alg-...` for theorem-style algorithm blocks.
 - [Shortcode extensions](https://quarto.org/docs/extensions/shortcodes.html): an extension contributes Lua shortcodes from `_extension.yml`, and each shortcode returns Pandoc AST nodes.
+- `document-slides.yml` schema (`/opt/quarto/share/schema/document-slides.yml` in a local Quarto 1.9.38 install): documents `slide-number: c` as "Flattened slide number" and `h.v` as "Horizontal . vertical slide number", confirming the meaning of both settings independent of observed behavior.
+- Reveal's own source, `reveal/dist/reveal.esm.js` (vendored per-render under `deck_files/libs/revealjs/dist/`; inspected 2026-08-30 at `/opt/quarto/share/formats/revealjs/reveal/dist/reveal.esm.js` in the same local Quarto 1.9.38 install): traced directly, not inferred from behavior alone, to confirm what `navigation-mode` and `slide-number: c` actually do -- the `next()`/`right()`/`left()` depth-first and row-preservation logic, the keyboard handler's `linear`-vs-`default` branch for Up/Down, and the PDF exporter's separate flat auto-increment counter that ignores the configured `slideNumber` format. Findings, measured slide sequences, and the exact quoted lines are recorded in `docs/architecture.md`, "Slide numbering" -- that section is the primary write-up; this entry records that the underlying vendor source was actually opened and read, not assumed from Quarto's own documentation.
 
 Architecture decisions derived from those sources:
 
@@ -102,6 +104,19 @@ Four visual profiles were adapted from design-source system pages inspected on 2
 The movement source slug is `motion`; the Sinew-facing name remains `movement`. The available source material did not provide a canonical public URL, owner, or license. Those gaps must be resolved before claiming endorsement or redistribution permission.
 
 All four adaptations replace remote font dependencies with explicit offline fallbacks, strengthen small text/rules for projection, retain non-color series encodings, and map source colors into the full Sinew semantic token contract. Matching Matplotlib overlays reproduce surface, ink, grid, legend, and data-cycle roles using dependable installed fonts. Detailed per-style changes and known typography differences are recorded in [visual styles](styles.md).
+
+## Citation style (CSL)
+
+Both bundled CSL files (`styles/citations/ieee.csl`, the project default, and
+`styles/citations/chicago-author-date.csl`, the documented author-year
+alternative) were verified against their upstream source, license, and
+vendoring date before being committed. Full provenance -- upstream commit,
+`<info>`-block author of record, the CC BY-SA 3.0 license declared both in
+each file's own `<rights>` element and in the upstream repository's README,
+and the inspection/vendoring date -- is recorded once, in
+[citations.md](citations.md), "CSL provenance", rather than duplicated here.
+That record exists and both files' licenses were confirmed compatible with
+redistribution in this repository before vendoring.
 
 ## Scientific visualization and accessibility
 

@@ -28,7 +28,26 @@ def main() -> int:
         if not condition:
             errors.append(message)
 
-    require('navigationMode: "grid"' in html or "navigationMode: 'grid'" in html, "Reveal grid navigation is absent")
+    # Navigation mode is deliberately different between the two renders (see
+    # docs/architecture.md and _quarto-gallery.yml): the gallery keeps `grid`
+    # so left/right preserves the current vertical row and lands on "the
+    # same slide type" in the next style column, while every delivery deck
+    # uses `default` so a forward Space walk visits every slide (the bug a
+    # stuck-on-`grid` delivery render caused before v1.2.0). Detected from
+    # the rendered artifact itself (the `--sinew-gallery: "runtime"` marker
+    # written by _quarto-gallery.yml), not from the optional COLOR argument
+    # below: the argument is only the caller's stated intent, and a render
+    # that silently came out in the wrong mode despite the caller's intent
+    # is exactly the regression this check exists to catch. Assert both
+    # directions, not "either is fine" -- a delivery deck that silently
+    # rendered with grid must still fail this gate.
+    gallery_runtime = '--sinew-gallery: "runtime"' in html
+    grid_present = 'navigationMode: "grid"' in html or "navigationMode: 'grid'" in html
+    default_present = 'navigationMode: "default"' in html or "navigationMode: 'default'" in html
+    if gallery_runtime:
+        require(grid_present, "Reveal grid navigation is absent from the gallery render")
+    else:
+        require(default_present, "Reveal default (depth-first) navigation is absent from the delivery render")
     require("--sinew-color-profile:" in html, "color profile marker is absent")
     require("{{< include" not in html, "an include shortcode was not resolved")
     require("openai" not in html.lower(), "unexpected injected provider text found")
@@ -139,7 +158,16 @@ def main() -> int:
         html.count('class="csl-entry"') == len(set(cited_keys)),
         f"expected {len(set(cited_keys))} unique bibliography entries",
     )
-    require('class="references csl-bib-body hanging-indent"' in html, "citeproc bibliography is absent")
+    # Pandoc only adds "hanging-indent" for CSL styles that use a hanging
+    # first line (author-date defaults). Sinew's default numeric IEEE style
+    # instead prefixes each entry with a "[N]" csl-left-margin div and does
+    # not carry that class, so accept either citeproc wrapper form; see
+    # docs/citations.md.
+    require(
+        'class="references csl-bib-body hanging-indent"' in html
+        or 'class="references csl-bib-body"' in html,
+        "citeproc bibliography is absent",
+    )
     require("references-slide" in html, "styled references slide is absent")
     require(
         html.count('class="style-references"') == expected_style_columns,
@@ -174,7 +202,6 @@ def main() -> int:
             f"expected color marker {requested_mode}",
         )
 
-    gallery_runtime = '--sinew-gallery: "runtime"' in html
     if requested_mode == "gallery":
         require(gallery_runtime, "zero-config render did not activate the runtime gallery")
 

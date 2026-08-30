@@ -2,7 +2,7 @@
 
 <span class="kicker">References</span>
 
-::: {.style-references data-style-key="sinewUnmasked2026" data-reference-keys="sinewUnmasked2026 alley2013 scienceplots2021 wcag2023"}
+::: {.style-references data-style-key="sinewUnmasked2026" data-reference-keys="alley2013 scienceplots2021 wcag2023 sinewUnmasked2026"}
 :::
 
 <span class="source">Entries are generated from references.bib. DOI and project links open in a new tab.</span>

@@ -34,18 +34,19 @@ Profiles own palette, typography, surfaces, syntax highlighting, and plot tokens
 ## 4. Add a complete index column
 
 - [ ] Copy one complete numbered folder under `_slides/` to the next available folder, such as `11-<slug>/`.
-- [ ] Keep the complete 11-slide file set from `_00-section.qmd` through `_09-references.qmd`, including `_03-research.qmd` as well as `_03-algorithm.qmd`; update every title and `data-style-preview` value.
+- [ ] Keep the complete 14-slide file set: `_00-section.qmd`, `_01-guidelines.qmd`, `_02-problem.qmd`, `_03-research.qmd`, `_03-algorithm.qmd`, `_04-plot.qmd`, `_05-table.qmd`, `_05a-media.qmd`, `_05b-placeholder.qmd`, `_05c-layout.qmd`, `_06-conclusion.qmd`, `_07-generate.qmd`, `_08-citations.qmd`, and `_09-references.qmd`; update every title and `data-style-preview` value.
 - [ ] Give the table a unique `#tbl-gallery-<slug>` identifier.
 - [ ] Give both algorithm captions stable `#algorithm-gallery-<slug>-method` and `#algorithm-gallery-<slug>-render` identifiers.
+- [ ] Give every figure on `_05a-media.qmd` and `_05b-placeholder.qmd` a unique id, for example `#fig-media-<slug>-photo`, `#fig-media-<slug>-clip`, `#fig-media-<slug>-gif`, and `#fig-placeholder-<slug>`.
 - [ ] Give the local references slide the stable target `#references-<slug>`.
 - [ ] Add a unique bibliography key such as `sinew<StyleName><Year>` to `references.bib`, linking to the public profile source.
 - [ ] Cite that key in `_08-citations.qmd` and set it as `data-style-key` in `_09-references.qmd`.
-- [ ] Append all eleven includes to `deck.qmd` in the intended horizontal order.
+- [ ] Append all fourteen includes to `deck.qmd` in the intended horizontal order, with `_05a-media.qmd`, `_05b-placeholder.qmd`, and `_05c-layout.qmd` between `_05-table.qmd` and `_06-conclusion.qmd`.
 - [ ] Add the slug to `styles/gallery/columns.html`.
 - [ ] Mirror every profile token and font stack in `styles/gallery/columns.css` so runtime preview matches standalone rendering.
 - [ ] Add any restrained style-specific gallery component rules needed for geometry or depth.
 
-The column must keep the same guidance -> problem -> research framing -> algorithm -> plot -> table -> conclusion -> generation -> citations -> references sequence. Do not add gallery-comparison narration to individual slides.
+The column must keep the same guidance -> problem -> research framing -> algorithm -> plot -> table -> media -> placeholder -> layout -> conclusion -> generation -> citations -> references sequence. Do not add gallery-comparison narration to individual slides.
 
 ## 5. Register validation and documentation
 
@@ -64,7 +65,7 @@ These are acceptance notes from regressions found while developing the existing 
 ### Style and content boundaries
 
 - [ ] Keep the profile event-neutral. Do not add conference profiles, conference names, venue colors, logos, timing, or upload rules to the visual-style axis.
-- [ ] Preserve the complete repeated story in every column: divider, guidance, problem, research framing, algorithm, plot, table, conclusion, generation, citations, and references.
+- [ ] Preserve the complete repeated story in every column: divider, guidance, problem, research framing, algorithm, plot, table, media, placeholder, layout, conclusion, generation, citations, and references.
 - [ ] Keep the evidence content and slide order structurally equivalent across styles; only the visual treatment and style-specific source citation change.
 - [ ] Remove gallery-comparison meta-copy such as "identical pseudocode," "identical data," "same claim," "shared story," "appearance only," or similar notes from visible slides.
 - [ ] Keep one Q1-Q9 question list, one H1-H9 hypothesis list, one algorithm, one style-specific plot, one structured table, and one local citation/reference example in every column.

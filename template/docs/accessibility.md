@@ -23,6 +23,7 @@ WAI's [complex-image tutorial](https://www.w3.org/WAI/tutorials/images/complex/)
 - Complex plots have a short alt, visible takeaway, and detailed prose/table equivalent in the deck or handout.
 - Lines use color plus marker/dash/direct label.
 - Plot text, grid, and data contrast is checked inside the image, not inferred from theme CSS.
+- An intentionally unfilled evidence slot uses `.missing-evidence`, never a blank gap or a plausible-looking stand-in. It never relies on its dashed border and hatch fill alone: the runtime injects a "MISSING EVIDENCE" label as real DOM text, not CSS-generated content, because some assistive technology does not expose generated content. It is a genuine numbered `Figure N` with a `#fig-` id, so it is reachable the same way as any other figure.
 
 ### Structure
 
@@ -49,6 +50,7 @@ WAI's [complex-image tutorial](https://www.w3.org/WAI/tutorials/images/complex/)
 - Videos have controls unless a venue requires immutable self-advancing playback.
 - Spoken media has captions/transcript; meaningful experiment audio is described.
 - Provide a still/poster fallback.
+- The managed video component autoplays muted by default when Reveal enters its slide (`data-sinew-autoplay="false"` opts out for a manual start). Unmuted playback is an explicit author choice made by omitting `muted`; browsers block unmuted autoplay outside a user gesture, so an unmuted video entered by Reveal navigation typically stays paused with its own controls visible rather than throwing, which is expected. See `figures-and-tables.md` for the captions/transcript requirement on any video that carries speech.
 
 ### Live delivery
 
@@ -75,7 +77,7 @@ CSS contrast tools cannot evaluate pixels in PNG/JPEG or every SVG path. Review 
 
 ## Automated and manual gates
 
-Automated checks should cover missing alt/captions, semantic structure, duplicate IDs, profile markers, and gross overflow. Quarto's Reveal format supports an `axe` audit option; use it in the release environment where browser automation is available.
+Automated checks should cover missing alt/captions, semantic structure, duplicate IDs, profile markers, and gross overflow. `template/scripts/check_overflow.py` covers the last of those: it measures the actual rendered geometry of every slide in a headless browser and reports any element whose box extends past the deck's configured canvas, since neither render success nor valid HTML signals silent overflow on its own. Its exit code 2 means the gate did not run at all (no headless browser available), not that it passed; treat that as an unresolved check, not a pass. Quarto's Reveal format supports an `axe` audit option; use it in the release environment where browser automation is available.
 
 Manual review still checks:
 
@@ -85,7 +87,7 @@ Manual review still checks:
 - whether speaker narration covers visual-only information;
 - whether PDF/video exports retain tags, fonts, captions, and legibility;
 - whether animations/media can be paused where required.
-- whether every evidence inspector opens with pointer and keyboard, retains the active profile, traps Reveal navigation, restores focus, and closes when the fullscreen evidence is clicked; no evidence type may show expand/close controls.
+- whether every evidence inspector opens with pointer and keyboard, retains the active profile, traps Reveal navigation, restores focus, and closes when the fullscreen evidence is clicked; no evidence type may show expand/close controls. This now covers video and GIF alongside image, table, and algorithm evidence: a zoomed video keeps its trim window and playback position instead of restarting.
 - whether cloned preview math is typeset and wide table previews retain legible headings, values, and navigation at browser zoom.
 - whether figure, table, algorithm, Q, and H references expose previews on pointer hover and keyboard focus, then navigate to the correct original target when activated.
 

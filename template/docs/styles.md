@@ -23,6 +23,18 @@ Every color profile defines:
 
 It also sets explicit sans-serif and monospace stacks for Reveal headings/body/code. Algorithm bodies and captions use `--sinew-algorithm-font`; this must be a genuine monospace stack chosen to fit the profile, never a proportional display face. Use local/system fonts or bundle licensed webfonts. Do not import delivery-critical fonts from a remote CDN.
 
+### Optional derived tokens
+
+A profile does not need to define these; `core.scss` computes a working default from the required tokens above, so they exist purely as a hand-tuning escape hatch:
+
+```css
+--sinew-plate           /* default: color-mix(in srgb, white 88%, var(--sinew-accent) 12%) */
+--sinew-column-gutter   /* default: 0.55rem */
+--sinew-gutter          /* default: 1.1em (split-layout) / 0.6em (card-strip) */
+```
+
+Verified against `core.scss` and every `styles/colors/*.css` file: none of the nine shipped profiles set any of these three, so the derived defaults are what every current profile actually renders with. `--sinew-plate` backs `.plate` (see "Affiliation marks" below for the same derive-from-palette pattern applied to logos via `--sinew-logo-plate`, and `figures-and-tables.md`, "A third path: plate it instead of stripping or leaving it white", for when to use `.plate` on a figure). `--sinew-column-gutter` sets the `.columns`/`.column` gutter; `--sinew-gutter` sets the gap in `.split-layout*`/`.card-strip-*`/`.diagram-flow`. A new style only needs to set one of these if the computed default reads wrong against that profile's own palette or density.
+
 Core layout and components live in `_extensions/sinew/theme/core.scss`. Styles should not target sample-slide IDs or change the meaning/order of content.
 
 The research-framing identity is part of that stable component layer. `.research-questions` uses `--sinew-accent`; `.research-hypotheses` uses `--sinew-success`; the Q/H identifier, item border, title rule, and optional `.is-highlighted` treatment inherit automatically in every profile. A profile must keep both semantic colors readable on its panel surfaces and must not replace the Q/H labels with color-only meaning.

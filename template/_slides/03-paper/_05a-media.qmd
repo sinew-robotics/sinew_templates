@@ -1,0 +1,23 @@
+## Photo, trimmed video, and looping GIF media all keep native resolution {data-style-preview="paper"}
+
+<span class="kicker">Media | illustrative scenario</span>
+
+::: {.card-strip-3}
+![Illustrative synthetic photo, not a lab or field image.](assets/media/demo-photo.jpg){#fig-media-paper-photo fig-alt="Synthetic raster photo: a gradient sky-to-ground horizon with sensor grain, a vignette, and three colored fiducial-like blobs."}
+
+::: {#fig-media-paper-clip}
+<video src="assets/media/demo-clip.mp4" muted playsinline loop controls poster="assets/media/demo-clip-poster.jpg" data-sinew-start="1" data-sinew-end="4"></video>
+
+Illustrative synthetic clip, not a robot recording. Autoplays muted on entry and loops the 1s to 4s window.
+:::
+
+::: {#fig-media-paper-gif}
+<img src="assets/media/demo-loop.gif" alt="Animated GIF of a dot orbiting a ring, eight frames, looping.">
+
+Illustrative synthetic loop, not experimental data.
+:::
+:::
+
+::: {.source}
+Every figure here opens the fullscreen inspector: click to zoom, Enter or Space from focus, Escape to close.
+:::

@@ -1,6 +1,14 @@
 gallery-mode: "runtime-style-preview"
 format:
   sinew-revealjs:
+    # The gallery is a repository-tour layer (docs/architecture.md), not a
+    # delivery deck: moving right is meant to jump to "the same slide type"
+    # in the next style column, preserving the current vertical row. That is
+    # navigation-mode: grid, which the sinew extension no longer defaults to
+    # (see template/_extensions/sinew/_extension.yml) because it breaks full
+    # Space-key coverage for a real delivery deck. Override it back here,
+    # for the gallery only.
+    navigation-mode: grid
     width: 1600
     height: 900
     css:

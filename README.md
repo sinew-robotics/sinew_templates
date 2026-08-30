@@ -25,10 +25,13 @@ The self-contained Quarto project lives in `template/`. It contains all `_quarto
 - Bare `{{< q N >}}` and `{{< h N >}}` hyperlinks that preview and return to the original statement, plus automatic figure, table, and algorithm cross-reference previews.
 - Click or keyboard activation to inspect figures, tables, and captioned algorithms in a profile-aware fullscreen dialog.
 - A reusable divider-slide lockup with owner-supplied KAIST and Interactive Robotic Systems Laboratory marks.
-- Profile-aware citation hover cards, a generated shared bibliography, and local two-column references in every style column.
+- Numeric IEEE citations by default, profile-aware citation hover cards, a generated shared bibliography, and local two-column references in every style column; author-year citations are a documented one-line opt-in.
 - A common projected-figure overlay, one matching Matplotlib overlay per visual style, and a plot generator.
+- Named layout primitives (`.split-layout`, card strips, full-bleed figure/title, flow diagrams) for common slide shapes, with slide content centered vertically by default.
+- Video, GIF, and a numbered `.missing-evidence` placeholder alongside images as full citizens of the figure/table cross-reference system, all with click-to-zoom in a keyboard-accessible fullscreen inspector.
+- `template/scripts/make_transparent.py` for white-background-to-alpha PNG conversion, and a light `.plate` backing for artwork that should not be touched.
 - Human documentation plus comprehensive `AGENTS.md` and `CLAUDE.md` operating rules.
-- Structural validation and an all-styles rendering script.
+- Structural validation, a DOM-measurement overflow gate, and an all-styles rendering script.
 
 The researched venue pages are background delivery guidance only. They do not configure Quarto and do not define visual styles. Verify the exact current event instructions separately before delivery; see [venue and event delivery research](template/docs/conferences/README.md).
 
@@ -38,6 +41,7 @@ The researched venue pages are background delivery guidance only. They do not co
 - A modern browser
 - Python 3.10+ only for validation and optional plot generation
 - Optional plotting stack: Matplotlib and SciencePlots 2.2.2
+- Optional imaging stack: Pillow (`template/requirements-imaging.txt`), only for `template/scripts/make_transparent.py`
 
 ## Use this repository now
 
@@ -54,10 +58,12 @@ Use arrow keys for the two-dimensional narrative:
 
 - left/right: change subtopic;
 - up/down: move within a subtopic;
-- Space: traverse every slide linearly;
+- Space: traverse every slide linearly, in document order;
 - `O`: overview; `S`: speaker view; `F`: fullscreen.
 
-Quarto warns that vertical slides are unfamiliar and can be skipped. The template keeps arrow controls visible, uses `navigation-mode: grid`, and recommends putting the required talk path at vertical index 1, with drill-down detail below.
+Quarto warns that vertical slides are unfamiliar and can be skipped. The template keeps arrow controls visible and recommends putting the required talk path at vertical index 1, with drill-down detail below.
+
+A delivery build (one selected `color-*` profile) uses `navigation-mode: default`: left/right moves to the top of the next subtopic and up/down moves within the current one, and Space reaches all 104 slides in order. The zero-config gallery demo you get from a plain `quarto render template` is different on purpose: it overrides to `navigation-mode: grid` (see `template/_quarto-gallery.yml`) so left/right instead jumps to the *same row* in the next style column, which is how you compare "the same slide type" across the nine columns. Space still walks the gallery in document order too, but a pure forward Space walk from the first slide will ride whatever row it last reached across every remaining column, because grid mode preserves the vertical row on a horizontal move; see `template/docs/architecture.md`, "Slide numbering", for the traced Reveal source and measured slide sequences for both modes. This only affects the gallery's own internal tour, not a real talk.
 
 ## Use as a starter
 
@@ -152,6 +158,7 @@ Each plot composes `sinew-slides.mplstyle` with `sinew-<style>.mplstyle`. See [f
 - [Research record](template/docs/research-notes.md): authoritative sources and hard-rule versus house-default labels.
 - [Venue and event delivery research](template/docs/conferences/README.md): dated background guidance and re-verification procedure; not render configuration.
 - [Authoring](template/docs/authoring.md): multi-file grid workflow, citation behavior, and slide structure.
+- [Citations](template/docs/citations.md): numeric vs. author-year styles, bundled CSL provenance, per-style reference-view numbering, and unpublished-work guidance.
 - [Figures and tables](template/docs/figures-and-tables.md): captions, alt text, statistics, SciencePlots, exports, robotics media.
 - [Styles](template/docs/styles.md): token contract, Origami provenance, fonts, adding new styles.
 - [Accessibility](template/docs/accessibility.md): WCAG-oriented HTML baseline and manual checks.
@@ -177,4 +184,4 @@ Every push, pull request, and release tag runs structural and contrast validatio
 
 ## Status and scope
 
-This repository is an academic authoring system, not an official event template. Delivery rules change by event, edition, track, and presentation type; consult current official instructions instead of expecting a visual profile to encode them. The current stable release is v1.1.0.
+This repository is an academic authoring system, not an official event template. Delivery rules change by event, edition, track, and presentation type; consult current official instructions instead of expecting a visual profile to encode them. The current stable release is v1.1.0; v1.2.0 is in development (see `CHANGELOG.md`, "Unreleased").

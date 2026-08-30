@@ -2,6 +2,22 @@
 
 ## Unreleased
 
+- Centered slide content vertically by default and added named layout primitives (`.split-layout`, `.split-layout-reverse`, `.split-layout-connector`, `.split-layout-footer`, `.card-strip-3/5/12`, `.full-bleed-figure`, `.full-bleed-title`, `.diagram-flow`) for column, connector, card-strip, full-bleed, and flow-diagram shapes.
+- Fixed figure/caption sizing so the caption box shrinks to the rendered image width instead of stretching to the column, and figures fill available space without hand-tuned `max-height` values.
+- Made a video, GIF, or the new missing-evidence placeholder a full citizen of the `Figure N` sequence: any content wrapped in a `#fig-` fenced div with the caption as its trailing paragraph gets a real number, a `#fig-` id, and working `@fig-` cross-references.
+- Added a managed video component: playback starts on slide enter and stops on slide leave, autoplay is muted by default with a `data-sinew-autoplay="false"` opt-out, and an optional trim window loops between `data-sinew-start`/`data-sinew-end` without cutting the source file.
+- Extended click-to-zoom to video, GIFs, and placeholders alongside images; a zoomed video keeps its trim window and playback position.
+- Added `.missing-evidence`, a numbered, cross-referenceable placeholder for a slide's intentionally unfilled evidence slot, with a dashed border, hatch fill, and a DOM-text "MISSING EVIDENCE" label so it stays unmistakable in grayscale.
+- Added `.plate`, a light backing card for untouched artwork, mixed per color profile from that profile's own accent token.
+- Added `template/scripts/make_transparent.py` (white-background-to-alpha PNG conversion, Pillow-based, with a documented residual limitation on near-maximally-saturated ink) and `template/requirements-imaging.txt`.
+- Added `template/scripts/generate_demo_media.py` and synthetic demo media under `template/assets/media/` for exercising the new evidence types.
+- Switched to numeric IEEE citations as the project default (`styles/citations/ieee.csl`); `chicago-author-date.csl` is bundled as the documented author-year alternative. Both are vendored from the official CSL project under CC BY-SA 3.0.
+- Changed the shipped `navigation-mode` from `grid` to `default` for delivery decks so a forward Space walk reaches every slide instead of only the ones a row-preserving jump happened to land on; the zero-config gallery keeps `grid` for its own style-to-style comparison.
+- Changed `slide-number` from `h.v` to `c` (sequential, depth-first), with `h.v` left as a one-line opt-back-in.
+- Added `template/scripts/check_overflow.py`, a headless-browser overflow gate that measures actual slide geometry and exits 2 (not 0) when it cannot run.
+- Split `validate.py` into universal and gallery-only checks so it runs on a scaffolded deck instead of crashing, derived extension paths from the matched manifest so a namespaced install validates correctly, and added lints for empty/unresolved citation keys, double captions, hand-numbered captions, structured-results table conventions, a single `#refs` target, and affiliation-mark provenance.
+- Updated `check_render.py` to assert the correct Reveal navigation mode for both the gallery and a delivery render.
+
 ## 1.1.0  -  2026-08-25
 
 - Added required Q1-Q9 research-question and H1-H9 research-hypothesis lists, with an optional non-color-only primary-item highlight and examples in every visual style.
