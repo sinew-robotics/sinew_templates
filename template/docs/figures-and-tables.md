@@ -94,6 +94,8 @@ The script never modifies the input and refuses to overwrite an existing output 
 
 Stripping and plating are not always interchangeable, even for artwork that would otherwise qualify for stripping. Measured case: a clean black-ink line-art diagram, transparent, on a dark profile's near-black surface -- WCAG contrast of the ink against the surface comes out around 1.1-1.2:1, effectively invisible, because stripping the background does nothing to the ink color itself. That is not a defect in `make_transparent.py` (it is proven clean: no white halo, no residual brightness) -- it is a property of black ink on a dark surface that transparency alone cannot fix.
 
+That measurement is also why plating is now the default for any transparent artwork, not a special-case fix reached for only after a contrast failure is caught. Transparent art has no background of its own -- it inherits whatever slide surface it lands on -- and the failure above is profile-dependent: the same asset measures roughly 1.1-1.2:1 against `origami` and `blueprint` (both dark-toned surfaces) but 19.7:1 against `movement` (a light surface). An author who builds and checks a deck against one profile, then later switches profiles, gets no warning that their transparent art has gone illegible. Give every transparent PNG `.plate` by default -- whether it started transparent or was just produced by `make_transparent.py` above -- and treat leaving one unplated as a deliberate, checked opt-out, not the baseline.
+
 `.plate` puts a light backing card behind the untouched artwork instead:
 
 ```markdown
@@ -113,13 +115,14 @@ Note the selector targets the media element, not `.plate` itself: Pandoc attache
 
 `--sinew-plate` is never a literal white: it is mixed from the active color profile's own `--sinew-accent`, so every profile gets a distinct, palette-derived plate automatically, with no per-profile file to edit -- the same "derive it from this profile's palette, never generic white" rule the dark-profile `.institution-lockup` plate already follows for logos (`--sinew-logo-plate`), just mixed toward white instead of toward ink so the result stays reliably light on both dark-toned and light-toned profiles. A profile may still set `--sinew-plate` directly for a hand-tuned value.
 
-Use `.plate` instead of stripping when:
+`.plate` is the default for transparent artwork, not a conditional fix reached for only when contrast measurably fails. Apply it whenever:
 
-- the artwork's own ink/line color is low contrast against the active profile's surface once transparent (measured, not assumed -- check the actual profile, not just "dark profiles in general");
+- (the default case) the artwork is transparent, full stop -- do not wait to measure a contrast failure before adding `.plate`; the point of the default is to remove the trap of a profile switch nobody re-checked;
+- the artwork's own ink/line color is low contrast against the active profile's surface once transparent (measured, not assumed -- check the actual profile, not just "dark profiles in general") -- this is the strongest single justification if the default is ever questioned;
 - the source should not be touched at all (see the two bullets above under "Use a light plate ... instead");
 - the artwork uses very saturated or vivid ink close to a pure primary color and you do not want to (or cannot) mute it -- `make_transparent.py` can leave a partial fringe on that class of ink for a proven, single-pixel-color reason (see the caveat above), and a plate sidesteps it entirely by never touching the pixels.
 
-Prefer stripping when the artwork sits comfortably on the surface once transparent; `.plate` on artwork that already contrasts fine just adds a visible box nothing needed.
+Skip `.plate` only as a deliberate opt-out: the artwork is meant to sit directly on the slide surface with no visible box, and it has been checked against the profile actually in use (not just the profile happening to be rendered at the time) and confirmed to contrast comfortably there.
 
 ## SciencePlots and Matplotlib
 

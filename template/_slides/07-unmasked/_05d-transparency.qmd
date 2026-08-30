@@ -1,0 +1,15 @@
+## This figure's background strips clean; its grey fills cannot survive {data-style-preview="unmasked"}
+
+<span class="kicker">Transparency | make_transparent.py</span>
+
+::: {.columns}
+::: {.column width="50%"}
+![Original V-JEPA 2 figure (Meta AI), untouched. Provenance unverified; included by owner decision (research-notes.md).](assets/media/reference/vjepa2-abstract-new.png){.plate #fig-transparency-original-unmasked fig-alt="V-JEPA 2 training-objective diagram: grey encoder, EMA-encoder, and predictor boxes, plus a red L1 loss box with a pale pink fill, on an opaque white background."}
+:::
+
+::: {.column width="50%"}
+![Tolerance 5.0: background clean, red ink solid. Grey fills cap 32/255 alpha (ceiling 53/255, any tolerance) -- structural, not a tuning miss.](assets/media/reference/vjepa2-abstract-transparent.png){.plate #fig-transparency-plate-unmasked fig-alt="Same diagram with background stripped: the red L1 box stays solid, but the grey encoder, EMA-encoder, and predictor fills are faint and nearly illegible."}
+:::
+:::
+
+<span class="hot">Decontamination is now spatially gated: the pale pink fill survives at 1625/1629 pixels; a 4-pixel border leak and the z-circle's curved edge still recolor toward red.</span>

@@ -945,6 +945,44 @@ html:has(.reveal .section-slide.present) .reveal .slide-background-content {
   object-fit: contain;
 }
 
+/* .plate media (sinew-1dd.2) opts out of the width/height: 100% rule just
+   above. That rule is correct for an UNSTYLED img/video: the element has
+   no visible box of its own, so stretching it to fill figure > div's
+   whole area and object-fit: containing the pixels inside is
+   indistinguishable from centering a natural-sized image -- no box is
+   ever drawn to reveal the stretch. .plate paints a real, visible
+   background+padding box directly on the img/video element itself (see
+   the plate rule above; mirrorPlateIntoClone in captions.html re-applies
+   the class to this exact cloned element), so forcing that element to
+   100% x 100% of a container whose aspect ratio has nothing to do with
+   the image makes the PLATE balloon into a shape unrelated to the
+   artwork it is supposed to hug: measured on the V-JEPA 2 reference
+   figure (332x393, ratio 0.845) opened fullscreen at 1600x900, the plate
+   rendered at 1504x649.7px (ratio 2.32) -- a wide, short card -- while
+   the actual diagram, object-fit: contain'd inside that card's padding,
+   displayed at only roughly 520x616px, centered in a sea of empty plate
+   color roughly 480px wide on each side. In-slide, by contrast, the same
+   figure's plate measures 326.6x380.4px against the same 0.845 ratio --
+   snug, exactly as designed; only the fullscreen clone inherits the
+   generic img/svg/video rule's aspect-blind 100%/100% sizing. Reverting
+   width/height to auto and position back to static lets the plated
+   element size itself the normal way (intrinsic ratio, capped by
+   max-width/max-height, padding added on top per its own box-sizing:
+   border-box) and be centered by figure > div's existing `place-items:
+   center` (declared above) instead of stretched to fill it -- the same
+   snug-card behavior as in-slide, just re-bounded to the fullscreen
+   dialog's own scale. Reuses max-width: 94vw/max-height: 76vh, the exact
+   bounds the generic (non-plate) fullscreen img/svg/video rule below
+   already uses for the same dialog, rather than inventing a new number. */
+.reveal .sinew-fullscreen-dialog[data-sinew-evidence-kind="figure"] .sinew-fullscreen-content :is(img.plate, video.plate) {
+  width: auto !important;
+  max-width: 94vw;
+  height: auto !important;
+  max-height: 76vh !important;
+  position: static;
+  inset: auto;
+}
+
 .reveal .sinew-fullscreen-content > * {
   box-sizing: border-box;
   width: min(94vw, 1600px);
@@ -1072,6 +1110,31 @@ html:has(.reveal .section-slide.present) .reveal .slide-background-content {
 .reveal .slide figure:not(:has(img[style^="width"], video[style^="width"])) {
   width: fit-content;
 }
+
+/* Card-strip figures opt out of the fit-content rule above because a
+   figure in a card strip is one of several figures forced into
+   equal-width grid cells side by side, not a lone evidence figure
+   centered on its own column, so "shrink to the image's own rendered
+   size" is wrong for it. Verified on a real render: a small (240x160)
+   GIF's figure fit-content'd down to 240px wide, which also squeezed
+   its width: 0; min-width: 100% figcaption (see "figure > figcaption"
+   below) into that same 240px box, wrapping its short caption across
+   far more lines than the photo/clip captions sharing the row -- extra
+   wrapped lines meant a taller figcaption, which meant less leftover
+   height for that figure's media area (see the card-strip fix below),
+   which is what was actually producing most of the residual figcaption
+   misalignment even after the row/figure heights were already
+   equalized. Full width lets every figure in the strip share one
+   caption width regardless of what its own image happens to measure;
+   extra specificity (`.reveal .slide` prefix) is needed to outrank the
+   fit-content rule's own `:not(:has(img[style^="width"], ...))`
+   argument, since an attribute selector inside :not(:has()) outranks a
+   bare class selector regardless of source order. */
+.reveal .slide .card-strip-3 > .quarto-float > figure,
+.reveal .slide .card-strip-5 > .quarto-float > figure,
+.reveal .slide .card-strip-12 > .quarto-float > figure {
+  width: 100%;
+}
 /* The fullscreen evidence inspector below wraps the media in its own
    unclassed div (to hang an aria-describedby caption link off it), and
    Quarto does the same with a classed .quarto-figure div for some
@@ -1084,6 +1147,31 @@ html:has(.reveal .section-slide.present) .reveal .slide-background-content {
   flex: 1 1 auto;
   min-width: 0;
   min-height: 0;
+}
+
+/* A THIRD wrapper layer, specific to raw HTML authored directly inside a
+   `#fig-...` div (the video/GIF/missing-evidence E2 pattern documented in
+   figures-and-tables.md): Pandoc treats a bare `<img>` (or any inline-level
+   content) on its own line as paragraph content and wraps it in a `<p>`,
+   which lands between the aria-describedby div above and the media
+   element itself. That `<p>` is an ordinary block box with no flex
+   properties of its own, so it breaks the flex-fill chain one level
+   before it reaches the actual `<img>`/`<video>` -- confirmed on a real
+   render: a GIF authored this way rendered at its untouched intrinsic
+   240x160 no matter how much vertical room its figure had, because
+   `flex: 1 1 auto` on the `<img>` (see below) has no effect when its
+   PARENT (`<p>`) is not itself a flex container. Passing flex straight
+   through this `<p>` the same way the aria-div above passes it through
+   its own parent lets the image participate in the fill/cap chain like
+   any other figure's media -- default margin cleared since a bare `<p>`
+   otherwise carries its own top/bottom spacing that has no role here. */
+.reveal .slide figure > div > p {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
 }
 
 /* Cap height instead of forcing width: with an explicit author width
@@ -1397,7 +1485,12 @@ html:has(.reveal .section-slide.present) .reveal .slide-background-content {
 .reveal .split-layout-footer > :nth-child(2) { grid-area: right; }
 .reveal .split-layout-footer > :nth-child(3) { grid-area: footer; }
 
-/* Equal-width card strips: 3, 5, or 12 columns. */
+/* Equal-width card strips: 3, 5, or 12 columns. Two explicit ROW tracks
+   -- media, then caption -- exist so every figure in the strip can share
+   ONE caption row via CSS subgrid (see the caption-alignment comment
+   below): row 1 takes whatever height is left after row 2, and row 2's
+   `auto` height is the tallest of every figure's own caption in that
+   row, computed once for the whole strip, not per figure. */
 .reveal .card-strip-3,
 .reveal .card-strip-5,
 .reveal .card-strip-12 {
@@ -1405,6 +1498,7 @@ html:has(.reveal .section-slide.present) .reveal .slide-background-content {
   flex: 1 1 auto;
   min-height: 0;
   align-items: stretch;
+  grid-template-rows: minmax(0, 1fr) auto;
   gap: var(--sinew-gutter, 0.6em);
 }
 .reveal .card-strip-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -1421,28 +1515,210 @@ html:has(.reveal .section-slide.present) .reveal .slide-background-content {
 }
 .reveal .full-bleed-figure figure { width: 100%; }
 
-/* A figure's `align-self: center` above (near the figure rules) exists
-   to stop the FLEX-column slide section from stretching the figure's
-   WIDTH. `align-self` controls the cross axis, and cross axis is not
-   the same axis in every parent: these primitives are CSS Grid rows,
-   where the cross axis is the row's HEIGHT, so that same `center`
-   value also stops a figure filling its grid cell's height here --
-   leaving the figure's own nested flex-fill sizing (figure > div >
-   img, all flex: 1 1 auto) with no definite height to resolve against,
-   so an ordinary image reverts to intrinsic sizing with no cap at all.
-   Restore the grid default (stretch) for figures specifically inside
-   these primitives so the cell's own height becomes the figure's
-   height, which the flex-fill chain then correctly fits inside. */
-.reveal .split-layout > figure,
-.reveal .split-layout-reverse > figure,
-.reveal .split-layout-connector > figure,
-.reveal .split-layout-footer > figure,
-.reveal .card-strip-3 > figure,
-.reveal .card-strip-5 > figure,
-.reveal .card-strip-12 > figure,
-.reveal .full-bleed-figure > figure {
-  align-self: stretch;
+/* There used to be a rule here restoring `align-self: stretch` for
+   `> figure` inside .split-layout/.split-layout-reverse/
+   .split-layout-connector/.split-layout-footer/.full-bleed-figure/
+   .card-strip-3/.card-strip-5/.card-strip-12, on the theory that a
+   figure's own `align-self: center` (set near the figure rules, to
+   stop the FLEX-column slide section from stretching a figure's WIDTH)
+   also stops it filling a GRID cell's HEIGHT here -- `align-self`
+   controls the cross axis, and cross axis is not the same axis in
+   every parent, so the same `center` value blocks the figure's own
+   nested flex-fill sizing (figure > div > img, flex: 1 1 auto) from
+   having a definite height to resolve against.
+
+   That rule never worked, for any of the eight primitives it named,
+   and deleting it changes nothing that was actually rendering: a
+   numbered `#fig-...` object -- an image, a video div, a GIF, or
+   `.missing-evidence` alike -- is emitted by Quarto's crossref pass as
+   `<div class="quarto-float quarto-figure ..."><figure
+   class="quarto-float quarto-float-fig ...">...</figure></div>`, so
+   the actual grid/flex child in every one of these primitives is that
+   OUTER div, never `<figure>` itself. A `> figure` child selector from
+   any layout primitive can never match a numbered figure -- see
+   AGENTS.md for this as a general rule, not an item to re-derive per
+   primitive. It went dark for years before being caught by
+   measurement, not inspection (see the card-strip caption-alignment
+   comment below for exactly how). Removing it is a zero-behavior-change
+   edit: whether `.split-layout` and `.full-bleed-figure` figures
+   actually need the fill-to-height behavior this rule was reaching for
+   is a separate, open question -- filed, not answered here -- and
+   `.card-strip-3/5/12` get a real, verified fix below instead of a
+   patched-up version of this one. */
+
+/* Card-strip caption alignment (sinew media-strip caption fix).
+   `> figure` above never actually matches a numbered figure: every
+   `#fig-...` object Quarto's crossref pass numbers -- an image, a video
+   div, a GIF, or `.missing-evidence` alike -- is emitted as
+   `<div class="quarto-float quarto-figure ..."><figure
+   class="quarto-float quarto-float-fig ...">...</figure></div>`, so the
+   actual direct child of `.card-strip-3/5/12` is that OUTER div, not the
+   `<figure>` the rule above targets, and `align-self: stretch` on a
+   `<figure>` that is never a direct grid child does nothing.
+
+   Two things were tried and rejected before this one, both confirmed by
+   measurement, not assumption -- kept here so a future edit does not
+   re-discover the same dead ends:
+   (1) Making the outer div a flex column and figure a flex: 1 1 auto
+       child of it does equalize each FIGURE's overall height to the
+       row (647px, from 503/435/407px before), and cuts the figcaption
+       spread from 192px to 96px, but it only bottom-anchors each
+       caption to a shared figure-bottom edge. A figure with a longer
+       caption (more wrapped lines) still starts that caption HIGHER to
+       leave room to reach the same bottom, so captions of different
+       lengths still start at different heights -- still ragged, just
+       less so.
+   (2) Forcing card-strip figures to width: 100% (see the fit-content
+       override above) fixes a second, compounding bug -- a small
+       image's `width: fit-content` figure squeezed its own figcaption
+       into that same small width, wrapping a short caption across far
+       more lines than it needed and eating into the figure's leftover
+       height -- and gets same-length captions to align exactly (the
+       photo and GIF captions land on the identical pixel after this).
+       But it still only fixes same-length captions: a real
+       nearly-2x-longer caption (the clip's two-sentence caption against
+       the photo/GIF's one short sentence) still starts 64px higher,
+       because bottom-anchoring within one shared figure box has no way
+       to know another column's caption is shorter until after layout.
+
+   Both fixes are correct and stay in effect (below); this section
+   replaces the MECHANISM they used to equalize height (a flex column
+   inside each figure, sized against the whole row) with a shared
+   subgrid: this component's own testable claim is that the caption
+   ROW itself, not just the figure box, is the thing that has to be one
+   shared height across the strip, and the only way to size a row to
+   "whatever the tallest sibling caption needs, shared identically by
+   every column" without measuring text in JS is a real CSS grid row --
+   a lone figure's flex-grow chain cannot see a sibling figure's caption
+   at all, however it is aimed.
+
+   `.card-strip-3/5/12` above now defines two explicit row tracks:
+   `minmax(0, 1fr)` for media, `auto` for captions. `.quarto-float`
+   (present on both the outer div and the inner `<figure>` -- see
+   figures-and-tables.md, "Any embedded object as a real Figure N") is
+   used as the anchor purely because it is the ACTUAL grid child here
+   -- confirmed unique to this fix's blast radius by grepping every
+   slide source: only the three media-demo slides ever instantiate
+   `.card-strip-3/5/12`, so `.quarto-float` scoped under them cannot
+   reach a split-layout, full-bleed, or standalone figure's wrapper.
+   `grid-row: 1 / -1` spans the outer div across BOTH row tracks, and
+   `grid-template-rows: subgrid` re-exposes those same two tracks to
+   ITS children -- so `<figure>` inside it can do the same thing one
+   level deeper (span both tracks, expose them again), landing its own
+   two children, the media-area div and the figcaption, on the shared
+   row 1 and row 2 with no explicit grid-row needed (two children, two
+   subgrid rows, default auto-placement puts DOM order into row order).
+   `<figure>` switches from `display: flex; flex-direction: column`
+   (its default, see "Academic figures" above) to `display: grid;
+   grid-template-rows: subgrid` ONLY here, scoped to card-strip figures
+   -- its own box (border, `tabindex`, `role="button"`,
+   `aria-controls`, the click/Enter/Space fullscreen-inspector handlers
+   from captions.html) is untouched, because this changes how figure
+   lays out ITS CHILDREN, not figure's own box or interactivity. (A
+   flattening fix using `display: contents` on `<figure>` itself was
+   considered and rejected for exactly this reason: `display: contents`
+   removes an element's own box entirely, which would take the
+   click/keyboard target for the fullscreen inspector down with it --
+   unacceptable given AGENTS.md requires that inspector on every
+   figure. Subgrid changes zero boxes above the two content children
+   being aligned.) Chrome 150 in this render environment supports
+   subgrid natively (Baseline since 2023; Chrome 117+, Firefox 71+,
+   Safari 16+); an older, non-supporting engine treats the invalid
+   `subgrid` value as a parse error and falls back to `grid-template-
+   rows: none` on that one property, degrading to something close to
+   fix (1) above rather than breaking outright.
+
+   The row 1 (media) box still needs its OWN internal chain --
+   `<figure>` being a grid container now does not by itself change how
+   the media-area div and its `<img>`/`<video>` share row 1's height,
+   any more than switching a paragraph's parent from flex to grid
+   changes the paragraph's own children -- and the same aspect-ratio
+   trap already documented for fix (1) is still live: `flex: 1 1 auto`
+   on the media element, given a taller row 1 than its own aspect ratio
+   needs, grows the element's box past its own ratio (measured: photo
+   519.7x526.6 against a native 640x480 ratio of 1.333, i.e. a rendered
+   ratio of 0.987 -- an invisible letterbox gap, object-fit: contain
+   only stops it from visibly distorting the pixels drawn inside that
+   oversized box). `align-self: center` on the media element does NOT
+   fix this (confirmed: identical 519.7x526.6 either way) because
+   flexbox derives an item's flex BASIS from a replaced element's
+   aspect ratio, but growth distributed afterward by flex-grow is a
+   plain length added on top with no further ratio involvement, on
+   either axis. `flex-grow: 0` does fix it, leaving the element's
+   existing `max-width: 100%; max-height: 100%; object-fit: contain`
+   (see "Academic figures" above) to cap it at its own correct,
+   aspect-locked size within whatever row 1 turns out to be -- verified
+   back to 519.7x389.8 (ratio 1.333, matching native 1.3333) and
+   519.7x294.2 (ratio 1.767, matching native 1.7667) for the photo and
+   clip. A smaller image (the GIF, 240x160, flex-grow already inert for
+   it below its own `<p>` wrapper -- see the GIF caveat above) just
+   leaves clear, honest space around itself inside its own share of the
+   now-shared row 1; nothing is upscaled, cropped, or padded to hide
+   that gap. */
+.reveal .card-strip-3 > .quarto-float,
+.reveal .card-strip-5 > .quarto-float,
+.reveal .card-strip-12 > .quarto-float {
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-row: 1 / -1;
   min-height: 0;
+}
+.reveal .card-strip-3 > .quarto-float > figure,
+.reveal .card-strip-5 > .quarto-float > figure,
+.reveal .card-strip-12 > .quarto-float > figure {
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-row: 1 / -1;
+  min-height: 0;
+}
+.reveal .card-strip-3 > .quarto-float figure :is(img, video),
+.reveal .card-strip-5 > .quarto-float figure :is(img, video),
+.reveal .card-strip-12 > .quarto-float figure :is(img, video) {
+  flex-grow: 0;
+}
+
+/* Card-strip media centering. `flex-grow: 0` above (correctly) stops each
+   media element from growing past its own aspect-locked size, but it does
+   nothing about WHERE that now-content-sized box sits inside row 1 -- the
+   aria-describedby div immediately above it (`.reveal .slide figure > div`,
+   "Academic figures" above) is a `display: flex; flex-direction: column`
+   container whose own height still fills the entire shared row-1 track
+   (grid's default `align-items: stretch`, unchanged by anything here), and
+   a flex column's default `justify-content: flex-start` pins a
+   non-growing child to that box's TOP edge. Measured before this fix, at
+   1600x900 on origami: photo/clip/GIF media boxes top out at 228.0/210.6/
+   228.0px but their vertical centers land at 409.2/347.4/302.4px -- three
+   different heights (640x480, 848x480, 240x160 native) top-anchored in a
+   row sized to the tallest of them, so the smaller two hang visibly
+   higher than the photo instead of sharing its center. `justify-content:
+   center` on that same div re-centers its child on row 1's shared height
+   instead of pinning it to the top -- since every column's `figure` uses
+   `grid-template-rows: subgrid` to expose the SAME row-1 track (see
+   above), centering each column's own child against ITS row-1 box
+   centers all of them against each other, without touching the caption
+   row's already-shared baseline (figcaption is an unrelated subgrid
+   sibling in row 2, untouched by this rule).
+
+   The GIF needs a second copy of this rule one layer deeper: it is
+   authored as raw `<img>` HTML (not `![]()`), so Pandoc wraps it in a
+   `<p>` (the third wrapper layer documented at `.reveal .slide figure >
+   div > p` above), and that `<p>` -- not the aria div -- is the flex
+   container whose direct child is the actual `<img>`. The `<p>` itself
+   still carries `flex: 1 1 auto` and is a genuine flex ITEM of the aria
+   div (unlike a grid item, `flex` is meaningful here), so it grows to
+   fill the aria div's full height, leaving no free space for the aria
+   div's own `justify-content: center` to distribute -- centering has to
+   happen one level down, inside the `<p>`, against the `<img>` it
+   actually contains. Photo and video have no such `<p>` layer, so this
+   second selector is a no-op for them; it only matters for the GIF (and
+   any future raw-HTML-image card-strip figure). */
+.reveal .card-strip-3 > .quarto-float figure > div,
+.reveal .card-strip-5 > .quarto-float figure > div,
+.reveal .card-strip-12 > .quarto-float figure > div,
+.reveal .card-strip-3 > .quarto-float figure > div > p,
+.reveal .card-strip-5 > .quarto-float figure > div > p,
+.reveal .card-strip-12 > .quarto-float figure > div > p {
+  justify-content: center;
 }
 
 /* `.smaller`/`.scrollable` are Quarto's documented per-slide classes

@@ -6,7 +6,7 @@
 The gallery also ships split-layout, split-layout-reverse, split-layout-footer, and card-strip-3/5/12 for other evidence shapes; this connector variant threads prose through a labeled pipeline.
 
 ::: {.connector-lane}
-feeds
+-feeds->
 :::
 
 ::: {.diagram-flow}

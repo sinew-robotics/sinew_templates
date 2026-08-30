@@ -81,6 +81,26 @@ CONTENT_SECONDS = 4.0
 # composite luminance proof.
 DIAGRAM_TOLERANCE = 12.0
 
+# Chosen separately from DIAGRAM_TOLERANCE by its own empirical sweep against
+# vjepa2-abstract-new.png (a third-party reference figure, not this script's
+# own synthetic output -- see template/assets/media/README.md, "Reference:
+# third-party V-JEPA 2 figures"). This asset is a much harder case: it mixes
+# antialiased text/lines (well handled) with pale, low-saturation GREY box
+# fills that sit close to white (small "distance from white") and a pale
+# reddish fill that shares the maximal saturation RATIO of a fully-saturated
+# red edge pixel. Neither content color can be made fully opaque by ANY
+# tolerance in the tool's documented range without also failing to clear the
+# background -- this is a structural limitation of the per-pixel model, not a
+# tuning miss (the full sweep, the grey fill's provable tolerance-independent
+# ceiling, and the disclosed residual fringe on the red box's curved edges
+# are recorded in the README). 5.0 was kept as the least-bad tradeoff: it
+# sits at the tool's own documented floor for clean line art, keeps the
+# background provably clean on both a dark and a light Sinew surface, keeps
+# the red box's solid ink fully opaque, and gives the pale reddish fill its
+# best achievable (still not full) opacity in-range. It does NOT rescue the
+# grey fills, which is disclosed rather than hidden.
+REFERENCE_TOLERANCE = 5.0
+
 try:
     from PIL import Image, ImageChops, ImageDraw, ImageFont
 except ImportError:
@@ -232,6 +252,47 @@ def make_diagram_transparent(source: Path, destination: Path) -> None:
             str(destination),
             "--tolerance",
             str(DIAGRAM_TOLERANCE),
+            "--force",
+        ]
+    )
+
+
+def make_reference_transparent(source: Path, destination: Path) -> None:
+    """Run make_transparent.py on a third-party reference figure this script does not own.
+
+    UNLIKE every other asset in this script, `source` here is a third-party
+    INPUT (a copied-in Meta AI figure; see the "Reference: third-party
+    V-JEPA 2 figures" section of template/assets/media/README.md for
+    provenance and the licensing caveat). This function never creates or
+    modifies `source` -- it only reads it. If it is missing, that is a hard
+    error, not something to paper over by synthesizing a stand-in: this
+    script draws only original, locally generated demo content, and a
+    third-party reference figure is exactly the kind of asset it must never
+    fabricate a replacement for.
+    """
+    if not source.is_file():
+        print(
+            f"error: {source} does not exist.\n"
+            "This is a third-party reference figure (a Meta AI V-JEPA 2 "
+            "diagram), not something generate_demo_media.py can synthesize. "
+            "Copy the original file in manually -- see the \"Reference: "
+            "third-party V-JEPA 2 figures\" section of "
+            "template/assets/media/README.md for what belongs there and "
+            "why -- then re-run this target.",
+            file=sys.stderr,
+        )
+        raise SystemExit(1)
+    if destination.exists():
+        destination.unlink()
+    run(
+        [
+            sys.executable,
+            str(MAKE_TRANSPARENT),
+            str(source),
+            "-o",
+            str(destination),
+            "--tolerance",
+            str(REFERENCE_TOLERANCE),
             "--force",
         ]
     )
@@ -570,6 +631,16 @@ def make_gif(path: Path) -> None:
 
 ASSET_NAMES = ("diagram", "diagram-transparent", "photo", "video", "poster", "gif")
 
+# NOT part of ASSET_NAMES / the default full run on purpose: this target
+# reads a third-party reference figure (template/assets/media/reference/
+# vjepa2-abstract-new.png) that will not exist on every checkout and that
+# this script must never create -- see make_reference_transparent(). Opt in
+# explicitly with --only reference-transparent; a plain, argument-less
+# `generate_demo_media.py` run continues to regenerate exactly the same six
+# original synthetic assets it always has, and never touches this one.
+REFERENCE_ASSET_NAMES = ("reference-transparent",)
+ALL_ASSET_CHOICES = ASSET_NAMES + REFERENCE_ASSET_NAMES
+
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
@@ -582,16 +653,21 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--only",
         action="append",
-        choices=ASSET_NAMES,
+        choices=ALL_ASSET_CHOICES,
         help=(
             "Regenerate only this asset (repeatable, e.g. --only photo --only gif). "
-            "Default: regenerate all six. 'diagram-transparent' requires "
-            "demo-diagram.png to already exist on disk if 'diagram' is not also "
-            "selected; 'poster' requires demo-clip.mp4 the same way for 'video'. "
-            "Use this to avoid disturbing an asset you did not mean to touch -- "
-            "each full run overwrites every file, which is how "
-            "demo-diagram-transparent.png ended up regenerated by accident against "
-            "an in-flux make_transparent.py during v1.2.0 development."
+            "Default (no --only): regenerate the six original synthetic assets. "
+            "'diagram-transparent' requires demo-diagram.png to already exist on "
+            "disk if 'diagram' is not also selected; 'poster' requires "
+            "demo-clip.mp4 the same way for 'video'. 'reference-transparent' is "
+            "opt-in only (never part of the default run): it requires "
+            "assets/media/reference/vjepa2-abstract-new.png, a third-party "
+            "figure this script does not and must not create, to already exist "
+            "on disk -- see template/assets/media/README.md. Use --only to avoid "
+            "disturbing an asset you did not mean to touch -- each full run "
+            "overwrites every file, which is how demo-diagram-transparent.png "
+            "ended up regenerated by accident against an in-flux "
+            "make_transparent.py during v1.2.0 development."
         ),
     )
     args = parser.parse_args(argv)
@@ -609,6 +685,8 @@ def main(argv: list[str] | None = None) -> int:
     video_path = output_dir / "demo-clip.mp4"
     poster_path = output_dir / "demo-clip-poster.jpg"
     gif_path = output_dir / "demo-loop.gif"
+    reference_source_path = output_dir / "reference" / "vjepa2-abstract-new.png"
+    reference_transparent_path = output_dir / "reference" / "vjepa2-abstract-transparent.png"
 
     print(f"Generating demo media into {output_dir} (targets: {', '.join(sorted(targets))})")
 
@@ -656,6 +734,19 @@ def main(argv: list[str] | None = None) -> int:
         make_gif(gif_path)
         print(f"wrote {gif_path} ({gif_path.stat().st_size} bytes)")
         written.append(gif_path)
+
+    if "reference-transparent" in targets:
+        # make_reference_transparent() itself refuses to run (SystemExit 1,
+        # clear stderr message) if reference_source_path is missing -- this
+        # script never synthesizes or overwrites that third-party input, so
+        # there is no fallback path here the way there is for
+        # diagram/diagram-transparent and video/poster above.
+        make_reference_transparent(reference_source_path, reference_transparent_path)
+        print(
+            f"wrote {reference_transparent_path} "
+            f"({reference_transparent_path.stat().st_size} bytes)"
+        )
+        written.append(reference_transparent_path)
 
     total_bytes = sum(p.stat().st_size for p in written)
     print(f"Total ({len(written)} file(s) written this run): {total_bytes} bytes "

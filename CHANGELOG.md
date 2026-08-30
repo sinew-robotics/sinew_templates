@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.2.0  -  2026-08-31
 
 - Centered slide content vertically by default and added named layout primitives (`.split-layout`, `.split-layout-reverse`, `.split-layout-connector`, `.split-layout-footer`, `.card-strip-3/5/12`, `.full-bleed-figure`, `.full-bleed-title`, `.diagram-flow`) for column, connector, card-strip, full-bleed, and flow-diagram shapes.
 - Fixed figure/caption sizing so the caption box shrinks to the rendered image width instead of stretching to the column, and figures fill available space without hand-tuned `max-height` values.
@@ -17,6 +17,14 @@
 - Added `template/scripts/check_overflow.py`, a headless-browser overflow gate that measures actual slide geometry and exits 2 (not 0) when it cannot run.
 - Split `validate.py` into universal and gallery-only checks so it runs on a scaffolded deck instead of crashing, derived extension paths from the matched manifest so a namespaced install validates correctly, and added lints for empty/unresolved citation keys, double captions, hand-numbered captions, structured-results table conventions, a single `#refs` target, and affiliation-mark provenance.
 - Updated `check_render.py` to assert the correct Reveal navigation mode for both the gallery and a delivery render.
+- Replaced an orphaned connector label in the layout demo slides: the bare word "feeds" sat in a `.connector-lane`, a text-only primitive that never draws a line, beside a `.diagram-flow` that has no label capability. It now reads `-feeds->`, a self-contained directional label that needs no drawn line to be unambiguous.
+- Scoped the ASCII rule to slide source, which is what `validate.py` has always enforced, and added a separate rendered-output rule banning decorative Unicode (arrows, math glyphs, emoji, box-drawing, symbols) while permitting Pandoc's typographic substitutions and Quarto's cross-reference non-breaking spaces. `check_render.py` enforces the output rule by allowlist, so a new toolchain-introduced character fails the gate and gets a deliberate decision.
+- Made `.plate` the default for transparent artwork rather than an opt-in, since transparent art inherits whatever slide surface it lands on and the risk is profile-dependent.
+- Added a reference figure under `template/assets/media/reference/` with provenance recorded honestly: `vjepa2-abstract-new.png` is marked license-unestablished and included by explicit owner decision.
+- Fixed media card-strip captions starting at different heights (measured 192px of spread across a three-figure strip). Three compounding causes: a `> figure` rule that could never match because Quarto wraps a numbered figure in `div.quarto-float`; a small image keeping `width: fit-content` and squeezing its own caption into the image's width; and captions bottom-anchored to their own figure, so a longer caption could not see its siblings. Card strips now carry explicit media and caption row tracks passed down by subgrid, so every caption in a strip shares one baseline regardless of length, and the media keeps its native aspect ratio.
+- Gated `make_transparent.py`'s decontamination spatially. It had assumed every partially-transparent pixel was saturated ink thinned by the white background and un-premultiplied it, which is right for antialiased edges but recolored a deliberately pale interior fill to the surrounding ink's own color. Decontamination now applies only within 3px of a fully-transparent pixel, since an interior fill was never composited against the background; measurement showed the two pixel populations separate cleanly. Alpha behavior is unchanged, so the documented grey-fill alpha ceiling remains.
+- Centered card-strip media vertically against each other while keeping the shared caption baseline. The media wrapper filled the whole shared row track and top-anchored its non-growing child, so images with different heights sat at different centers.
+- Fixed a plated figure's backing card ballooning in the fullscreen inspector. The generic fullscreen rule forces media to fill the dialog, which is invisible on a plain image but not on `.plate` media, whose padded background box is itself visible: a 332x393 figure's plate rendered 1504x649.7 with the artwork stranded in a wide band of plate color.
 
 ## 1.1.0  -  2026-08-25
 

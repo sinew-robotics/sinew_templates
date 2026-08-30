@@ -184,4 +184,4 @@ Every push, pull request, and release tag runs structural and contrast validatio
 
 ## Status and scope
 
-This repository is an academic authoring system, not an official event template. Delivery rules change by event, edition, track, and presentation type; consult current official instructions instead of expecting a visual profile to encode them. The current stable release is v1.1.0; v1.2.0 is in development (see `CHANGELOG.md`, "Unreleased").
+This repository is an academic authoring system, not an official event template. Delivery rules change by event, edition, track, and presentation type; consult current official instructions instead of expecting a visual profile to encode them. The current stable release is v1.2.0 (see `CHANGELOG.md`).

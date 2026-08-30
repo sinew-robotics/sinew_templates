@@ -814,9 +814,10 @@ class Validation:
         self.require(len(style_folders) == len(COLORS), "the gallery must contain one column per style")
         for name, folder in zip(COLORS, style_folders):
             self.require(folder.name.endswith(name), f"style column order mismatch for {name}: {folder.name}")
-            # Fourteen files (docs/adding-a-style.md section 4 is the
-            # authoritative list): _05a-media.qmd, _05b-placeholder.qmd, and
-            # _05c-layout.qmd sit between _05-table.qmd and _06-conclusion.qmd.
+            # Fifteen files (docs/adding-a-style.md section 4 is the
+            # authoritative list): _05a-media.qmd, _05b-placeholder.qmd,
+            # _05c-layout.qmd, and _05d-transparency.qmd sit between
+            # _05-table.qmd and _06-conclusion.qmd.
             expected_slide_names = {
                 "_00-section.qmd",
                 "_01-guidelines.qmd",
@@ -828,6 +829,7 @@ class Validation:
                 "_05a-media.qmd",
                 "_05b-placeholder.qmd",
                 "_05c-layout.qmd",
+                "_05d-transparency.qmd",
                 "_06-conclusion.qmd",
                 "_07-generate.qmd",
                 "_08-citations.qmd",
@@ -846,6 +848,7 @@ class Validation:
             media_path = folder / "_05a-media.qmd"
             placeholder_path = folder / "_05b-placeholder.qmd"
             layout_path = folder / "_05c-layout.qmd"
+            transparency_path = folder / "_05d-transparency.qmd"
             generate_path = folder / "_07-generate.qmd"
             citation_path = folder / "_08-citations.qmd"
             references_path = folder / "_09-references.qmd"
@@ -856,6 +859,7 @@ class Validation:
             self.require(media_path.is_file(), f"media slide missing for {name}")
             self.require(placeholder_path.is_file(), f"placeholder slide missing for {name}")
             self.require(layout_path.is_file(), f"layout slide missing for {name}")
+            self.require(transparency_path.is_file(), f"transparency slide missing for {name}")
             self.require(generate_path.is_file(), f"generation slide missing for {name}")
             self.require(citation_path.is_file(), f"citation slide missing for {name}")
             self.require(references_path.is_file(), f"local references slide missing for {name}")

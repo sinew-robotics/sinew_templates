@@ -209,7 +209,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 try:
-    from PIL import Image, ImageChops, ImageOps
+    from PIL import Image, ImageChops, ImageFilter, ImageOps
 except ImportError:
     print(
         "make_transparent.py requires Pillow, which is not installed.\n"
@@ -231,6 +231,20 @@ RATIO_LOW = 0.85
 RATIO_HIGH = 0.99
 FEATHER_WIDE = 160
 FEATHER_NARROW = 16
+
+# Decontamination is spatially gated: only pixels within this many pixels
+# (8-connected / chebyshev distance) of a fully-transparent pixel are
+# un-premultiplied against white. See "Color decontamination" in the module
+# docstring for why, and the task report for the measurement this value is
+# derived from: on the vjepa2-abstract-new.png worked example, every
+# genuine antialiasing residual pixel measured (the documented curved
+# z-circle boundary pixel, and every other non-fill red-hued
+# partially-transparent pixel belonging to the same box) sits at chebyshev
+# distance 1-3 from the nearest fully-transparent pixel, while all but 4 of
+# 1629 pale-pink interior fill pixels sit at distance 4 or more (the
+# distribution has a hard gap: no fill pixel at distance 2 or 3 at all).
+# Radius 3 catches the former population and spares the latter.
+DECONTAMINATION_RADIUS = 3
 
 
 def feather_for_ratio(spread: int, distance: int) -> float:
@@ -339,6 +353,22 @@ def protect_enclosed_regions(
     return Image.composite(opaque, raw_alpha, protect_mask)
 
 
+def build_near_background_mask(alpha_image: "Image.Image", radius: int) -> "Image.Image":
+    """Return a mode-L mask, 255 within `radius` (chebyshev) of a fully-transparent
+    pixel, 0 elsewhere.
+
+    A square `(2*radius + 1)`-wide max-filter over the "is this pixel fully
+    transparent" mask is exactly one round of 8-connected dilation by
+    `radius` -- the same neighborhood `NEIGHBOR_OFFSETS`/flood-fill use
+    elsewhere in this file, just computed in one pass instead of a BFS. See
+    `DECONTAMINATION_RADIUS` for why 3 is the right radius, and "Color
+    decontamination" in the module docstring for why this mask exists.
+    """
+    background = alpha_image.point(lambda value: 255 if value == 0 else 0)
+    size = 2 * radius + 1
+    return background.filter(ImageFilter.MaxFilter(size))
+
+
 def decontaminate(
     rgb_image: "Image.Image",
     alpha_image: "Image.Image",
@@ -355,14 +385,29 @@ def decontaminate(
     [0, 255] with no clamping needed on ordinary input; see "Color
     decontamination" in the module docstring. The clamp stays as a safety
     net, but triggering it is now unexpected, so it is counted and reported.
+
+    This is spatially gated (see `build_near_background_mask` and
+    `DECONTAMINATION_RADIUS`): only a partially-transparent pixel within
+    `DECONTAMINATION_RADIUS` of an actual fully-transparent pixel is
+    un-premultiplied. A partially-transparent pixel far from any
+    fully-transparent pixel was never actually composited against the
+    background -- its fractional alpha comes entirely from the tolerance
+    ramp reading its own color as insufficiently far from white, not from a
+    real white/ink blend -- so treating it as a faded edge and reconstructing
+    it toward saturated ink is wrong; its source color is left untouched.
     """
     rgb_data = rgb_image.getdata()
     alpha_data = alpha_image.getdata()
     distance_data = distance_image.getdata()
+    near_background_data = build_near_background_mask(
+        alpha_image, DECONTAMINATION_RADIUS
+    ).getdata()
     output = []
     clamp_hits = 0
-    for (red, green, blue), alpha, distance in zip(rgb_data, alpha_data, distance_data):
-        if alpha == 0 or alpha == 255:
+    for (red, green, blue), alpha, distance, near_background in zip(
+        rgb_data, alpha_data, distance_data, near_background_data
+    ):
+        if alpha == 0 or alpha == 255 or not near_background:
             output.append((red, green, blue))
             continue
         coverage = distance / 255.0

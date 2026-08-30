@@ -79,6 +79,8 @@ CSS contrast tools cannot evaluate pixels in PNG/JPEG or every SVG path. Review 
 
 Automated checks should cover missing alt/captions, semantic structure, duplicate IDs, profile markers, and gross overflow. `template/scripts/check_overflow.py` covers the last of those: it measures the actual rendered geometry of every slide in a headless browser and reports any element whose box extends past the deck's configured canvas, since neither render success nor valid HTML signals silent overflow on its own. Its exit code 2 means the gate did not run at all (no headless browser available), not that it passed; treat that as an unresolved check, not a pass. Quarto's Reveal format supports an `axe` audit option; use it in the release environment where browser automation is available.
 
+`template/scripts/check_render.py` (run via `check-render.sh`) also scans rendered visible text for decorative Unicode -- arrows, math glyphs, emoji, box-drawing, and symbol characters that fail on an unknown projector. It strips `<script>`/`<style>`/comment blocks before stripping tags so it never flags non-ASCII living in inert library code, then allowlists only ASCII plus the toolchain's own smart-typography and non-breaking-space output (see AGENTS.md); anything else fails with the offending codepoint, an occurrence count, and a text excerpt.
+
 Manual review still checks:
 
 - whether alt text conveys the actual finding;

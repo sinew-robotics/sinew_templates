@@ -462,6 +462,7 @@
      would otherwise silently lose its light backing -- reapply the
      class directly to the cloned media element, which core.scss also
      matches via img.plate/video.plate for exactly this case. */
+
   function mirrorPlateIntoClone(figure, clone) {
     var plateHost = figure.parentElement;
     if (!plateHost || !plateHost.classList.contains("plate")) return;
@@ -503,12 +504,18 @@
 
     function openInspector(label, clone, opener, kind) {
       title.textContent = label;
-      content.replaceChildren(stripInspectorMetadata(clone));
-      typesetClonedMath(content);
+      content.replaceChildren(clone);
       returnFocus = opener;
       dialog.dataset.sinewEvidenceKind = kind;
       dialog.showModal();
-      if (kind === "figure") mirrorVideoStateIntoClone(opener, content);
+      /* mirrorVideoStateIntoClone's play() needs the dialog already open
+         (a paused/hidden video will not resume), so it runs after
+         showModal() rather than before content.replaceChildren above. */
+      if (kind === "figure") {
+        mirrorVideoStateIntoClone(opener, content);
+      }
+      stripInspectorMetadata(clone);
+      typesetClonedMath(content);
     }
 
     dialog.addEventListener("cancel", function (event) {
