@@ -23,6 +23,16 @@
     });
   }
 
+  function labelMissingEvidence() {
+    document.querySelectorAll(".missing-evidence").forEach(function (block) {
+      if (block.querySelector(".missing-evidence-label")) return;
+      var label = document.createElement("p");
+      label.className = "missing-evidence-label";
+      label.textContent = "Missing evidence";
+      block.insertBefore(label, block.firstChild);
+    });
+  }
+
   function installInstitutionLockups() {
     var slides = document.querySelectorAll(".reveal .slides section.slide");
     var source = document.querySelector(".reveal .slides section.slide .institution-lockup");
@@ -55,6 +65,153 @@
       var suffix = identifier.nextSibling;
       if (suffix && suffix.nodeType === Node.TEXT_NODE && !/^\s*:/.test(suffix.nodeValue || "")) {
         suffix.nodeValue = ": " + (suffix.nodeValue || "").replace(/^\s+/, "");
+      }
+    });
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Video component (E3, sinew-6lb.2 / sinew-6lb.5)                   */
+  /*                                                                    */
+  /* Authors write a plain <video> inside a Quarto figure div (see the  */
+  /* E2 authoring pattern in template/docs/figures-and-tables.md) with  */
+  /* whatever combination of muted/playsinline/loop/controls/poster     */
+  /* attributes the defaults call for. This runtime owns exactly three  */
+  /* things HTML attributes cannot express on their own: (1) starting   */
+  /* playback when Reveal actually shows the slide and stopping it when */
+  /* the slide is left, instead of the browser's native autoplay firing */
+  /* the instant the page loads, which finishes an unreached slide's    */
+  /* clip before the audience ever sees it; (2) an optional trim window */
+  /* (data-sinew-start / data-sinew-end, seconds, both optional and      */
+  /* independent) that loops playback between two points without         */
+  /* cutting the source file, so the never-trim-the-file rule stays      */
+  /* practical for an excerpt; (3) the same trim/state handling replayed */
+  /* inside the fullscreen evidence inspector's clone (see below), so a  */
+  /* zoomed clip keeps the same window and does not restart or diverge   */
+  /* from the video the audience was already watching on the slide.      */
+  /*                                                                     */
+  /* data-sinew-autoplay="false" opts a video out of enter-triggered      */
+  /* playback (manual start via its own visible controls instead).       */
+  /* Unmuted ("sound on") playback is an author choice made by omitting  */
+  /* the muted attribute; this runtime never adds or removes it. Browsers*/
+  /* block unmuted autoplay outside a user gesture, so an unmuted video   */
+  /* entered via Reveal navigation (not a click) will usually stay        */
+  /* paused with its controls visible rather than throwing -- .play()'s   */
+  /* rejection is caught and swallowed deliberately; see                  */
+  /* template/docs/figures-and-tables.md for the author-facing warning.   */
+  function videoTrimBounds(video) {
+    var start = parseFloat(video.dataset.sinewStart || "");
+    var end = parseFloat(video.dataset.sinewEnd || "");
+    return {
+      start: isNaN(start) ? 0 : Math.max(0, start),
+      end: isNaN(end) ? null : end
+    };
+  }
+
+  function attemptPlay(video) {
+    var attempt = video.play();
+    if (attempt && typeof attempt.catch === "function") {
+      attempt.catch(function () {
+        /* Autoplay blocked (commonly unmuted playback outside a user
+           gesture). Leave the video paused with its own controls so the
+           viewer can start it manually; this is expected, not an error. */
+      });
+    }
+  }
+
+  function wireVideoTrim(video) {
+    if (video.dataset.sinewTrimWired === "true") return;
+    video.dataset.sinewTrimWired = "true";
+    video.addEventListener("timeupdate", function () {
+      var bounds = videoTrimBounds(video);
+      if (bounds.end !== null && video.currentTime >= bounds.end) {
+        video.currentTime = bounds.start;
+        if (video.dataset.sinewPlaying === "true" && video.paused) attemptPlay(video);
+      }
+    });
+  }
+
+  function enterVideoSlide(video) {
+    wireVideoTrim(video);
+    var bounds = videoTrimBounds(video);
+    video.currentTime = bounds.start;
+    if (video.dataset.sinewAutoplay === "false") return;
+    video.dataset.sinewPlaying = "true";
+    attemptPlay(video);
+  }
+
+  function leaveVideoSlide(video) {
+    var bounds = videoTrimBounds(video);
+    video.dataset.sinewPlaying = "false";
+    video.pause();
+    video.currentTime = bounds.start;
+  }
+
+  function manageVideoPlayback() {
+    var videos = document.querySelectorAll(".reveal .slides section.slide video");
+    if (!videos.length) return;
+
+    videos.forEach(function (video) {
+      wireVideoTrim(video);
+      video.currentTime = videoTrimBounds(video).start;
+    });
+
+    function handleSlideChanged(event) {
+      var previous = event && event.previousSlide;
+      var current = event && event.currentSlide;
+      if (previous) previous.querySelectorAll("video").forEach(leaveVideoSlide);
+      if (current) current.querySelectorAll("video").forEach(enterVideoSlide);
+    }
+
+    if (!window.Reveal || typeof window.Reveal.on !== "function") return;
+    window.Reveal.on("slidechanged", handleSlideChanged);
+    window.Reveal.on("ready", function (event) {
+      handleSlideChanged({ currentSlide: event && event.currentSlide, previousSlide: null });
+    });
+  }
+
+  /* Fullscreen inspector clones every figure with cloneNode(), which
+     copies DOM/attributes but not a <video>'s live playback state or its
+     event listeners. Without this pairing the clone would restart at 0:00
+     while the original silently kept playing underneath (or lost sync) --
+     "continuing at the same timestamp is what a viewer expects" is the
+     explicit sinew-6lb.1 contract for video zoom. mirrorVideoStateIntoClone
+     hands playback to the clone (matching videos by document order, since
+     a figure holds at most one) and pauses the original so only one copy
+     is ever audible/decoding at a time; mirrorVideoStateFromClone hands it
+     back on close so the slide's own video resumes where the zoomed view
+     left off instead of jumping back to wherever it was when zoom opened. */
+  function mirrorVideoStateIntoClone(sourceRoot, cloneRoot) {
+    var originals = sourceRoot.querySelectorAll("video");
+    var clones = cloneRoot.querySelectorAll("video");
+    originals.forEach(function (original, index) {
+      var clone = clones[index];
+      if (!clone) return;
+      wireVideoTrim(clone);
+      clone.muted = original.muted;
+      clone.volume = original.volume;
+      clone.loop = original.loop;
+      clone.currentTime = original.currentTime;
+      var wasPlaying = !original.paused;
+      original.pause();
+      if (wasPlaying) {
+        clone.dataset.sinewPlaying = "true";
+        attemptPlay(clone);
+      }
+    });
+  }
+
+  function mirrorVideoStateFromClone(cloneRoot, sourceRoot) {
+    var clones = cloneRoot.querySelectorAll("video");
+    var originals = sourceRoot.querySelectorAll("video");
+    clones.forEach(function (clone, index) {
+      var original = originals[index];
+      if (!original) return;
+      var wasPlaying = !clone.paused;
+      clone.pause();
+      original.currentTime = clone.currentTime;
+      if (wasPlaying) {
+        original.dataset.sinewPlaying = "true";
+        attemptPlay(original);
       }
     });
   }
@@ -297,6 +454,22 @@
     return node;
   }
 
+  /* .plate (sinew-1dd.2) is a Pandoc image attribute, so Quarto attaches
+     the class to the OUTER .quarto-float wrapper div, not to the <img>
+     itself (verified against actual render output). cloneNode(true) on
+     the expandable <figure> clones only <figure> and its descendants,
+     never that outer wrapper, so a plated figure's fullscreen clone
+     would otherwise silently lose its light backing -- reapply the
+     class directly to the cloned media element, which core.scss also
+     matches via img.plate/video.plate for exactly this case. */
+
+  function mirrorPlateIntoClone(figure, clone) {
+    var plateHost = figure.parentElement;
+    if (!plateHost || !plateHost.classList.contains("plate")) return;
+    var media = clone.querySelector("img, video");
+    if (media) media.classList.add("plate");
+  }
+
   function evidenceIdentifier(scope, fallback) {
     var identifier = scope.querySelector(".sinew-caption-identifier");
     return identifier ? identifier.textContent.trim() : fallback;
@@ -331,11 +504,18 @@
 
     function openInspector(label, clone, opener, kind) {
       title.textContent = label;
-      content.replaceChildren(stripInspectorMetadata(clone));
-      typesetClonedMath(content);
+      content.replaceChildren(clone);
       returnFocus = opener;
       dialog.dataset.sinewEvidenceKind = kind;
       dialog.showModal();
+      /* mirrorVideoStateIntoClone's play() needs the dialog already open
+         (a paused/hidden video will not resume), so it runs after
+         showModal() rather than before content.replaceChildren above. */
+      if (kind === "figure") {
+        mirrorVideoStateIntoClone(opener, content);
+      }
+      stripInspectorMetadata(clone);
+      typesetClonedMath(content);
     }
 
     dialog.addEventListener("cancel", function (event) {
@@ -350,6 +530,9 @@
       event.stopPropagation();
     });
     dialog.addEventListener("close", function () {
+      if (dialog.dataset.sinewEvidenceKind === "figure" && returnFocus) {
+        mirrorVideoStateFromClone(content, returnFocus);
+      }
       content.replaceChildren();
       delete dialog.dataset.sinewEvidenceKind;
       if (returnFocus && typeof returnFocus.focus === "function") returnFocus.focus();
@@ -390,7 +573,9 @@
     slides.querySelectorAll("section.slide figure").forEach(function (figure) {
       if (figure.querySelector("table")) return;
       registerExpandable(figure, "figure", function () {
-        return figure.cloneNode(true);
+        var clone = figure.cloneNode(true);
+        mirrorPlateIntoClone(figure, clone);
+        return clone;
       });
     });
 
@@ -420,10 +605,12 @@
     installInstitutionLockups();
     boldFloatIdentifiers();
     numberAlgorithmCaptions();
+    labelMissingEvidence();
     buildStyleBibliographies();
     labelResearchStatements();
     buildEvidenceInspector();
     wireSinewReferences();
+    manageVideoPlayback();
   }
 
   if (document.readyState === "loading") {

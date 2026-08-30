@@ -1,0 +1,27 @@
+## The split-layout-connector primitive pairs framing text with a labeled diagram flow {data-style-preview="scholar"}
+
+<span class="kicker">Layout | illustrative scenario</span>
+
+::: {.split-layout-connector}
+The gallery also ships split-layout, split-layout-reverse, split-layout-footer, and card-strip-3/5/12 for other evidence shapes; this connector variant threads prose through a labeled pipeline.
+
+::: {.connector-lane}
+-feeds->
+:::
+
+::: {.diagram-flow}
+::: {.diagram-step}
+Collect demonstrations
+:::
+::: {.diagram-arrow}
+:::
+::: {.diagram-step}
+Label contact events
+:::
+::: {.diagram-arrow}
+:::
+::: {.diagram-step}
+Train jointly
+:::
+:::
+:::

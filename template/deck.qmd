@@ -32,6 +32,14 @@ format: sinew-revealjs
 
 {{< include _slides/02-origami/_05-table.qmd >}}
 
+{{< include _slides/02-origami/_05a-media.qmd >}}
+
+{{< include _slides/02-origami/_05b-placeholder.qmd >}}
+
+{{< include _slides/02-origami/_05c-layout.qmd >}}
+
+{{< include _slides/02-origami/_05d-transparency.qmd >}}
+
 {{< include _slides/02-origami/_06-conclusion.qmd >}}
 
 {{< include _slides/02-origami/_07-generate.qmd >}}
@@ -53,6 +61,14 @@ format: sinew-revealjs
 {{< include _slides/03-paper/_04-plot.qmd >}}
 
 {{< include _slides/03-paper/_05-table.qmd >}}
+
+{{< include _slides/03-paper/_05a-media.qmd >}}
+
+{{< include _slides/03-paper/_05b-placeholder.qmd >}}
+
+{{< include _slides/03-paper/_05c-layout.qmd >}}
+
+{{< include _slides/03-paper/_05d-transparency.qmd >}}
 
 {{< include _slides/03-paper/_06-conclusion.qmd >}}
 
@@ -76,6 +92,14 @@ format: sinew-revealjs
 
 {{< include _slides/04-high-contrast/_05-table.qmd >}}
 
+{{< include _slides/04-high-contrast/_05a-media.qmd >}}
+
+{{< include _slides/04-high-contrast/_05b-placeholder.qmd >}}
+
+{{< include _slides/04-high-contrast/_05c-layout.qmd >}}
+
+{{< include _slides/04-high-contrast/_05d-transparency.qmd >}}
+
 {{< include _slides/04-high-contrast/_06-conclusion.qmd >}}
 
 {{< include _slides/04-high-contrast/_07-generate.qmd >}}
@@ -97,6 +121,14 @@ format: sinew-revealjs
 {{< include _slides/05-blueprint/_04-plot.qmd >}}
 
 {{< include _slides/05-blueprint/_05-table.qmd >}}
+
+{{< include _slides/05-blueprint/_05a-media.qmd >}}
+
+{{< include _slides/05-blueprint/_05b-placeholder.qmd >}}
+
+{{< include _slides/05-blueprint/_05c-layout.qmd >}}
+
+{{< include _slides/05-blueprint/_05d-transparency.qmd >}}
 
 {{< include _slides/05-blueprint/_06-conclusion.qmd >}}
 
@@ -120,6 +152,14 @@ format: sinew-revealjs
 
 {{< include _slides/06-scholar/_05-table.qmd >}}
 
+{{< include _slides/06-scholar/_05a-media.qmd >}}
+
+{{< include _slides/06-scholar/_05b-placeholder.qmd >}}
+
+{{< include _slides/06-scholar/_05c-layout.qmd >}}
+
+{{< include _slides/06-scholar/_05d-transparency.qmd >}}
+
 {{< include _slides/06-scholar/_06-conclusion.qmd >}}
 
 {{< include _slides/06-scholar/_07-generate.qmd >}}
@@ -141,6 +181,14 @@ format: sinew-revealjs
 {{< include _slides/07-unmasked/_04-plot.qmd >}}
 
 {{< include _slides/07-unmasked/_05-table.qmd >}}
+
+{{< include _slides/07-unmasked/_05a-media.qmd >}}
+
+{{< include _slides/07-unmasked/_05b-placeholder.qmd >}}
+
+{{< include _slides/07-unmasked/_05c-layout.qmd >}}
+
+{{< include _slides/07-unmasked/_05d-transparency.qmd >}}
 
 {{< include _slides/07-unmasked/_06-conclusion.qmd >}}
 
@@ -164,6 +212,14 @@ format: sinew-revealjs
 
 {{< include _slides/08-the-give/_05-table.qmd >}}
 
+{{< include _slides/08-the-give/_05a-media.qmd >}}
+
+{{< include _slides/08-the-give/_05b-placeholder.qmd >}}
+
+{{< include _slides/08-the-give/_05c-layout.qmd >}}
+
+{{< include _slides/08-the-give/_05d-transparency.qmd >}}
+
 {{< include _slides/08-the-give/_06-conclusion.qmd >}}
 
 {{< include _slides/08-the-give/_07-generate.qmd >}}
@@ -186,6 +242,14 @@ format: sinew-revealjs
 
 {{< include _slides/09-the-meeting/_05-table.qmd >}}
 
+{{< include _slides/09-the-meeting/_05a-media.qmd >}}
+
+{{< include _slides/09-the-meeting/_05b-placeholder.qmd >}}
+
+{{< include _slides/09-the-meeting/_05c-layout.qmd >}}
+
+{{< include _slides/09-the-meeting/_05d-transparency.qmd >}}
+
 {{< include _slides/09-the-meeting/_06-conclusion.qmd >}}
 
 {{< include _slides/09-the-meeting/_07-generate.qmd >}}
@@ -207,6 +271,14 @@ format: sinew-revealjs
 {{< include _slides/10-movement/_04-plot.qmd >}}
 
 {{< include _slides/10-movement/_05-table.qmd >}}
+
+{{< include _slides/10-movement/_05a-media.qmd >}}
+
+{{< include _slides/10-movement/_05b-placeholder.qmd >}}
+
+{{< include _slides/10-movement/_05c-layout.qmd >}}
+
+{{< include _slides/10-movement/_05d-transparency.qmd >}}
 
 {{< include _slides/10-movement/_06-conclusion.qmd >}}
 

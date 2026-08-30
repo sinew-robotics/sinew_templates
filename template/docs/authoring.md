@@ -66,6 +66,94 @@ Quarto-generated `Figure N` and `Table N` identifiers are bolded by the format; 
 
 The source project's quiet visual hierarchy, assertion headlines, one-evidence discipline, figure captions, and numbered takeaways are retained. Branding and app-specific UI are not.
 
+## Layout
+
+### Vertical centering
+
+Slide content is centered vertically by default: the section is a flex column and Reveal always gives the present slide an explicit height equal to the full canvas, so there is real space to center into. Divider slides (`.section-slide`) and the deck's own `#title-slide` keep their own hand-tuned vertical rhythm and are not affected.
+
+Opt a dense reference/appendix slide back into top alignment:
+
+```markdown
+## A long backup derivation {.top-aligned}
+```
+
+Quarto ships `div.columns { display: initial; gap: initial; }` in its own `_quarto-rules.scss` to restore pre-Pandoc-8237 column behavior. `initial` for `display` is the CSS-wide initial value, `inline`, not the div's normal block default, so `align-items`/`gap` on a plain `.columns` block have never done anything: there is no flex or grid box for them to apply to. Do not try `display: flex` on `.column` to fix this -- it fights Quarto's inline-block sizing model and can drop media below text. `.column` keeps `display: inline-block` and gets `vertical-align: middle` instead, which centers unequal-height columns correctly. Widths no longer need to sum to under 100 to fake a gutter (48/48, 54/42, and similar hand-tuned splits from older slides still render correctly); new slides should use a round split (50/50, 60/40) and let the theme's padding-based gutter show the gap.
+
+### Named layout primitives
+
+The dominant shape across real decks is two columns, text on the left and media on the right. Write it as `.split-layout` with exactly two direct children:
+
+```markdown
+::: {.split-layout}
+Two or three sentences of supporting text. The left panel is the wide
+one (3fr) and takes prose.
+
+![Evidence caption.](assets/figures/result.svg){#fig-result}
+:::
+```
+
+For media-left/text-right, put the media panel first and use `.split-layout-reverse` (the class swaps the fr ratio; DOM order stays reading order):
+
+```markdown
+::: {.split-layout-reverse}
+![Diagram.](assets/figures/setup.svg){#fig-setup}
+
+Supporting text goes in the second, wide panel.
+:::
+```
+
+Other primitives:
+
+- `.split-layout-connector` -- three columns, text | narrow connector lane | media. Put arrow/edge labels in a child with `.connector-lane`.
+- `.split-layout-footer` -- the same two-column top row plus one full-width row beneath it. Exactly three direct children: left, right, footer.
+- `.card-strip-3`, `.card-strip-5`, `.card-strip-12` -- equal-width card strips for that many items.
+- `.full-bleed-figure` -- a single figure with no side padding, filling the slide width.
+
+All of these are grid-based (`minmax(0, Nfr)` tracks, never bare `Nfr`, so a wide code block, table, or image cannot force its column to overflow) and are unrelated to Quarto's `.columns`/`.column` reset, so their gap and ratio arithmetic works directly -- no percentage tuning needed. `.smaller` and `.scrollable` are Quarto's documented per-slide classes; the theme neutralizes both automatically on any slide using one of these primitives, the same way it already does for `.references-slide`, so a primitive slide that got manually marked `.smaller`/`.scrollable` (or a future auto-shrink pass) does not silently override the primitive's own sizing. Confirmed by rendering a slide with `.smaller` and a `.split-layout` primitive together: font size measured 34px (the theme's own root size, restored), against 23.8px (Quarto's `0.7em` reduction, unmodified) on an otherwise identical `.smaller` slide with no primitive. Do not add `.smaller` yourself to solve overflow (see "Text and typography" above); if a primitive slide genuinely overflows, split the content across slides instead.
+
+### Figures, sizing, and captions
+
+A figure is centered on its own evidence, not on the column: the image (or video) sets the width, and the caption's box shrinks to match it, wrapping as normal left-aligned prose. A long caption is not centered as a block of text -- centered multi-line prose reads badly, so only the box, not the text alignment, follows the image.
+
+That shrink-to-match behavior is the default (no explicit width on the image). Writing an explicit `{width="NN%"}` attribute is a deliberate author choice and is honored as given -- the image renders at that percentage of the column instead of being stretched to fill it -- but the caption box then spans the full column width rather than narrowing to the image, since the figure itself is no longer shrink-wrapped around a fixed-size image. Verified against the rendered `fig-gallery-paper` example (`{width="72%"}`): the image measured exactly 72% of its container while its figcaption measured the full container width. Prefer the default (no explicit width) unless the deck genuinely needs a smaller image with a narrower, image-matched caption.
+
+Images size automatically to the column width, capped to whatever vertical space is left after the kicker, title, and caption claim their own height. Do not hand-tune a `max-height` in pixels or ems for a specific slide; if a figure looks too small or too large, that almost always means the slide has too much competing content, not that the figure needs a manual size. Media always keeps its native aspect ratio -- nothing here crops or letterboxes -- so a very wide, very tall, square, or unusually-proportioned asset all render correctly with no extra markup.
+
+### Flow diagrams
+
+For a short, no-JS, no-SVG pipeline of stages:
+
+```markdown
+::: {.diagram-flow}
+::: {.diagram-step}
+Collect demonstrations
+:::
+::: {.diagram-arrow}
+:::
+::: {.diagram-step}
+Label contact events
+:::
+::: {.diagram-arrow}
+:::
+::: {.diagram-step}
+Train jointly
+:::
+:::
+```
+
+Steps and arrows use theme tokens only, so the diagram stays legible in every color profile and in grayscale: meaning comes from the border, the label text, and the arrow glyph, never from fill color alone.
+
+### Long titles
+
+`h1` is capped at 22 characters wide by default (dividers included). A title that must run long opts out per slide:
+
+```markdown
+# A title long enough that it needs the full slide width {.full-bleed-title}
+```
+
+Note the selector is `.full-bleed-title h1`, not `h1.full-bleed-title`: Pandoc/Quarto put attributes written on a `#`/`##` heading onto the enclosing `<section>`, not onto the heading element itself.
+
 ## Research questions and hypotheses
 
 Research questions and research hypotheses use required semantic list classes. Do not type `Q1`, `Q2`, `H1`, or `H2` into item text: Sinew generates Q1-Q9 and H1-H9 with CSS counters so identifiers remain consistent across every visual profile.
@@ -118,7 +206,7 @@ Quarto warns that audiences often miss vertical slides. Sinew mitigates, but doe
 - Say when you move down for detail and when you return to the main path.
 - Keep controls enabled and use `O` overview during rehearsal.
 - Share a linear PDF or `?view=scroll` version after the talk.
-- For fixed-timing video, define one deterministic linear route and do not rely on live 2D choices.
+- For fixed-timing video, define one deterministic linear route and do not rely on live 2D choices. How critical this is depends on `navigation-mode`, and it is not symmetric. Delivery decks use `navigation-mode: default` (the extension's shipped setting), under which plain forward Space already IS a deterministic route: it visits every slide in source order, matching the flattened `c` slide number exactly (see `template/docs/architecture.md`, "Slide numbering"). The internal style gallery keeps `navigation-mode: grid` deliberately, and only there, so that moving right lands on the same slide type in the next style column; under `grid`, forward Space preserves the current row across stacks and can skip most of the deck whenever stacks differ in height -- measured on this gallery: `1, 2, 3, 4, 5, 10, 11, ..., 140`, only 24 of 140 slides reached. So for a gallery-style or otherwise `grid`-mode deck, a defined linear route is not a nice-to-have: without one, a fixed-timing export silently skips most of the deck, not just a slide or two.
 
 ## Text and typography
 

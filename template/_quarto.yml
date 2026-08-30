@@ -12,6 +12,15 @@ profile:
   group:
     - [color-origami, color-paper, color-high-contrast, color-blueprint, color-scholar, color-unmasked, color-the-give, color-the-meeting, color-movement]
 
+# Numeric [N] citations (IEEE) are the project default. Citation style is a
+# document/bibliography concern, not a visual axis, so it is not one of the
+# color-* profiles above; see docs/citations.md. To render the same deck
+# with author-year citations instead, override this one key in deck.qmd
+# (Quarto's schema rejects `csl: null`/`csl: ""`, so point it at the other
+# bundled CSL rather than trying to unset the key):
+#   csl: styles/citations/chicago-author-date.csl
+csl: styles/citations/ieee.csl
+
 format:
   sinew-revealjs:
     output-file: index.html

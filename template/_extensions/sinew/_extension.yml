@@ -1,6 +1,6 @@
 title: Sinew Academic Reveal.js
 author: Ivan Domrachev and contributors
-version: 1.1.0
+version: 1.2.0
 quarto-required: ">=1.5.0"
 contributes:
   shortcodes:
@@ -10,7 +10,30 @@ contributes:
       theme:
         - default
         - theme/core.scss
-      navigation-mode: grid
+      # "default" (not "grid" or "linear") is the delivery default. Verified
+      # against reveal.esm.js: Space/N/P and the on-screen next/prev controls
+      # always run the depth-first route (down within a stack, else right to
+      # the next stack) regardless of navigation-mode. What navigation-mode
+      # actually changes is (a) which vertical row a horizontal move lands
+      # on and (b) what the physical arrow keys do. "grid" makes right()/
+      # left() PRESERVE the current row when switching stacks (`Ye(c+1,
+      # "grid"===A.navigationMode?h:void 0)`), which is exactly what makes
+      # forward Space skip slides whenever stacks differ in height (see
+      # docs/architecture.md, "Slide numbering"). "default" and "linear"
+      # both pass `void 0` there, which resets to the target stack's start
+      # row (0 on a first visit), giving full depth-first coverage. "linear"
+      # is NOT used here even though it also fixes that: reveal.esm.js's
+      # keyboard handler collapses Up/Down into prev()/next() whenever
+      # navigation-mode is "linear" (`h="linear"===t.navigationMode||...`),
+      # so the physical arrow keys stop doing in-stack vertical movement at
+      # all -- incompatible with this template's vertical evidence stacks
+      # and with the "up/down: move within a subtopic" contract in
+      # README.md. "default" keeps left/right and up/down exactly as
+      # documented while still giving Space full linear coverage.
+      # `template/_quarto-gallery.yml` overrides this back to `grid` for the
+      # internal repository-tour layer only, where the row-preserving jump
+      # is the point (compare "the same slide type" across style columns).
+      navigation-mode: default
       controls: true
       controls-layout: edges
       controls-tutorial: true
@@ -22,7 +45,16 @@ contributes:
       center: false
       center-title-slide: false
       slide-level: 2
-      slide-number: h.v
+      # Flattened, depth-first sequential slide number (1, 2, 3, ...) reflecting
+      # each slide's position in the deck source (document order), including
+      # section dividers. Numbering is positional: a divider counts as a
+      # slide, so the first content slide in a stack is the second number in
+      # that stack, not the first. Delivery decks use navigation-mode:
+      # default (see above), under which this matches forward Space-key
+      # order exactly; see docs/architecture.md, "Slide numbering".
+      # To opt back into the previous "horizontal.vertical" numbering used by
+      # earlier decks, set this to `h.v` instead.
+      slide-number: c
       show-slide-number: all
       width: 1600
       height: 900

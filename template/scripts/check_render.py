@@ -5,10 +5,77 @@ from __future__ import annotations
 
 import re
 import sys
+from html import unescape
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
+
+# Rendered visible text is held to a narrower rule than slide SOURCE (which
+# validate.py restricts to pure printable ASCII). The toolchain legitimately
+# introduces a small, fixed set of non-ASCII characters that no author typed:
+# Pandoc smart-typography substitutions and the non-breaking space Quarto's
+# cross-reference machinery emits (load-bearing for "Figure 1" spacing). See
+# AGENTS.md and CLAUDE.md for the authoritative statement of this rule.
+PERMITTED_NON_ASCII_CODEPOINTS = {
+    0x00A0,  # non-breaking space (Quarto cross-reference spacing)
+    0x2018,  # left single quotation mark
+    0x2019,  # right single quotation mark
+    0x201C,  # left double quotation mark
+    0x201D,  # right double quotation mark
+    0x2013,  # en dash
+    0x2014,  # em dash
+    0x2026,  # horizontal ellipsis
+}
+
+
+def extract_visible_text(source: str) -> str:
+    """Approximate what a viewer actually sees, from a self-contained render.
+
+    The rendered index.html inlines the whole Reveal.js bundle, so a naive
+    scan of the raw file also matches non-ASCII characters living in library
+    JavaScript and CSS that no viewer ever sees as text. Strip <script> and
+    <style> blocks and HTML comments before stripping tags, then unescape
+    entities, so only visible text remains.
+    """
+    body = re.sub(r"<!--.*?-->", " ", source, flags=re.S)
+    body = re.sub(r"<script\b.*?</script>", " ", body, flags=re.S | re.I)
+    body = re.sub(r"<style\b.*?</style>", " ", body, flags=re.S | re.I)
+    body = re.sub(r"<[^>]+>", " ", body)
+    return unescape(body)
+
+
+def find_decorative_unicode(visible_text: str) -> list[str]:
+    """Report visible-text characters outside the permitted rendered charset.
+
+    Allowlisted, not denylisted: permit ASCII 0x20-0x7E plus newline/tab plus
+    PERMITTED_NON_ASCII_CODEPOINTS, and flag anything else. Enumerating every
+    arrow/emoji/box-drawing/math-glyph character individually is unbounded
+    and would silently miss new ones; an allowlist instead makes a genuinely
+    new toolchain-introduced character trip the gate for a deliberate
+    decision, which is the behavior wanted here.
+    """
+    offenders: dict[int, dict[str, object]] = {}
+    for index, char in enumerate(visible_text):
+        codepoint = ord(char)
+        if char in ("\n", "\t"):
+            continue
+        if 0x20 <= codepoint <= 0x7E:
+            continue
+        if codepoint in PERMITTED_NON_ASCII_CODEPOINTS:
+            continue
+        info = offenders.setdefault(codepoint, {"count": 0, "excerpt": None})
+        info["count"] = int(info["count"]) + 1
+        if info["excerpt"] is None:
+            start, end = max(0, index - 20), min(len(visible_text), index + 21)
+            info["excerpt"] = re.sub(r"\s+", " ", visible_text[start:end]).strip()
+
+    return [
+        f"decorative Unicode U+{codepoint:04X} in visible text "
+        f"({offenders[codepoint]['count']} occurrence(s)): "
+        f"...{offenders[codepoint]['excerpt']}..."
+        for codepoint in sorted(offenders)
+    ]
 
 
 def main() -> int:
@@ -28,10 +95,34 @@ def main() -> int:
         if not condition:
             errors.append(message)
 
-    require('navigationMode: "grid"' in html or "navigationMode: 'grid'" in html, "Reveal grid navigation is absent")
+    # Navigation mode is deliberately different between the two renders (see
+    # docs/architecture.md and _quarto-gallery.yml): the gallery keeps `grid`
+    # so left/right preserves the current vertical row and lands on "the
+    # same slide type" in the next style column, while every delivery deck
+    # uses `default` so a forward Space walk visits every slide (the bug a
+    # stuck-on-`grid` delivery render caused before v1.2.0). Detected from
+    # the rendered artifact itself (the `--sinew-gallery: "runtime"` marker
+    # written by _quarto-gallery.yml), not from the optional COLOR argument
+    # below: the argument is only the caller's stated intent, and a render
+    # that silently came out in the wrong mode despite the caller's intent
+    # is exactly the regression this check exists to catch. Assert both
+    # directions, not "either is fine" -- a delivery deck that silently
+    # rendered with grid must still fail this gate.
+    gallery_runtime = '--sinew-gallery: "runtime"' in html
+    grid_present = 'navigationMode: "grid"' in html or "navigationMode: 'grid'" in html
+    default_present = 'navigationMode: "default"' in html or "navigationMode: 'default'" in html
+    if gallery_runtime:
+        require(grid_present, "Reveal grid navigation is absent from the gallery render")
+    else:
+        require(default_present, "Reveal default (depth-first) navigation is absent from the delivery render")
     require("--sinew-color-profile:" in html, "color profile marker is absent")
     require("{{< include" not in html, "an include shortcode was not resolved")
     require("openai" not in html.lower(), "unexpected injected provider text found")
+
+    visible_text = extract_visible_text(html)
+    decorative_unicode_errors = find_decorative_unicode(visible_text)
+    for message in decorative_unicode_errors:
+        errors.append(message)
 
     deck = (ROOT / "deck.qmd").read_text(encoding="utf-8")
     includes = re.findall(r"^\{\{<\s+include\s+([^ >]+)\s*>\}\}$", deck, re.MULTILINE)
@@ -139,7 +230,16 @@ def main() -> int:
         html.count('class="csl-entry"') == len(set(cited_keys)),
         f"expected {len(set(cited_keys))} unique bibliography entries",
     )
-    require('class="references csl-bib-body hanging-indent"' in html, "citeproc bibliography is absent")
+    # Pandoc only adds "hanging-indent" for CSL styles that use a hanging
+    # first line (author-date defaults). Sinew's default numeric IEEE style
+    # instead prefixes each entry with a "[N]" csl-left-margin div and does
+    # not carry that class, so accept either citeproc wrapper form; see
+    # docs/citations.md.
+    require(
+        'class="references csl-bib-body hanging-indent"' in html
+        or 'class="references csl-bib-body"' in html,
+        "citeproc bibliography is absent",
+    )
     require("references-slide" in html, "styled references slide is absent")
     require(
         html.count('class="style-references"') == expected_style_columns,
@@ -174,7 +274,6 @@ def main() -> int:
             f"expected color marker {requested_mode}",
         )
 
-    gallery_runtime = '--sinew-gallery: "runtime"' in html
     if requested_mode == "gallery":
         require(gallery_runtime, "zero-config render did not activate the runtime gallery")
 

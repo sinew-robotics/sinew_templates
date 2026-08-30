@@ -1,0 +1,17 @@
+## A missing result stays visibly unfilled instead of a plausible-looking stand-in {data-style-preview="the-meeting"}
+
+<span class="kicker">Placeholder | illustrative scenario</span>
+
+::: {#fig-placeholder-the-meeting}
+::: {.missing-evidence}
+Contact-recovery ablation pending re-run after force-torque sensor recalibration.
+
+Tracking: SINEW-GALLERY-014
+:::
+
+What this figure will show once the re-run completes: recovery success rate versus perturbation magnitude, compared against the current contact-aware policy.
+:::
+
+::: {.source}
+Illustrative placeholder pattern; the tracking id and scenario are fictional. Reuse this shape, never a plausible-looking number, whenever real evidence is not ready.
+:::
