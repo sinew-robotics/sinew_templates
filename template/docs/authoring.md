@@ -116,6 +116,8 @@ All of these are grid-based (`minmax(0, Nfr)` tracks, never bare `Nfr`, so a wid
 
 A figure is centered on its own evidence, not on the column: the image (or video) sets the width, and the caption's box shrinks to match it, wrapping as normal left-aligned prose. A long caption is not centered as a block of text -- centered multi-line prose reads badly, so only the box, not the text alignment, follows the image.
 
+That shrink-to-match behavior is the default (no explicit width on the image). Writing an explicit `{width="NN%"}` attribute is a deliberate author choice and is honored as given -- the image renders at that percentage of the column instead of being stretched to fill it -- but the caption box then spans the full column width rather than narrowing to the image, since the figure itself is no longer shrink-wrapped around a fixed-size image. Verified against the rendered `fig-gallery-paper` example (`{width="72%"}`): the image measured exactly 72% of its container while its figcaption measured the full container width. Prefer the default (no explicit width) unless the deck genuinely needs a smaller image with a narrower, image-matched caption.
+
 Images size automatically to the column width, capped to whatever vertical space is left after the kicker, title, and caption claim their own height. Do not hand-tune a `max-height` in pixels or ems for a specific slide; if a figure looks too small or too large, that almost always means the slide has too much competing content, not that the figure needs a manual size. Media always keeps its native aspect ratio -- nothing here crops or letterboxes -- so a very wide, very tall, square, or unusually-proportioned asset all render correctly with no extra markup.
 
 ### Flow diagrams

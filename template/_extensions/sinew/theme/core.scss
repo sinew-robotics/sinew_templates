@@ -177,6 +177,12 @@ html:has(.reveal .section-slide.present) .reveal .slide-background-content {
   text-transform: uppercase;
 }
 
+/* overflow-wrap/word-break: a caption's source/license text (see
+   authoring.md, "Assertion-evidence slide anatomy") routinely carries a
+   URL or a long filename -- one unbreakable token wider than any
+   sensible caption box -- so ordinary word wrapping is not enough on
+   its own; force a break inside the token instead of letting it run
+   past the slide edge. */
 .reveal .figcap,
 .reveal .algorithm-caption,
 .reveal figcaption,
@@ -188,6 +194,8 @@ html:has(.reveal .section-slide.present) .reveal .slide-background-content {
   font-size: 0.43em;
   line-height: 1.35;
   text-align: left;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .reveal .figcap strong,
@@ -1035,9 +1043,34 @@ html:has(.reveal .section-slide.present) .reveal .slide-background-content {
   flex: 1 1 auto;
   align-self: center;
   min-height: 0;
-  width: fit-content;
   max-width: 100%;
   margin: 0.2em auto 0;
+}
+/* Shrink-to-fit (and caption-hugging below) applies only when the
+   image/video has no explicit width of its own. Pandoc/Quarto write an
+   author's `{width="NN%"}` as an inline `style="width: NN.N%"` on the
+   media element -- a genuine, ordinary authoring pattern for a
+   deliberately small inset figure, not just Pandoc's own default.
+   Forcing that back to `width: auto` (an earlier version of this rule
+   did, with !important, to defeat the SAME inline style when it was
+   unwanted) also defeats it when the author asked for it: a 20% inset
+   figure rendered at full size, indistinguishable from an
+   unconstrained one, because the two cases share one inline property
+   and CSS cannot tell "Pandoc's default" from "the author's choice"
+   apart. So this file no longer tries to: an explicit width is always
+   honored. `[style^="width"]` (not `*=`) deliberately does not match
+   `max-width: ...`, which also contains the substring "width". Without
+   an explicit width, the figure still shrinks to the image's own
+   rendered size, matching the caption box to it as before; with one,
+   the figure stays the column's full width (Quarto's own
+   `.quarto-figure > figure { width: 100% }` default, not overridden
+   here) and the caption spans that width instead of the now-smaller
+   image -- an honest tradeoff, not a bug: a plain, wide, readable
+   caption beats one artificially squeezed to an inset image's width,
+   and there is no way to read the author's percentage into a sibling's
+   CSS width without knowing the resolved pixel value. */
+.reveal .slide figure:not(:has(img[style^="width"], video[style^="width"])) {
+  width: fit-content;
 }
 /* The fullscreen evidence inspector below wraps the media in its own
    unclassed div (to hang an aria-describedby caption link off it), and
@@ -1053,22 +1086,25 @@ html:has(.reveal .section-slide.present) .reveal .slide-background-content {
   min-height: 0;
 }
 
-/* Pandoc/Quarto write an inline `style="width: NN.N%"` onto the <img>
-   itself (a fig-width percentage), which -- like Reveal's inline
-   display: block on the present slide above -- beats any stylesheet
-   rule regardless of specificity and pins the image to a fraction of
-   whatever box it lands in, defeating the fit-content sizing above and
-   silently reproducing the old fixed-percentage-of-column behavior.
-   !important on width/height is required here for the same reason. */
+/* Cap height instead of forcing width: with an explicit author width
+   left alone (see above), only max-height/max-width are needed to keep
+   the image within the remaining vertical space and the column, and
+   neither property collides with the inline `width` Pandoc/the author
+   wrote, so no !important fight is needed here at all -- max-height
+   and max-width are never set inline, so the stylesheet rule already
+   wins. When width is unconstrained (no inline style), max-height
+   still applies proportionally, preserving aspect ratio with no crop
+   and no letterbox bars, because nothing here fixes a box ratio
+   different from the asset's own; object-fit: contain is a safety net,
+   not the mechanism doing the work. */
 .reveal .slide figure :is(img, video),
 .reveal .slide > img {
   display: block;
   flex: 1 1 auto;
   min-width: 0;
   min-height: 0;
-  width: auto !important;
-  height: auto !important;
   max-width: 100%;
+  max-height: 100%;
   margin-right: auto;
   margin-left: auto;
   object-fit: contain;
@@ -1083,12 +1119,19 @@ html:has(.reveal .section-slide.present) .reveal .slide-background-content {
    makes the caption contribute nothing to its ancestor's fit-content
    sizing while still filling whatever width the image (or other
    widest sibling) ends up establishing, so the caption wraps at
-   exactly the image's edge instead of setting it. */
+   exactly the image's edge instead of setting it. That box can still
+   be narrower than one unbreakable token -- a long URL or filename in
+   the source/license text authoring.md itself asks captions to carry
+   -- so wrapping has to be forced per token, not just per word;
+   overflow-wrap/word-break below do that (see the shared caption rule
+   near the top of this file for the same fix on the general case). */
 .reveal .slide figure > figcaption,
 .reveal .slide figure > .figcap {
   box-sizing: border-box;
   width: 0;
   min-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 /* Booktabs-like tables: no vertical rules, visible hierarchy, tabular numbers. */
@@ -1219,12 +1262,20 @@ html:has(.reveal .section-slide.present) .reveal .slide-background-content {
 /* specificity, so `!important` here is required, not decorative --     */
 /* the same reasoning already used elsewhere in this file to beat        */
 /* Quarto's own !important rules (see the sizing rules near the         */
-/* fullscreen inspector below). */
+/* fullscreen inspector below).                                         */
+/*                                                                      */
+/* `justify-content: safe center` (not bare `center`): plain `center`   */
+/* on overflowing content centers the OVERFLOW too, clipping evenly off */
+/* both ends -- on this template that clips the title off the top just  */
+/* as often as it clips the bottom. `safe` is the CSS box-alignment     */
+/* keyword built for exactly this: it centers when the content fits and */
+/* falls back to start (top) alignment when it would overflow, so       */
+/* overflow only ever clips the bottom, never the title. */
 .reveal .slides section.present:not(#title-slide):not(.section-slide),
 .reveal .slides section section.present:not(#title-slide):not(.section-slide) {
   display: flex !important;
   flex-direction: column;
-  justify-content: center;
+  justify-content: safe center;
 }
 
 .reveal .slides section.present.top-aligned,
@@ -1293,11 +1344,20 @@ html:has(.reveal .section-slide.present) .reveal .slide-background-content {
 /* .split-layout-reverse for media-left/text-right and put the media   */
 /* panel first in the source; the class swaps the fr ratio, not the    */
 /* DOM order, so markup order always matches reading order. */
+/* flex: 1 1 auto; min-height: 0 here (not just on the figures inside,
+   below) for the same reason as the slide-figure fix: without it, the
+   primitive itself -- a flex ITEM of the flex-column slide section --
+   defaults to its own content height instead of filling/being bounded
+   by whatever space the section actually has, so a grid row inside it
+   has nothing definite to stretch a figure against no matter what the
+   figure's own align-self says. */
 .reveal .split-layout,
 .reveal .split-layout-reverse,
 .reveal .split-layout-connector,
 .reveal .split-layout-footer {
   display: grid;
+  flex: 1 1 auto;
+  min-height: 0;
   align-items: center;
   gap: var(--sinew-gutter, 1.1em);
 }
@@ -1342,6 +1402,8 @@ html:has(.reveal .section-slide.present) .reveal .slide-background-content {
 .reveal .card-strip-5,
 .reveal .card-strip-12 {
   display: grid;
+  flex: 1 1 auto;
+  min-height: 0;
   align-items: stretch;
   gap: var(--sinew-gutter, 0.6em);
 }
@@ -1353,22 +1415,67 @@ html:has(.reveal .section-slide.present) .reveal .slide-background-content {
    grid cell edge-to-edge subject to the aspect-ratio rules above. */
 .reveal .full-bleed-figure {
   display: grid;
+  flex: 1 1 auto;
   width: 100%;
   min-height: 0;
 }
 .reveal .full-bleed-figure figure { width: 100%; }
 
-/* Quarto's build-time density heuristic can read one of these
-   primitives -- a wide grid of short label/value pairs, for example --
-   as dense prose and auto-apply .smaller/.scrollable, the same trap
-   already worked around above for .references-slide. Fixed grid
-   tracks make that guess wrong for a primitive slide even though the
-   heuristic is right to flag genuine dense-prose slides, so the
-   override is scoped to slides that actually contain a primitive. */
-.reveal .slides section:has([class^="split-layout"], [class^="card-strip"], .full-bleed-figure).smaller {
+/* A figure's `align-self: center` above (near the figure rules) exists
+   to stop the FLEX-column slide section from stretching the figure's
+   WIDTH. `align-self` controls the cross axis, and cross axis is not
+   the same axis in every parent: these primitives are CSS Grid rows,
+   where the cross axis is the row's HEIGHT, so that same `center`
+   value also stops a figure filling its grid cell's height here --
+   leaving the figure's own nested flex-fill sizing (figure > div >
+   img, all flex: 1 1 auto) with no definite height to resolve against,
+   so an ordinary image reverts to intrinsic sizing with no cap at all.
+   Restore the grid default (stretch) for figures specifically inside
+   these primitives so the cell's own height becomes the figure's
+   height, which the flex-fill chain then correctly fits inside. */
+.reveal .split-layout > figure,
+.reveal .split-layout-reverse > figure,
+.reveal .split-layout-connector > figure,
+.reveal .split-layout-footer > figure,
+.reveal .card-strip-3 > figure,
+.reveal .card-strip-5 > figure,
+.reveal .card-strip-12 > figure,
+.reveal .full-bleed-figure > figure {
+  align-self: stretch;
+  min-height: 0;
+}
+
+/* `.smaller`/`.scrollable` are Quarto's documented per-slide classes
+   (not something this file found being applied automatically by any
+   content-density measurement -- grepped the bundled filters and
+   reveal.js core for one and found none). The real reason to neutralize
+   them here is the same one already applied to .references-slide: an
+   author (or a future revision of Quarto that does add such a pass)
+   marking a primitive slide .smaller/.scrollable by hand would silently
+   fight the primitive's own fixed-track sizing, so guard against that
+   rather than rely on authors remembering not to.
+   `[class^="X"]` (starts-with) is the wrong tool here: it tests whether
+   the whole class ATTRIBUTE STRING starts with X, not whether X is any
+   one of the element's classes, so `class="custom-highlight
+   split-layout"` would not match even though `split-layout` is right
+   there. `[class~="X"]` (word/token match) is correct: it matches when
+   X is exactly one space-separated token in the class list, in any
+   position, so every primitive class needs its own explicit `~=`
+   entry rather than one shared prefix. */
+.reveal .slides section:has(
+    [class~="split-layout"], [class~="split-layout-reverse"],
+    [class~="split-layout-connector"], [class~="split-layout-footer"],
+    [class~="card-strip-3"], [class~="card-strip-5"], [class~="card-strip-12"],
+    [class~="full-bleed-figure"]
+  ).smaller {
   font-size: 1em !important;
 }
-.reveal .slides section:has([class^="split-layout"], [class^="card-strip"], .full-bleed-figure).scrollable {
+.reveal .slides section:has(
+    [class~="split-layout"], [class~="split-layout-reverse"],
+    [class~="split-layout-connector"], [class~="split-layout-footer"],
+    [class~="card-strip-3"], [class~="card-strip-5"], [class~="card-strip-12"],
+    [class~="full-bleed-figure"]
+  ).scrollable {
   overflow: hidden !important;
 }
 
