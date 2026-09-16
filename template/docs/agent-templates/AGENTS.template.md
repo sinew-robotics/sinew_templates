@@ -25,7 +25,7 @@ Select exactly one `color-*` profile. It owns palette, fonts, surfaces, syntax h
 
 ## Slide structure
 
-- Slide source and visible text use only printable ASCII characters from a standard US keyboard. This is machine-checkable: every byte in slide text outside code-generated assets must be ASCII 0x20-0x7E, plus newline and tab.
+- Slide source and visible text spell every symbol with printable ASCII characters from a standard US keyboard. This is machine-checkable: every character in slide text outside code-generated assets must be ASCII 0x20-0x7E, newline, tab, or a letter/combining mark from any script. Write the deck in the audience's language; only symbols are constrained.
 - Replace Unicode arrows, multiplication signs, bullets, daggers, smart quotes, dashes, and math symbols with words, ASCII punctuation, or ASCII LaTeX commands.
 - Write mathematics with `$...$` inline and `$$...$$` for display math, using ASCII LaTeX commands.
 - `deck.qmd` is the explicit ordered manifest.

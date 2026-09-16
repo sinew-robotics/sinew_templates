@@ -73,7 +73,8 @@ These are acceptance notes from regressions found while developing the existing 
 
 ### Keyboard characters, spacing, and overflow
 
-- [ ] Use only printable ASCII from a standard US keyboard in slide source and visible text. Do not paste Unicode arrows, bullets, multiplication signs, smart quotes, dashes, daggers, or math glyphs.
+- [ ] Spell symbols with printable ASCII from a standard US keyboard in slide source and visible text. Do not paste Unicode arrows, bullets, multiplication signs, smart quotes, dashes, daggers, or math glyphs. Script letters are exempt; a style is free to be demonstrated in a non-Latin script.
+- [ ] Record which scripts the style's font stack covers, and name the fallback face that catches the rest. A style whose display face is Latin-only fails silently mid-word on a Cyrillic or CJK deck.
 - [ ] Put mathematical notation inside dollar delimiters with ASCII LaTeX commands. Metric directions use `$\uparrow$` and `$\downarrow$`, never Unicode arrow characters.
 - [ ] Keep visible vertical gaps between adjacent content groups, especially on the copied problem, research framing, algorithm/evidence, and generation slides (`_02`, both `_03` slides, and `_07`).
 - [ ] Make the final checklist/highlight block contain every bullet completely; preserve its padding, wrapping, and width.

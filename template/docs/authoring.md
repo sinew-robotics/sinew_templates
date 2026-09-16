@@ -210,14 +210,15 @@ Quarto warns that audiences often miss vertical slides. Sinew mitigates, but doe
 
 ## Text and typography
 
-- Use printable ASCII characters from a standard US keyboard in slide source and visible slide text. Spell out or use ASCII equivalents for arrows and other decorative symbols.
+- Spell symbols with printable ASCII from a standard US keyboard in slide source and visible slide text. Spell out or use ASCII equivalents for arrows and other decorative symbols.
+- Write the deck in whatever language the audience reads. Letters and combining marks from any script pass both gates, so Cyrillic, Greek, and CJK slide text needs no transliteration; the symbol rule above still applies, because `->`, `--`, and `$\uparrow$` are available in every language. Before delivering a non-Latin deck, confirm the selected profile's font stack actually covers the script (see `styles.md`): `origami` resolves to the platform UI stack and covers wide script ranges, while a profile naming a specific display face may fall back mid-slide.
 - Write math with `$...$` inline or `$$...$$` for display math. Put ASCII LaTeX commands inside the delimiters instead of pasting Unicode math glyphs.
 - Use sentence case.
 - Prefer short declarative sentences and concrete verbs.
 - Do not use all caps, underline, italics, or color as the sole emphasis channel.
 - Keep body text at the theme default; do not solve overflow with `.smaller` unless the slide is a reference/appendix.
 - Expand abbreviations on first use.
-- Keep all visible slide text in the documented printable-ASCII set so glyph availability is deterministic.
+- Keep every visible symbol in the documented printable-ASCII set so glyph availability is deterministic; for script letters outside it, make availability deterministic through the font stack instead.
 
 ## Equations
 
