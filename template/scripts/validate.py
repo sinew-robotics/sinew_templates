@@ -38,10 +38,34 @@ from __future__ import annotations
 import argparse
 import re
 import sys
+import unicodedata
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
+
+# The source-character gate exists to keep decorative Unicode -- arrows,
+# math glyphs, emoji, box drawing, typographic bullets and dashes -- out
+# of slide source, because every one of those has an ASCII or LaTeX
+# spelling that renders deterministically on an unknown projector. It was
+# never meant to decide which human language a deck is written in: a
+# Russian, Greek, or Japanese deck has no ASCII spelling to fall back on.
+# So letters and combining marks from any script pass, and everything
+# else above ASCII still fails -- `->`, `--`, and `$\uparrow$` remain the
+# required spellings for symbols in every language.
+LETTER_AND_MARK_CATEGORIES = frozenset({"Lu", "Ll", "Lt", "Lm", "Lo", "Mn", "Mc", "Me"})
+
+
+def decorative_non_ascii(source: str) -> list[str]:
+    """Non-ASCII characters that are not letters or combining marks."""
+    return sorted(
+        {
+            character
+            for character in source
+            if ord(character) > 127
+            and unicodedata.category(character) not in LETTER_AND_MARK_CATEGORIES
+        }
+    )
 DECK = ROOT / "deck.qmd"
 EXTENSION_MANIFEST_CANDIDATES = (
     ROOT / "_extensions/sinew/_extension.yml",
@@ -207,10 +231,10 @@ class Validation:
             if not path.is_file():
                 continue
             source = path.read_text(encoding="utf-8")
-            non_ascii = sorted({character for character in source if ord(character) > 127})
+            decorative = decorative_non_ascii(source)
             self.require(
-                not non_ascii,
-                f"slide metadata and authoring instructions must use standard-keyboard ASCII in {path}; found {non_ascii}",
+                not decorative,
+                f"slide metadata and authoring instructions must spell symbols in ASCII or LaTeX in {path}; found {decorative}",
             )
         beads = [path for path in ROOT.rglob(".beads") if ".git" not in path.parts]
         self.require(not beads, f".beads must stay outside the template: {beads}")
@@ -520,10 +544,10 @@ class Validation:
 
             text = path.read_text(encoding="utf-8")
             self.require(not text.startswith("---\n"), f"included slide contains YAML: {rel}")
-            non_ascii = sorted({character for character in text if ord(character) > 127})
+            decorative = decorative_non_ascii(text)
             self.require(
-                not non_ascii,
-                f"slide source must use standard-keyboard ASCII in {rel}; found {non_ascii}",
+                not decorative,
+                f"slide source must spell symbols in ASCII or LaTeX in {rel}; found {decorative}",
             )
             headings = re.findall(r"^(#{1,2})\s+(.+)$", text, re.MULTILINE)
             self.require(len(headings) == 1, f"slide must contain exactly one level-1/2 heading: {rel}")

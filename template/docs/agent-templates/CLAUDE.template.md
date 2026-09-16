@@ -9,7 +9,7 @@ Rename this file to `CLAUDE.md` and follow `AGENTS.md` completely.
 - Keep illustrative/preliminary content labeled and claim boundaries visible.
 - Verify the exact event edition, track, presentation type, and artifact using current official sources. Event research files are dated background guidance, not profiles.
 - Activate exactly one `color-*` profile. It owns visual style only; never place event logistics or invented branding in it.
-- Slide source and visible text use only printable ASCII from a standard US keyboard. This is machine-checkable: permit ASCII 0x20-0x7E plus newline and tab, and reject all other characters.
+- Slide source and visible text spell every symbol with printable ASCII from a standard US keyboard. This is machine-checkable: permit ASCII 0x20-0x7E, newline, tab, and letters/combining marks from any script, and reject all other characters. Write the deck in the audience's language; only symbols are constrained.
 - Use `$...$` or `$$...$$` with ASCII LaTeX commands for math, never pasted Unicode math glyphs.
 - `deck.qmd` is the ordered manifest; one include equals one slide; `#` is horizontal and `##` is vertical; included files have no YAML.
 - Never use level-3 or deeper headings inside slides. Pandoc can emit nested section tags that Reveal treats as stacks; use bold labels or semantic containers.

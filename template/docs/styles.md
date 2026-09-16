@@ -134,6 +134,19 @@ Reference inspected on 2026-08-25: design-source route `/systems/motion/system.h
 
 Extracted ideas: charged white, scarlet motion, a green wake, condensed display type, and directional diagonal energy. Sinew uses darker scarlet and green for contrast, keeps the diagonal treatment on title/divider surfaces, makes progress animation conditional on `prefers-reduced-motion`, and provides Big Shoulders/Arial Narrow/Arial plus Lora/Georgia fallbacks. Algorithms use Latin Modern Mono Light Cond with Liberation Mono fallback to retain the profile's narrow rhythm without sacrificing character alignment. The Matplotlib overlay uses a dependable sans stack, thicker series lines, and the same scarlet/green-led cycle; marker and dash differences remain mandatory.
 
+## Script coverage
+
+The character gates (`validate.py`, `check_render.py`) permit letters from any script, so the deck's language is an authoring choice, not a validation one. What a profile can actually *draw* is a separate question, and it is the one to check before delivering a non-Latin deck.
+
+No profile loads a remote font: every stack names faces and falls back to a platform family. That fallback is what decides script coverage, and it differs per profile:
+
+| Profile | Display/body stack | Non-Latin behavior |
+|:--|:--|:--|
+| `origami` | `ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif` | Resolves straight to the platform UI face, which covers Cyrillic, Greek, and (per platform) CJK. The safest starting point for a non-Latin deck. |
+| `paper`, `high-contrast`, `blueprint`, `scholar`, `unmasked`, `the-give`, `the-meeting`, `movement` | A named face plus a generic fallback (`Arial`, `Georgia`, `sans-serif`, ...) | Latin-first. Cyrillic and Greek usually reach the generic fallback and render, but at a different face than the Latin text on the same line. CJK coverage is not implied anywhere. |
+
+Before delivering a non-Latin deck: render it, open the slides with the most display type (title, dividers, metrics), and confirm no glyph box or mid-word face change. If the profile's display face does not cover the script, either pick a profile whose stack does or extend that profile's stack with a locally installed face and record the substitution here.
+
 ## Runtime gallery switching
 
 The default repository gallery previews all nine styles in separate horizontal columns. `styles/gallery/columns.html` listens to Reveal's `ready` and `slidechanged` events; `styles/gallery/columns.css` mirrors the represented style tokens. A real render does not switch styles mid-talk: select exactly one visual profile with `--profile color-<name>`.

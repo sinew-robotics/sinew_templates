@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Narrowed the source and rendered-text character gates from "ASCII only" to "symbols in ASCII or LaTeX", so a deck can be written in a non-Latin script. `validate.py` and `check_render.py` now also permit letters and combining marks from any script (Unicode categories `Lu Ll Lt Lm Lo Mn Mc Me`) and still reject every other non-ASCII character, which is the set the gate was built for: arrows, math glyphs, emoji, box drawing, typographic bullets and dashes. Those all have an ASCII or LaTeX spelling in every language; a Russian, Greek, or Japanese deck has no such spelling for its own words, so the old rule blocked the audience's language rather than a projection hazard. `->`, `--`, and `$\uparrow$` remain required. Script coverage moves to where it belongs -- the selected profile's font stack, documented per style and checked before delivery.
+
 ## 1.2.0  -  2026-08-31
 
 - Centered slide content vertically by default and added named layout primitives (`.split-layout`, `.split-layout-reverse`, `.split-layout-connector`, `.split-layout-footer`, `.card-strip-3/5/12`, `.full-bleed-figure`, `.full-bleed-title`, `.diagram-flow`) for column, connector, card-strip, full-bleed, and flow-diagram shapes.

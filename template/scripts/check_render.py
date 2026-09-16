@@ -5,18 +5,28 @@ from __future__ import annotations
 
 import re
 import sys
+import unicodedata
 from html import unescape
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
 
-# Rendered visible text is held to a narrower rule than slide SOURCE (which
-# validate.py restricts to pure printable ASCII). The toolchain legitimately
-# introduces a small, fixed set of non-ASCII characters that no author typed:
-# Pandoc smart-typography substitutions and the non-breaking space Quarto's
-# cross-reference machinery emits (load-bearing for "Figure 1" spacing). See
-# AGENTS.md and CLAUDE.md for the authoritative statement of this rule.
+# Letters and combining marks from any script are visible slide text, not
+# decoration, so they pass at both layers. The gate exists to catch symbols
+# that fail on an unknown projector -- arrows, math glyphs, emoji, box
+# drawing -- and those have ASCII or LaTeX spellings in every language. A
+# deck written in Russian, Greek, or Japanese has no such fallback, so
+# script coverage is a font question (see docs/styles.md), not a character
+# legality question. Kept in sync with validate.py's LETTER_AND_MARK_
+# CATEGORIES.
+LETTER_AND_MARK_CATEGORIES = frozenset({"Lu", "Ll", "Lt", "Lm", "Lo", "Mn", "Mc", "Me"})
+
+# Beyond letters, the toolchain legitimately introduces a small, fixed set
+# of non-ASCII characters that no author typed: Pandoc smart-typography
+# substitutions and the non-breaking space Quarto's cross-reference
+# machinery emits (load-bearing for "Figure 1" spacing). See AGENTS.md and
+# CLAUDE.md for the authoritative statement of this rule.
 PERMITTED_NON_ASCII_CODEPOINTS = {
     0x00A0,  # non-breaking space (Quarto cross-reference spacing)
     0x2018,  # left single quotation mark
@@ -49,6 +59,7 @@ def find_decorative_unicode(visible_text: str) -> list[str]:
     """Report visible-text characters outside the permitted rendered charset.
 
     Allowlisted, not denylisted: permit ASCII 0x20-0x7E plus newline/tab plus
+    letters and combining marks from any script plus
     PERMITTED_NON_ASCII_CODEPOINTS, and flag anything else. Enumerating every
     arrow/emoji/box-drawing/math-glyph character individually is unbounded
     and would silently miss new ones; an allowlist instead makes a genuinely
@@ -63,6 +74,8 @@ def find_decorative_unicode(visible_text: str) -> list[str]:
         if 0x20 <= codepoint <= 0x7E:
             continue
         if codepoint in PERMITTED_NON_ASCII_CODEPOINTS:
+            continue
+        if unicodedata.category(char) in LETTER_AND_MARK_CATEGORIES:
             continue
         info = offenders.setdefault(codepoint, {"count": 0, "excerpt": None})
         info["count"] = int(info["count"]) + 1
